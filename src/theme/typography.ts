@@ -6,7 +6,7 @@ const typography: TypographyOptions = {
     fontFamily: 'var(--font-poppins)',
     fontWeight: 500,
     fontSize: '30px',
-    lineHeight: '30px',
+    lineHeight: 'normal',
   },
   h2: {
     fontFamily: 'var(--font-poppins)',

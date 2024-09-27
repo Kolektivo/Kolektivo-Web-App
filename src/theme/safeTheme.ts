@@ -91,6 +91,45 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
           IconComponent: IconSelect,
         },
       },
+      MuiAppBar: {
+        styleOverrides: {
+          root: {
+            backgroundColor: colors.background.paper,
+            color: colors.secondary.contrastText,
+            borderBottom: `1px solid ${colors.secondary.dark}`,
+          },
+        },
+      },
+      MuiListItemButton: {
+        styleOverrides: {
+          root: {
+            gap: spacing * 2,
+            padding: `${spacing * 3}px ${spacing * 4}px`,
+          },
+        },
+      },
+      MuiListItemIcon: {
+        styleOverrides: {
+          root: {
+            minWidth: 'auto',
+          },
+        },
+      },
+      MuiListItemText: {
+        defaultProps: {
+          primaryTypographyProps: {
+            fontWeight: 700,
+            color: colors.text.secondary,
+          },
+        },
+      },
+      MuiPaper: {
+        styleOverrides: {
+          root: {
+            borderColor: 'red',
+          },
+        },
+      },
     },
   })
 }
