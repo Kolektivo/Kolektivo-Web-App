@@ -5,7 +5,10 @@ import Layout from '@/components/Layout'
 import '@/styles/globals.css'
 
 export const metadata: Metadata = {
-  title: 'Kolektivo',
+  title: {
+    template: '%s | Kolektivo',
+    default: 'Kolektivo',
+  },
   description: 'Kolektivo Website',
 }
 

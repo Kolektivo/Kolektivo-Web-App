@@ -14,6 +14,7 @@ import {
 import Image from 'next/image'
 import { type TransitionEventHandler } from 'react'
 import logo from '@/public/images/logo.svg'
+import NavLinks from './NavLinks'
 
 export default function Menu({
   drawerWidth,
@@ -27,6 +28,7 @@ export default function Menu({
   onClose: ModalProps['onClose']
 }) {
   const theme = useTheme()
+
   const drawer = (
     <Stack height="100%" justifyContent="space-between">
       <Box>
@@ -34,14 +36,7 @@ export default function Menu({
           <Image src={logo} alt="logo" width={138} height={36} />
         </Box>
         <List disablePadding>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <Icon>communities</Icon>
-              </ListItemIcon>
-              <ListItemText primary="Communities" />
-            </ListItemButton>
-          </ListItem>
+          <NavLinks />
         </List>
       </Box>
       <Box paddingTop={6}>
