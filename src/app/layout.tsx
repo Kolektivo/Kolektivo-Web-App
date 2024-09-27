@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Providers from './provider'
+import { lato, materialSymbolsOutlined, poppins } from '@/theme/fonts'
 
 export const metadata: Metadata = {
   title: 'Kolektivo',
@@ -13,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className={`${poppins.variable} ${lato.variable} ${materialSymbolsOutlined.variable}`}>
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -7,7 +7,7 @@ const SafeThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const theme = useMemo(() => createSafeTheme(prefersDarkMode ? 'dark' : 'light'), [prefersDarkMode]) */
 
   return (
-    <AppRouterCacheProvider options={{ key: 'css' }}>
+    <AppRouterCacheProvider options={{ enableCssLayer: true }}>
       <ThemeProvider theme={createSafeTheme('light')}>
         <CssBaseline enableColorScheme>{children}</CssBaseline>
       </ThemeProvider>
