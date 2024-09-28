@@ -5,13 +5,14 @@ export const metadata: Metadata = {
   title: 'My Organization',
 }
 
-export default function Page() {
+export default async function Page() {
   return (
     <ActionCard
       icon="add_circle"
       title="Create Organization Profile"
       description="Build a detailed profile for your organization to provide essential information and connect with the community."
       textButton="Create"
+      href="/my-organization/create"
     />
   )
 }

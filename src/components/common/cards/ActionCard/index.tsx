@@ -1,5 +1,6 @@
 import { Box, Button, Card, CardContent, Icon, Stack, Typography } from '@mui/material'
 import { type MouseEventHandler, type ReactElement } from 'react'
+import Link from 'next/link'
 
 const ActionCard = ({
   icon,
@@ -7,6 +8,7 @@ const ActionCard = ({
   description,
   textButton,
   isSecondary = false,
+  href = '',
   onClickButton,
 }: {
   icon: string
@@ -14,7 +16,8 @@ const ActionCard = ({
   description: string
   textButton: string
   isSecondary?: boolean
-  onClickButton?: MouseEventHandler<HTMLButtonElement> | undefined
+  href?: string | undefined
+  onClickButton?: MouseEventHandler<HTMLAnchorElement> | undefined
 }): ReactElement => {
   return (
     <Card>
@@ -28,9 +31,11 @@ const ActionCard = ({
             {description}
           </Typography>
           <Box>
-            <Button variant="contained" onClick={onClickButton} color={isSecondary ? 'secondary' : 'primary'}>
-              {textButton}
-            </Button>
+            <Link href={href} onClick={onClickButton}>
+              <Button variant="contained" color={isSecondary ? 'secondary' : 'primary'}>
+                {textButton}
+              </Button>
+            </Link>
           </Box>
         </Stack>
       </CardContent>

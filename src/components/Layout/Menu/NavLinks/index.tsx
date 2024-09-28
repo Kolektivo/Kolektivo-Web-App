@@ -24,7 +24,7 @@ export default function NavLinks() {
   return (
     <>
       {links.map((link) => {
-        const isActive = pathname === link.href
+        const isActive = `/${pathname.split('/')[1]}` === link.href
         return (
           <ListItem key={link.name} disablePadding>
             <ListItemButton

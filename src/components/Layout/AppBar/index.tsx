@@ -2,8 +2,17 @@ import { AppBar, Button, Icon, IconButton, Stack, Toolbar, Typography } from '@m
 import { usePathname } from 'next/navigation'
 import { type MouseEventHandler } from 'react'
 
-function transformString(input: string) {
-  let result = input.replace(/\//g, '')
+const routesNames: { [key: string]: string } = {
+  '/my-organization/create': 'Create Organization',
+  '/my-organization/update': 'Update Organization',
+}
+
+function getNameRoute(pathname: string) {
+  if (pathname in routesNames) {
+    return routesNames[pathname]
+  }
+
+  let result = pathname.replace(/\//g, '')
   result = result.replace(/-/g, ' ')
   result = result.replace(/\b\w/g, (char) => char.toUpperCase())
 
@@ -41,7 +50,7 @@ export default function CustomAppBar({
             <Icon>menu</Icon>
           </IconButton>
           <Typography variant="h1" noWrap component="div">
-            {transformString(pathname)}
+            {getNameRoute(pathname)}
           </Typography>
         </Toolbar>
         <Toolbar disableGutters variant="dense" sx={{ gap: 2 }}>
