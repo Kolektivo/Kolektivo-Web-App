@@ -1,6 +1,6 @@
 'use client'
 
-import { Box } from '@mui/material'
+import { Box, Container } from '@mui/material'
 import { useState } from 'react'
 import CustomAppBar from './AppBar'
 import Menu from './Menu'
@@ -42,7 +42,9 @@ export default function Layout({
         />
       </Box>
       <Box component="main" sx={{ flexGrow: 1, pt: '96px', width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
-        {children}
+        <Container maxWidth={false} disableGutters sx={{ padding: 4, marginX: 0 }}>
+          {children}
+        </Container>
       </Box>
     </Box>
   )
