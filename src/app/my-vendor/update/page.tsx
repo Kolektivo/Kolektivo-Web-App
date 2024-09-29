@@ -1,4 +1,4 @@
-import MyVendors from '@/components/vendors/myVendors/Vendors'
+import MyVendorsCard from '@/components/vendors/myVendors/Vendors'
 import { Card, CardContent, Divider, Stack, Typography } from '@mui/material'
 import { type Metadata } from 'next'
 import Link from 'next/link'
@@ -13,20 +13,22 @@ export default function UpdateVendors() {
     <Stack gap="24px">
       <Card>
         <CardContent>
-          <Typography variant="h2">Select vendor to update</Typography>
+          <Typography variant="h2">Select Activity to Update </Typography>
         </CardContent>
       </Card>
       <Stack>
-        <MyVendors>
+        <MyVendorsCard>
           <Divider />
           <Card sx={{ borderRadius: 'px 0px 0px 0px' }}>
             <CardContent>
-              <Link href={'/activities'}>
-                <Typography variant="h4" textAlign="right" marginTop="24px">Go back</Typography>
+              <Link href="/my-vendor">
+                <Typography variant="h4" textAlign="right" marginTop="24px">
+                  Go back
+                </Typography>
               </Link>
             </CardContent>
           </Card>
-        </MyVendors>
+        </MyVendorsCard>
       </Stack>
     </Stack>
   )

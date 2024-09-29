@@ -1,4 +1,3 @@
-
 import vendor1Image from '@/public/images/vendors/Frame 1000001685.svg'
 import vendor2Image from '@/public/images/vendors/image 14.svg'
 
@@ -9,7 +8,7 @@ export const vendorsActionCards = [
     title: 'Create New Vendor profile',
     description: 'Set up new vendor profiles for your community.',
     textButton: 'Create',
-    href: '/my-organization/create',
+    href: '/my-vendor/create',
   },
   {
     icon: 'replay',
@@ -22,7 +21,7 @@ export const vendorsActionCards = [
   },
 ]
 
-export const vendors = [
+export const myVendors = [
   {
     imgSrc: vendor1Image,
     title: 'BRGR HAUS',
