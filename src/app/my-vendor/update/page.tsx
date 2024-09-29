@@ -1,7 +1,7 @@
+import GoBackBox from '@/components/common/display/GoBack'
 import MyVendorsCard from '@/components/vendors/myVendors/Vendors'
 import { Card, CardContent, Divider, Stack, Typography } from '@mui/material'
 import { type Metadata } from 'next'
-import Link from 'next/link'
 import React from 'react'
 
 export const metadata: Metadata = {
@@ -13,21 +13,13 @@ export default function UpdateVendors() {
     <Stack gap="24px">
       <Card>
         <CardContent>
-          <Typography variant="h2">Select Activity to Update </Typography>
+          <Typography variant="h2">Select Vendor To Update </Typography>
         </CardContent>
       </Card>
       <Stack>
         <MyVendorsCard>
           <Divider />
-          <Card sx={{ borderRadius: 'px 0px 0px 0px' }}>
-            <CardContent>
-              <Link href="/my-vendor">
-                <Typography variant="h4" textAlign="right" marginTop="24px">
-                  Go back
-                </Typography>
-              </Link>
-            </CardContent>
-          </Card>
+          <GoBackBox href="/my-vendor" />
         </MyVendorsCard>
       </Stack>
     </Stack>

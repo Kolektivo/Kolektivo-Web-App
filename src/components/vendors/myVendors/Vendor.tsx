@@ -10,7 +10,7 @@ type Props = {
 
 export default function Vendor({ img, title, description }: Props) {
   return (
-    <Stack direction="row" alignItems="center" paddingY="24px" gap="16px">
+    <Stack direction="row" alignItems="center" padding="24px" gap="16px">
       <Image src={img} alt={`vendorImage-${img}`} width={86} height={86} />
       <Stack gap="4px">
         <Typography fontWeight={700} fontSize={18}>
