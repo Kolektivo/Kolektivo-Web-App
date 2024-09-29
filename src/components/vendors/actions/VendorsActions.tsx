@@ -1,13 +1,14 @@
-import { activitiesActionCards } from '@/constants/activities/main'
+
+import { vendorsActionCards } from '@/constants/vendors/main'
 import { Stack } from '@mui/material'
 import React from 'react'
-import ActionCard from '../common/cards/ActionCard'
+import ActionCard from '../../common/cards/ActionCard'
 import { type IconColor } from '@/types/common/colors'
 
-export default function ActivitiesActions() {
+export default function VendorsActions() {
   return (
     <Stack direction="row" alignItems="center" gap="24px">
-      {activitiesActionCards.map((card, index) => (
+      {vendorsActionCards.map((card, index) => (
         <div key={index} style={{ flex: '1' }}>
           <ActionCard
             icon={card.icon}
