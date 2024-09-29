@@ -34,6 +34,12 @@ const lightPalette = {
     light: '#EAF6F6',
     contrastText: '#1E7672',
   },
+  strongOrange: {
+    dark: '#E96E3A',
+    main: '#E96E3A',
+    light: '#E96E3A',
+    contrastText: '#E96E3A',
+  },
   warning: {
     dark: '#FBCC8E',
     main: '#FBCC8E',
