@@ -11,7 +11,7 @@ type Props = {
 
 export default function Activity({ img, title, description, state }: Props) {
   return (
-    <Stack direction="row" alignItems="center" paddingY="24px" gap="16px">
+    <Stack direction="row" alignItems="center" padding="24px" gap="16px">
       <Image src={img} alt={`vendorImage-${img}`} width={140} height={80} />
       <Stack gap="4px">
         <Stack alignItems="center" direction="row" gap="8px">

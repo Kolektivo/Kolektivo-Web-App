@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <Stack gap="24px">
-      <VendorsActions/>
+      <VendorsActions />
       <MyVendorsCard />
     </Stack>
   )

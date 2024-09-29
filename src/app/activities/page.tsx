@@ -1,5 +1,5 @@
 import ActivitiesActions from '@/components/activities/actions/Actions'
-import MyVendorsCard from '@/components/vendors/myVendors/Vendors'
+import MyActivitiesCard from '@/components/activities/myActivities/Activities'
 import { Stack } from '@mui/material'
 import { type Metadata } from 'next'
 
@@ -11,7 +11,7 @@ export default function Activities() {
   return (
     <Stack gap="24px">
       <ActivitiesActions />
-      <MyVendorsCard />
+      <MyActivitiesCard />
     </Stack>
   )
 }
