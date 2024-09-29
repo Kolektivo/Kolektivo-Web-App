@@ -1,5 +1,4 @@
-import vendor1Image from '@/public/images/vendors/Frame 1000001685.svg'
-import vendor2Image from '@/public/images/vendors/image 14.svg'
+import activityImage from '@/public/images/activities/Event.svg'
 
 export const activitiesActionCards = [
   {
@@ -23,13 +22,15 @@ export const activitiesActionCards = [
 
 export const myActivities = [
   {
-    imgSrc: vendor1Image,
+    imgSrc: activityImage,
     title: 'BRGR HAUS',
     description: 'Kura Hulanda Village, 3 Langestraat',
+    state: 'upcoming',
   },
   {
-    imgSrc: vendor2Image,
+    imgSrc: activityImage,
     title: 'Esperamos Caracasbaai',
     description: 'Caracasbaaiweg 280 Unit 10, Eden Mall',
+    state: 'upcoming',
   },
 ]

@@ -1,7 +1,7 @@
 import { Card, CardContent, Divider, Stack, Typography } from '@mui/material'
 import { myActivities } from '@/constants/activities/main'
 import React, { type ReactNode } from 'react'
-import Vendor from '@/components/vendors/myVendors/Vendor'
+import Activity from './Activity'
 
 type Props = {
   children?: ReactNode
@@ -17,7 +17,12 @@ export default function MyActivitiesCard({ children }: Props) {
         {myActivities.map((activity, index) => (
           <Stack key={index}>
             <Divider />
-            <Vendor img={activity.imgSrc} title={activity.title} description={activity.description} />
+            <Activity
+              img={activity.imgSrc}
+              title={activity.title}
+              description={activity.description}
+              state={activity.state}
+            />
           </Stack>
         ))}
         {children}
