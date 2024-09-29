@@ -1,27 +1,28 @@
+
 import vendor1Image from '@/public/images/vendors/Frame 1000001685.svg'
 import vendor2Image from '@/public/images/vendors/image 14.svg'
 
-export const activitiesActionCards = [
+export const vendorsActionCards = [
   {
     icon: 'add_circle',
     iconColor: 'primary',
-    title: 'Create Activity',
-    description: 'Set up new activities for your community.',
+    title: 'Create New Vendor profile',
+    description: 'Set up new vendor profiles for your community.',
     textButton: 'Create',
     href: '/my-organization/create',
   },
   {
     icon: 'replay',
     iconColor: 'strongOrange',
-    title: 'Update activity',
-    description: 'Make changes to your existing activities.',
+    title: 'Update Vendor',
+    description: 'Make changes to your existing vendor profiles.',
     textButton: 'Update',
     isSecondary: true,
-    href: '/activities/updateVendors',
+    href: '/my-vendor/update',
   },
 ]
 
-export const myVendors = [
+export const vendors = [
   {
     imgSrc: vendor1Image,
     title: 'BRGR HAUS',
