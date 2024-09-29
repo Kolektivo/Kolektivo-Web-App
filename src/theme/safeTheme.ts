@@ -37,15 +37,51 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
         },
       },
       MuiCardActions: {
+        defaultProps: {
+          disableSpacing: true,
+        },
         styleOverrides: {
           root: {
+            gap: '16px',
             padding: spacing * 4,
+            borderTop: `1px solid ${colors.border.main}`,
+            justifyContent: 'end',
+          },
+        },
+      },
+      MuiInputLabel: {
+        defaultProps: {
+          shrink: true,
+          variant: 'standard',
+          disableAnimation: true,
+          sx: {
+            position: 'relative',
+            fontSize: '18px',
+            fontWeight: 700,
+            textTransform: { scale: 1 },
+            marginBottom: 2,
+            color: colors.text.primary,
+          },
+        },
+        styleOverrides: {
+          shrink: {
+            transform: 'scale(1) !important',
+          },
+        },
+      },
+      MuiInputBase: {
+        styleOverrides: {
+          multiline: {
+            padding: '0 !important',
+            minHeight: '144px',
+            alignItems: 'start',
           },
         },
       },
       MuiOutlinedInput: {
         defaultProps: {
           fullWidth: true,
+          notched: false,
         },
         styleOverrides: {
           input: {
