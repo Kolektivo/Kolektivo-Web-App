@@ -1,4 +1,4 @@
-import MyVendors from '@/components/vendors/myVendors/Vendors'
+import MyVendorsCard from '@/components/vendors/myVendors/Vendors'
 import VendorsActions from '@/components/vendors/actions/VendorsActions'
 import { Stack } from '@mui/material'
 import { type Metadata } from 'next'
@@ -11,7 +11,7 @@ export default function Page() {
   return (
     <Stack gap="24px">
       <VendorsActions/>
-      <MyVendors />
+      <MyVendorsCard />
     </Stack>
   )
 }

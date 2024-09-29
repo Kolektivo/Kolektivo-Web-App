@@ -8,7 +8,7 @@ export const activitiesActionCards = [
     title: 'Create Activity',
     description: 'Set up new activities for your community.',
     textButton: 'Create',
-    href: '/my-organization/create',
+    href: '/activities/create',
   },
   {
     icon: 'replay',
@@ -17,11 +17,11 @@ export const activitiesActionCards = [
     description: 'Make changes to your existing activities.',
     textButton: 'Update',
     isSecondary: true,
-    href: '/activities/updateVendors',
+    href: '/activities/update',
   },
 ]
 
-export const myVendors = [
+export const myActivities = [
   {
     imgSrc: vendor1Image,
     title: 'BRGR HAUS',
