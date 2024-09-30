@@ -110,6 +110,10 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
             textTransform: 'capitalize',
             color: colors.text.primary,
           },
+          sizeSmall: {
+            padding: '9px 11px',
+            fontSize: '14px',
+          },
         },
       },
       MuiIcon: {
@@ -159,10 +163,28 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
           },
         },
       },
-      MuiPaper: {
-        styleOverrides: {
-          root: {
-            borderColor: 'red',
+      MuiDialog: {
+        defaultProps: {
+          PaperProps: {
+            elevation: 0,
+            sx: {
+              minWidth: 472,
+            },
+          },
+          slotProps: {
+            backdrop: {
+              sx: {
+                backgroundColor: '#000000B2',
+              },
+            },
+          },
+        },
+      },
+      MuiDialogActions: {
+        defaultProps: {
+          sx: {
+            padding: 4,
+            paddingTop: 0,
           },
         },
       },

@@ -25,7 +25,7 @@ const lightPalette = {
   success: {
     dark: '#92DEBA',
     main: '#92DEBA',
-    light: '#92DEBA',
+    light: '#12B76A',
     contrastText: '#084D2D',
   },
   info: {
