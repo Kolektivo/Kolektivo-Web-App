@@ -1,7 +1,7 @@
-import GoBackBox from '@/components/common/display/GoBack'
 import MyVendorsCard from '@/components/vendors/myVendors/Vendors'
-import { Card, CardContent, Divider, Stack, Typography } from '@mui/material'
+import { Button, Card, CardContent, Divider, Stack, Typography } from '@mui/material'
 import { type Metadata } from 'next'
+import Link from 'next/link'
 import React from 'react'
 
 export const metadata: Metadata = {
@@ -19,7 +19,11 @@ export default function UpdateVendors() {
       <Stack>
         <MyVendorsCard>
           <Divider />
-          <GoBackBox href="/my-vendor" />
+          <Stack padding="24px" alignItems="end">
+            <Link href="/my-vendor">
+              <Button>Go back</Button>
+            </Link>
+          </Stack>
         </MyVendorsCard>
       </Stack>
     </Stack>

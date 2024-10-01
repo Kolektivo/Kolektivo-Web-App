@@ -1,4 +1,4 @@
-import { Card, CardContent, Stack, Typography } from '@mui/material'
+import { Card, CardContent, CardHeader } from '@mui/material'
 import React, { type ReactNode } from 'react'
 
 type Props = {
@@ -10,9 +10,7 @@ export default function ItemsCard({ title, children }: Props) {
   return (
     <Card>
       <CardContent style={{ padding: '0px' }}>
-        <Stack padding="24px">
-          <Typography variant="h2">{title}</Typography>
-        </Stack>
+        <CardHeader title={title} />
         {children}
       </CardContent>
     </Card>

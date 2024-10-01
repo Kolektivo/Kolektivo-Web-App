@@ -1,6 +1,6 @@
 import MyActivitiesCard from '@/components/activities/myActivities/Activities'
-import GoBackBox from '@/components/common/display/GoBack'
-import { Card, CardContent, Stack, Typography } from '@mui/material'
+import { Button, Card, CardContent, Stack, Typography } from '@mui/material'
+import Link from 'next/link'
 import React from 'react'
 
 export default function UpdateActivity() {
@@ -13,7 +13,11 @@ export default function UpdateActivity() {
       </Card>
       <Stack>
         <MyActivitiesCard>
-          <GoBackBox href="/activities" />
+          <Stack padding="24px" alignItems="end">
+            <Link href="/activities">
+              <Button>Go back</Button>
+            </Link>
+          </Stack>
         </MyActivitiesCard>
       </Stack>
     </Stack>
