@@ -1,8 +1,12 @@
-import { Button, Card, CardContent, Divider, Icon, InputAdornment, Link, Stack, Typography } from '@mui/material'
+import { Card, CardContent, Divider, Icon, InputAdornment, Stack, Typography } from '@mui/material'
 import TextField from '@mui/material/TextField'
-import React from 'react'
+import React, { type ReactNode } from 'react'
 
-export default function CreateActivityForm() {
+type Props = {
+  children: ReactNode
+}
+
+export default function CreateActivityMain({ children }: Props) {
   return (
     <Card>
       <CardContent sx={{ padding: '0px' }}>
@@ -50,14 +54,7 @@ export default function CreateActivityForm() {
           />
         </Stack>
         <Divider />
-        <Stack direction="row" padding="24px 24px 0px 24px" justifyContent="end">
-          <Link href="/activities">
-            <Button>Cancel</Button>
-          </Link>
-          <Link href="/activities">
-            <Button color="secondary">Next</Button>
-          </Link>
-        </Stack>
+        {children}
       </CardContent>
     </Card>
   )
