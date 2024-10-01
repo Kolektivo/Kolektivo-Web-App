@@ -25,6 +25,19 @@ declare module '@mui/material/Icon' {
   }
 }
 
+declare module '@mui/material/Chip' {
+  interface ChipPropsColorOverrides {
+    strongOrange: true
+    chipOrange: true
+  }
+}
+
+declare module '@mui/material/Box' {
+  interface BoxPropsColorOverrides {
+    bannerLightGray: true
+  }
+}
+
 const createSafeTheme = (mode: PaletteMode): Theme => {
   const colors = lightPalette
 

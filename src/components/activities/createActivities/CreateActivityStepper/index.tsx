@@ -26,6 +26,24 @@ export default function CreateActivityStepper() {
   // const handleReset = () => {
   //   setActiveStep(0)
   // }
+  const StepperButtons = () => {
+    return (
+      <Stack direction="row" padding="24px 0px 0px 24px" justifyContent="end">
+        {activeStep == 0 ? (
+          <Link href="/activities">
+            <Button>Cancel</Button>
+          </Link>
+        ) : (
+          <Button onClick={handleBack} color="secondary">
+            Go Back
+          </Button>
+        )}
+        <Button onClick={handleNext} color="secondary">
+          Next
+        </Button>
+      </Stack>
+    )
+  }
 
   return (
     <Stack gap="24px" sx={{ width: '100%' }}>
@@ -46,14 +64,7 @@ export default function CreateActivityStepper() {
         <Stack gap="24px">
           <HeaderCard title="Activity Details" />
           <CreateActivityMain>
-            <Stack direction="row" padding="24px 0px 0px 24px" justifyContent="end">
-              <Link href="/activities">
-                <Button>Cancel</Button>
-              </Link>
-              <Button onClick={handleNext} color="secondary">
-                Next
-              </Button>
-            </Stack>
+            <StepperButtons />
           </CreateActivityMain>
         </Stack>
       )}
@@ -61,14 +72,7 @@ export default function CreateActivityStepper() {
         <Stack gap="24px">
           <HeaderCard title="Activity Image" />
           <CreateActivityImage>
-            <Stack direction="row" padding="24px 0px 0px 24px" justifyContent="end">
-              <Button onClick={handleBack} color="secondary">
-                Go Back
-              </Button>
-              <Button onClick={handleNext} color="secondary">
-                Next
-              </Button>
-            </Stack>
+            <StepperButtons />
           </CreateActivityImage>
         </Stack>
       )}
