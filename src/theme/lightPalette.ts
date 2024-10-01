@@ -40,6 +40,12 @@ const lightPalette = {
     light: '#E96E3A',
     contrastText: '#E96E3A',
   },
+  notReady: {
+    dark: '#C4C4C4',
+    main: '#C4C4C4',
+    light: '#C4C4C4',
+    contrastText: '#C4C4C4',
+  },
   warning: {
     dark: '#FBCC8E',
     main: '#FBCC8E',
