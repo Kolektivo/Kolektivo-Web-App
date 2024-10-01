@@ -1,4 +1,6 @@
-import { Typography } from '@mui/material'
+import MyVendorsCard from '@/components/vendors/myVendors/Vendors'
+import VendorsActions from '@/components/vendors/actions/VendorsActions'
+import { Stack } from '@mui/material'
 import { type Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -6,5 +8,10 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
-  return <Typography variant="h2">My Vendor Page</Typography>
+  return (
+    <Stack gap="24px">
+      <VendorsActions />
+      <MyVendorsCard />
+    </Stack>
+  )
 }
