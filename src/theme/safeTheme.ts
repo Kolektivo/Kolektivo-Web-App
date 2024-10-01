@@ -9,6 +9,16 @@ import IconSelect from '@/components/common/inputs/select/IconSelect'
 
 const spacing = 6
 
+declare module '@mui/material/styles' {
+  interface Palette {
+    strongOrange: Palette['primary']
+  }
+
+  interface PaletteOptions {
+    strongOrange?: PaletteOptions['primary']
+  }
+}
+
 const createSafeTheme = (mode: PaletteMode): Theme => {
   const colors = lightPalette
 
@@ -30,6 +40,13 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
         },
       },
       MuiCardContent: {
+        styleOverrides: {
+          root: {
+            padding: spacing * 4,
+          },
+        },
+      },
+      MuiCardHeader: {
         styleOverrides: {
           root: {
             padding: spacing * 4,

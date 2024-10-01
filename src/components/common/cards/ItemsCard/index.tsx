@@ -1,18 +1,18 @@
-import { Card, CardContent, CardHeader } from '@mui/material'
+import { Card, CardActions, CardHeader } from '@mui/material'
 import React, { type ReactNode } from 'react'
 
 type Props = {
   title: string
   children: ReactNode
+  actions?: ReactNode
 }
 
-export default function ItemsCard({ title, children }: Props) {
+export default function ItemsCard({ title, children, actions }: Props) {
   return (
     <Card>
-      <CardContent style={{ padding: '0px' }}>
-        <CardHeader title={title} />
-        {children}
-      </CardContent>
+      <CardHeader title={title} />
+      {children}
+      {actions && <CardActions>{actions}</CardActions>}
     </Card>
   )
 }

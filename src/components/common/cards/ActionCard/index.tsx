@@ -1,7 +1,6 @@
 import { Box, Button, Card, CardContent, Icon, Stack, Typography } from '@mui/material'
 import { type MouseEventHandler, type ReactElement } from 'react'
 import Link from 'next/link'
-import { type IconColor } from '@/types/common/colors'
 
 const ActionCard = ({
   icon,
@@ -14,7 +13,7 @@ const ActionCard = ({
   onClickButton,
 }: {
   icon: string
-  iconColor: IconColor
+  iconColor?: string
   title: string
   description: string
   textButton: string
@@ -26,9 +25,7 @@ const ActionCard = ({
     <Card>
       <CardContent>
         <Stack gap={3}>
-          <Icon color={iconColor} sx={{ fontSize: '32px' }}>
-            {icon}
-          </Icon>
+          <Icon sx={{ fontSize: '32px', color: iconColor }}>{icon}</Icon>
           <Typography variant="h2">{title}</Typography>
           <Typography variant="body1" color="text.secondary">
             {description}
