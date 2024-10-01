@@ -19,6 +19,12 @@ declare module '@mui/material/styles' {
   }
 }
 
+declare module '@mui/material/Icon' {
+  interface IconPropsColorOverrides {
+    strongOrange: true
+  }
+}
+
 const createSafeTheme = (mode: PaletteMode): Theme => {
   const colors = lightPalette
 
