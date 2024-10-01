@@ -1,7 +1,6 @@
 import { Box, Button, Card, CardContent, Icon, Stack, Typography } from '@mui/material'
 import { type MouseEventHandler, type ReactElement } from 'react'
 import Link from 'next/link'
-import { type IconColor } from '@/types/common/colors'
 
 const ActionCard = ({
   icon,
@@ -14,7 +13,7 @@ const ActionCard = ({
   onClickButton,
 }: {
   icon: string
-  iconColor: IconColor
+  iconColor?: 'primary' | 'strongOrange'
   title: string
   description: string
   textButton: string

@@ -9,6 +9,22 @@ import IconSelect from '@/components/common/inputs/select/IconSelect'
 
 const spacing = 6
 
+declare module '@mui/material/styles' {
+  interface Palette {
+    strongOrange: Palette['primary']
+  }
+
+  interface PaletteOptions {
+    strongOrange?: PaletteOptions['primary']
+  }
+}
+
+declare module '@mui/material/Icon' {
+  interface IconPropsColorOverrides {
+    strongOrange: true
+  }
+}
+
 const createSafeTheme = (mode: PaletteMode): Theme => {
   const colors = lightPalette
 
@@ -30,6 +46,13 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
         },
       },
       MuiCardContent: {
+        styleOverrides: {
+          root: {
+            padding: spacing * 4,
+          },
+        },
+      },
+      MuiCardHeader: {
         styleOverrides: {
           root: {
             padding: spacing * 4,
@@ -110,6 +133,10 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
             textTransform: 'capitalize',
             color: colors.text.primary,
           },
+          sizeSmall: {
+            padding: '9px 11px',
+            fontSize: '14px',
+          },
         },
       },
       MuiIcon: {
@@ -159,10 +186,28 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
           },
         },
       },
-      MuiPaper: {
-        styleOverrides: {
-          root: {
-            borderColor: 'red',
+      MuiDialog: {
+        defaultProps: {
+          PaperProps: {
+            elevation: 0,
+            sx: {
+              minWidth: 472,
+            },
+          },
+          slotProps: {
+            backdrop: {
+              sx: {
+                backgroundColor: '#000000B2',
+              },
+            },
+          },
+        },
+      },
+      MuiDialogActions: {
+        defaultProps: {
+          sx: {
+            padding: 4,
+            paddingTop: 0,
           },
         },
       },

@@ -63,7 +63,7 @@ export default function CustomAppBar({
             </Icon>
           </Button>
           <Button variant="contained" color="secondary" sx={{ borderRadius: 100 }}>
-            Sig In
+            Sign In
           </Button>
         </Toolbar>
       </Stack>
