@@ -10,11 +10,14 @@ import HeaderCard from '@/components/common/cards/HeaderCard'
 import CreateActivityMain from '../Main'
 import CreateActivityImage from '../Image'
 import CreateActivityRequirementsRewards from '../RequirementsRewards'
+import CreateActivityReview from '../Review'
+import CreatedActivityModal from '../Modal'
 
 const steps = ['', '', '', '']
 
 export default function CreateActivityStepper() {
   const [activeStep, setActiveStep] = React.useState(0)
+  const [open, setOpen] = React.useState<boolean>(false)
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
@@ -24,9 +27,10 @@ export default function CreateActivityStepper() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1)
   }
 
-  // const handleReset = () => {
-  //   setActiveStep(0)
-  // }
+  const handleComplete = () => {
+    setOpen(true)
+  }
+
   const StepperButtons = () => {
     return (
       <CardActions>
@@ -39,9 +43,15 @@ export default function CreateActivityStepper() {
             Go Back
           </Button>
         )}
-        <Button onClick={handleNext} variant="contained" color="primary">
-          Next
-        </Button>
+        {activeStep == steps.length - 1 ? (
+          <Button onClick={handleComplete} variant="contained" color="primary" className="stepperButton">
+            Complete
+          </Button>
+        ) : (
+          <Button onClick={handleNext} variant="contained" color="primary" className="stepperButton">
+            Next
+          </Button>
+        )}
       </CardActions>
     )
   }
@@ -61,6 +71,7 @@ export default function CreateActivityStepper() {
           )
         })}
       </Stepper>
+      <CreatedActivityModal open={open} setOpen={setOpen} />
       {activeStep == 0 && (
         <Stack gap="24px">
           <HeaderCard title="Activity Details" />
@@ -83,6 +94,14 @@ export default function CreateActivityStepper() {
           <CreateActivityRequirementsRewards>
             <StepperButtons />
           </CreateActivityRequirementsRewards>
+        </Stack>
+      )}
+      {activeStep == 3 && (
+        <Stack gap="24px">
+          <HeaderCard title="Review" />
+          <CreateActivityReview>
+            <StepperButtons />
+          </CreateActivityReview>
         </Stack>
       )}
     </Stack>
