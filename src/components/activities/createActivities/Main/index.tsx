@@ -9,24 +9,22 @@ type Props = {
 export default function CreateActivityMain({ children }: Props) {
   return (
     <Card>
-      <CardContent sx={{ padding: '0px' }}>
-        <Stack padding="24px">
+      <CardContent>
+        <Stack gap="48px">
           <TextField
             id="activityName"
             variant="outlined"
             label="What’s the name of your activity?"
             placeholder="Beach Cleanup"
           />
-        </Stack>
-        <Stack padding="24px" gap="16px">
-          <Typography variant="h3">When does your activity start and end?</Typography>
-          <Stack direction="row" gap="16px">
-            <TextField id="date" type="date" variant="outlined" placeholder="Date" />
-            <TextField id="startTime" type="time" variant="outlined" placeholder="Start time" />
-            <TextField id="endTime" type="time" variant="outlined" placeholder="End time" />
+          <Stack gap="16px">
+            <Typography variant="h3">When does your activity start and end?</Typography>
+            <Stack direction="row" gap="16px">
+              <TextField id="date" type="date" variant="outlined" placeholder="Date" />
+              <TextField id="startTime" type="time" variant="outlined" placeholder="Start time" />
+              <TextField id="endTime" type="time" variant="outlined" placeholder="End time" />
+            </Stack>
           </Stack>
-        </Stack>
-        <Stack padding="24px">
           <TextField
             id="location"
             type="search"
@@ -43,8 +41,6 @@ export default function CreateActivityMain({ children }: Props) {
               },
             }}
           />
-        </Stack>
-        <Stack padding="24px">
           <TextField
             id="activityName"
             variant="outlined"
@@ -53,9 +49,9 @@ export default function CreateActivityMain({ children }: Props) {
             multiline
           />
         </Stack>
-        <Divider />
-        {children}
       </CardContent>
+      <Divider />
+      {children}
     </Card>
   )
 }

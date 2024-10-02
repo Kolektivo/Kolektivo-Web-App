@@ -9,13 +9,13 @@ type Props = {
 export default function CreateActivityImage({ children }: Props) {
   return (
     <Card>
-      <CardContent sx={{ padding: '0px' }}>
+      <CardContent>
         <Box padding="24px">
           <UploadImage placeholder="Activity Banner" />
         </Box>
-        <Divider />
-        {children}
       </CardContent>
+      <Divider />
+      {children}
     </Card>
   )
 }

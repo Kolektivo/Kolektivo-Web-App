@@ -5,10 +5,11 @@ import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
 import Button from '@mui/material/Button'
-import { Link, Stack } from '@mui/material'
+import { CardActions, Link, Stack } from '@mui/material'
 import HeaderCard from '@/components/common/cards/HeaderCard'
-import CreateActivityMain from '../CreateActivityMain'
-import CreateActivityImage from '../CreateActivityImage'
+import CreateActivityMain from '../Main'
+import CreateActivityImage from '../Image'
+import CreateActivityRequirementsRewards from '../RequirementsRewards'
 
 const steps = ['', '', '', '']
 
@@ -28,7 +29,7 @@ export default function CreateActivityStepper() {
   // }
   const StepperButtons = () => {
     return (
-      <Stack direction="row" padding="24px 0px 0px 24px" justifyContent="end">
+      <CardActions>
         {activeStep == 0 ? (
           <Link href="/activities">
             <Button>Cancel</Button>
@@ -38,10 +39,10 @@ export default function CreateActivityStepper() {
             Go Back
           </Button>
         )}
-        <Button onClick={handleNext} color="secondary">
+        <Button onClick={handleNext} variant="contained" color="primary">
           Next
         </Button>
-      </Stack>
+      </CardActions>
     )
   }
 
@@ -74,6 +75,14 @@ export default function CreateActivityStepper() {
           <CreateActivityImage>
             <StepperButtons />
           </CreateActivityImage>
+        </Stack>
+      )}
+      {activeStep == 2 && (
+        <Stack gap="24px">
+          <HeaderCard title="Requirements & Rewards" />
+          <CreateActivityRequirementsRewards>
+            <StepperButtons />
+          </CreateActivityRequirementsRewards>
         </Stack>
       )}
     </Stack>
