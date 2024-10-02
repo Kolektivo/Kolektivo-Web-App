@@ -1,4 +1,4 @@
-import CreateOrganization from '@/components/my-organization/CreateOrganization'
+import CreateOrganization from '@/components/organization/CreateOrganization'
 import { type Metadata } from 'next'
 
 export const metadata: Metadata = {
