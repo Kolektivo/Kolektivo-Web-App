@@ -99,6 +99,24 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
             minHeight: '144px',
             alignItems: 'start',
           },
+          root: {
+            variants: [
+              {
+                props: { error: true },
+                style: {
+                  '&::after': {
+                    content: '"error"',
+                    display: 'block',
+                    'font-family': materialSymbolsOutlined.style.fontFamily,
+                    'font-size': '24px',
+                    'font-variation-settings': '"FILL" 1',
+                    color: colors.error.main,
+                    padding: spacing * 2,
+                  },
+                },
+              },
+            ],
+          },
         },
       },
       MuiOutlinedInput: {
@@ -109,6 +127,10 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
         styleOverrides: {
           input: {
             padding: spacing * 2,
+            ':-webkit-autofill': {
+              WebkitBoxShadow: `0 0 0 100px ${colors.background.default} inset`,
+              WebkitTextFillColor: colors.text.primary,
+            },
           },
         },
       },

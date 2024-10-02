@@ -18,7 +18,7 @@ const lightPalette = {
   },
   error: {
     dark: '#DA3E33',
-    main: '#F8A9A3',
+    main: '#F04438',
     light: '#FEECEB',
     contrastText: '#84251F',
   },

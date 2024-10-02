@@ -1,15 +1,43 @@
-import { type ReactElement } from 'react'
+'use client'
+
+import { type ChangeEvent, useRef, type ReactElement, useState } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
+import Image from 'next/image'
+
+type UploadImageProps = {
+  placeholder?: string
+  height?: number
+  width?: number
+  previewBase64?: string
+  onChangeImage?: (image: File) => void
+}
 
 const UploadImage = ({
   placeholder = 'Photo',
   height = 450,
   width = 800,
-}: {
-  placeholder?: string
-  height?: number
-  width?: number
-}): ReactElement => {
+  previewBase64,
+  onChangeImage,
+}: UploadImageProps): ReactElement => {
+  const inputFileRef = useRef<HTMLInputElement | null>(null)
+  const [preview, setPreview] = useState<string | null>(previewBase64 ?? null)
+
+  const handleUploadPhoto = () => {
+    if (inputFileRef.current) {
+      inputFileRef.current.click()
+    }
+  }
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      setPreview(URL.createObjectURL(file) ?? '')
+      if (onChangeImage) {
+        onChangeImage(file)
+      }
+    }
+  }
+
   return (
     <Stack direction={{ xs: 'column', sm: 'row' }} alignItems="center" gap={5}>
       <Box
@@ -20,15 +48,26 @@ const UploadImage = ({
         alignItems="center"
         display="flex"
       >
-        <Typography variant="subtitle2" textTransform="uppercase" color="#A9A9A9">
-          {placeholder}
-        </Typography>
+        {preview ? (
+          <Image src={preview} alt="Selected" width={285} height={160} style={{ borderRadius: '12px' }} />
+        ) : (
+          <Typography variant="subtitle2" textTransform="uppercase" color="#A9A9A9">
+            {placeholder}
+          </Typography>
+        )}
       </Box>
       <Stack gap={3}>
         <Box>
-          <Button variant="contained" color="secondary" size="small">
+          <Button onClick={handleUploadPhoto} variant="contained" color="secondary" size="small">
             Upload a photo
           </Button>
+          <input
+            type="file"
+            ref={inputFileRef}
+            style={{ display: 'none' }}
+            accept="image/png, image/jpeg"
+            onChange={handleFileChange}
+          />
         </Box>
         <Typography variant="caption" color="text.secondary" maxWidth={272}>
           At least {width}x{height} px recommended. JPG or PNG is allowed
