@@ -16,6 +16,7 @@ export default function CreateActivityMain({ children }: Props) {
             variant="outlined"
             label="What’s the name of your activity?"
             placeholder="Beach Cleanup"
+            required
           />
           <Stack gap="16px">
             <Typography variant="h3">When does your activity start and end?</Typography>

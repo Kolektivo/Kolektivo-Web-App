@@ -5,19 +5,21 @@ import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
 import Button from '@mui/material/Button'
-import { CardActions, Link, Stack } from '@mui/material'
+import { CardActions, FormControl, Link, Stack } from '@mui/material'
 import HeaderCard from '@/components/common/cards/HeaderCard'
 import CreateActivityMain from '../Main'
 import CreateActivityImage from '../Image'
 import CreateActivityRequirementsRewards from '../RequirementsRewards'
 import CreateActivityReview from '../Review'
-import CreatedActivityModal from '../Modal'
+import DialogSuccess from '@/components/common/modals/DialogSuccess'
+import { useRouter } from 'next/navigation'
 
 const steps = ['', '', '', '']
 
 export default function CreateActivityStepper() {
   const [activeStep, setActiveStep] = React.useState(0)
   const [open, setOpen] = React.useState<boolean>(false)
+  const router = useRouter()
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
@@ -29,6 +31,11 @@ export default function CreateActivityStepper() {
 
   const handleComplete = () => {
     setOpen(true)
+  }
+
+  const handleDialogSuccessClick = () => {
+    setOpen(false)
+    router.push('/activities')
   }
 
   const StepperButtons = () => {
@@ -71,39 +78,46 @@ export default function CreateActivityStepper() {
           )
         })}
       </Stepper>
-      <CreatedActivityModal open={open} setOpen={setOpen} />
-      {activeStep == 0 && (
-        <Stack gap="24px">
-          <HeaderCard title="Activity Details" />
-          <CreateActivityMain>
-            <StepperButtons />
-          </CreateActivityMain>
-        </Stack>
-      )}
-      {activeStep == 1 && (
-        <Stack gap="24px">
-          <HeaderCard title="Activity Image" />
-          <CreateActivityImage>
-            <StepperButtons />
-          </CreateActivityImage>
-        </Stack>
-      )}
-      {activeStep == 2 && (
-        <Stack gap="24px">
-          <HeaderCard title="Requirements & Rewards" />
-          <CreateActivityRequirementsRewards>
-            <StepperButtons />
-          </CreateActivityRequirementsRewards>
-        </Stack>
-      )}
-      {activeStep == 3 && (
-        <Stack gap="24px">
-          <HeaderCard title="Review" />
-          <CreateActivityReview>
-            <StepperButtons />
-          </CreateActivityReview>
-        </Stack>
-      )}
+      <DialogSuccess
+        title="Activity Created"
+        description="Your activity has been successfully created"
+        open={open}
+        onClickButton={handleDialogSuccessClick}
+      />
+      <FormControl>
+        {activeStep == 0 && (
+          <Stack gap="24px">
+            <HeaderCard title="Activity Details" />
+            <CreateActivityMain>
+              <StepperButtons />
+            </CreateActivityMain>
+          </Stack>
+        )}
+        {activeStep == 1 && (
+          <Stack gap="24px">
+            <HeaderCard title="Activity Image" />
+            <CreateActivityImage>
+              <StepperButtons />
+            </CreateActivityImage>
+          </Stack>
+        )}
+        {activeStep == 2 && (
+          <Stack gap="24px">
+            <HeaderCard title="Requirements & Rewards" />
+            <CreateActivityRequirementsRewards>
+              <StepperButtons />
+            </CreateActivityRequirementsRewards>
+          </Stack>
+        )}
+        {activeStep == 3 && (
+          <Stack gap="24px">
+            <HeaderCard title="Review" />
+            <CreateActivityReview>
+              <StepperButtons />
+            </CreateActivityReview>
+          </Stack>
+        )}
+      </FormControl>
     </Stack>
   )
 }
