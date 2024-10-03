@@ -28,6 +28,9 @@ const typography: TypographyOptions = {
     lineHeight: '19.2px',
     letterSpacing: '0.5px',
   },
+  h5: {
+    lineHeight: 1,
+  },
   subtitle1: {
     fontFamily: 'var(--font-lato)',
     fontWeight: 700,

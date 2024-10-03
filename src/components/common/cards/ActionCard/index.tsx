@@ -4,6 +4,7 @@ import Link from 'next/link'
 
 const ActionCard = ({
   icon,
+  iconColor,
   title,
   description,
   textButton,
@@ -12,6 +13,7 @@ const ActionCard = ({
   onClickButton,
 }: {
   icon: string
+  iconColor?: 'primary' | 'strongOrange'
   title: string
   description: string
   textButton: string
@@ -23,7 +25,7 @@ const ActionCard = ({
     <Card>
       <CardContent>
         <Stack gap={3}>
-          <Icon color="primary" sx={{ fontSize: '32px' }}>
+          <Icon color={iconColor} sx={{ fontSize: '32px' }}>
             {icon}
           </Icon>
           <Typography variant="h2">{title}</Typography>

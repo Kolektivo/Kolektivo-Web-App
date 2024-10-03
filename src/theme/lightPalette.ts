@@ -18,9 +18,9 @@ const lightPalette = {
   },
   error: {
     dark: '#DA3E33',
-    main: '#F8A9A3',
+    main: '#F04438',
     light: '#FEECEB',
-    contrastText: '#84251F',
+    contrastText: '#FFF',
   },
   success: {
     dark: '#92DEBA',
@@ -33,6 +33,12 @@ const lightPalette = {
     main: '#EAF6F6',
     light: '#EAF6F6',
     contrastText: '#1E7672',
+  },
+  strongOrange: {
+    dark: '#E96E3A',
+    main: '#E96E3A',
+    light: '#E96E3A',
+    contrastText: '#E96E3A',
   },
   warning: {
     dark: '#FBCC8E',

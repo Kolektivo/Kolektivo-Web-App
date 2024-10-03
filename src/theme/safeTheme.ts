@@ -9,6 +9,22 @@ import IconSelect from '@/components/common/inputs/select/IconSelect'
 
 const spacing = 6
 
+declare module '@mui/material/styles' {
+  interface Palette {
+    strongOrange: Palette['primary']
+  }
+
+  interface PaletteOptions {
+    strongOrange?: PaletteOptions['primary']
+  }
+}
+
+declare module '@mui/material/Icon' {
+  interface IconPropsColorOverrides {
+    strongOrange: true
+  }
+}
+
 const createSafeTheme = (mode: PaletteMode): Theme => {
   const colors = lightPalette
 
@@ -30,6 +46,13 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
         },
       },
       MuiCardContent: {
+        styleOverrides: {
+          root: {
+            padding: spacing * 4,
+          },
+        },
+      },
+      MuiCardHeader: {
         styleOverrides: {
           root: {
             padding: spacing * 4,
@@ -76,6 +99,24 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
             minHeight: '144px',
             alignItems: 'start',
           },
+          root: {
+            variants: [
+              {
+                props: { error: true },
+                style: {
+                  '&::after': {
+                    content: '"error"',
+                    display: 'block',
+                    'font-family': materialSymbolsOutlined.style.fontFamily,
+                    'font-size': '24px',
+                    'font-variation-settings': '"FILL" 1',
+                    color: colors.error.main,
+                    padding: spacing * 2,
+                  },
+                },
+              },
+            ],
+          },
         },
       },
       MuiOutlinedInput: {
@@ -86,6 +127,10 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
         styleOverrides: {
           input: {
             padding: spacing * 2,
+            ':-webkit-autofill': {
+              WebkitBoxShadow: `0 0 0 100px ${colors.background.default} inset`,
+              WebkitTextFillColor: colors.text.primary,
+            },
           },
         },
       },

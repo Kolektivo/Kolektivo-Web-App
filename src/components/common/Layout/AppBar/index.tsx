@@ -5,6 +5,8 @@ import { type MouseEventHandler } from 'react'
 const routesNames: { [key: string]: string } = {
   '/my-organization/create': 'Create Organization',
   '/my-organization/update': 'Update Organization',
+  '/my-vendor/update': 'Update Vendor',
+  '/activities/update': 'Update Activity',
 }
 
 function getNameRoute(pathname: string) {
