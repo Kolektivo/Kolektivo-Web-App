@@ -5,7 +5,7 @@ import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
 import Button from '@mui/material/Button'
-import { CardActions, FormControl, Link, Stack } from '@mui/material'
+import { CardActions, Link, Stack } from '@mui/material'
 import HeaderCard from '@/components/common/cards/HeaderCard'
 import CreateActivityMain from '../Main'
 import CreateActivityImage from '../Image'
@@ -66,13 +66,13 @@ export default function CreateActivityStepper() {
   return (
     <Stack gap="24px" sx={{ width: '100%' }}>
       <Stepper activeStep={activeStep}>
-        {steps.map((label) => {
+        {steps.map((label, index) => {
           const stepProps: { completed?: boolean } = {}
           const labelProps: {
             optional?: React.ReactNode
           } = {}
           return (
-            <Step key={label} {...stepProps}>
+            <Step key={index} {...stepProps}>
               <StepLabel {...labelProps}>{label}</StepLabel>
             </Step>
           )
@@ -84,40 +84,38 @@ export default function CreateActivityStepper() {
         open={open}
         onClickButton={handleDialogSuccessClick}
       />
-      <FormControl>
-        {activeStep == 0 && (
-          <Stack gap="24px">
-            <HeaderCard title="Activity Details" />
-            <CreateActivityMain>
-              <StepperButtons />
-            </CreateActivityMain>
-          </Stack>
-        )}
-        {activeStep == 1 && (
-          <Stack gap="24px">
-            <HeaderCard title="Activity Image" />
-            <CreateActivityImage>
-              <StepperButtons />
-            </CreateActivityImage>
-          </Stack>
-        )}
-        {activeStep == 2 && (
-          <Stack gap="24px">
-            <HeaderCard title="Requirements & Rewards" />
-            <CreateActivityRequirementsRewards>
-              <StepperButtons />
-            </CreateActivityRequirementsRewards>
-          </Stack>
-        )}
-        {activeStep == 3 && (
-          <Stack gap="24px">
-            <HeaderCard title="Review" />
-            <CreateActivityReview>
-              <StepperButtons />
-            </CreateActivityReview>
-          </Stack>
-        )}
-      </FormControl>
+      {activeStep == 0 && (
+        <Stack gap="24px">
+          <HeaderCard title="Activity Details" />
+          <CreateActivityMain>
+            <StepperButtons />
+          </CreateActivityMain>
+        </Stack>
+      )}
+      {activeStep == 1 && (
+        <Stack gap="24px">
+          <HeaderCard title="Activity Image" />
+          <CreateActivityImage>
+            <StepperButtons />
+          </CreateActivityImage>
+        </Stack>
+      )}
+      {activeStep == 2 && (
+        <Stack gap="24px">
+          <HeaderCard title="Requirements & Rewards" />
+          <CreateActivityRequirementsRewards>
+            <StepperButtons />
+          </CreateActivityRequirementsRewards>
+        </Stack>
+      )}
+      {activeStep == 3 && (
+        <Stack gap="24px">
+          <HeaderCard title="Review" />
+          <CreateActivityReview>
+            <StepperButtons />
+          </CreateActivityReview>
+        </Stack>
+      )}
     </Stack>
   )
 }

@@ -21,9 +21,9 @@ export default function CreateActivityMain({ children }: Props) {
           <Stack gap="16px">
             <Typography variant="h3">When does your activity start and end?</Typography>
             <Stack direction="row" gap="16px">
-              <TextField id="date" type="date" variant="outlined" placeholder="Date" />
-              <TextField id="startTime" type="time" variant="outlined" placeholder="Start time" />
-              <TextField id="endTime" type="time" variant="outlined" placeholder="End time" />
+              <TextField id="outlined-basic" type="date" variant="outlined" label="Date" />
+              <TextField id="startTime" type="time" variant="outlined" label="Start time" />
+              <TextField id="endTime" type="time" variant="outlined" label="End time" />
             </Stack>
           </Stack>
           <TextField

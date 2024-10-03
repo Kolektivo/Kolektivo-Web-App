@@ -8,6 +8,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  type SelectChangeEvent,
   Stack,
   Typography,
 } from '@mui/material'
@@ -19,7 +20,18 @@ type Props = {
 }
 
 export default function CreateActivityRequirementsRewards({ children }: Props) {
-  const handleChange = () => {}
+  const [requirements, setRequirements] = React.useState<string[]>([])
+
+  const handleRequirementsChange = (event: SelectChangeEvent<string>) => {
+    const {
+      target: { value },
+    } = event
+    if (requirements.includes(value)) {
+      return
+    }
+    setRequirements([...requirements, value])
+  }
+  
   return (
     <Card>
       <CardContent>
@@ -28,13 +40,23 @@ export default function CreateActivityRequirementsRewards({ children }: Props) {
             <Box>
               <Box>
                 <InputLabel>What are the requirements for the attendee?</InputLabel>
-                <Select onChange={handleChange} placeholder="Select requirement" value={0} autoWidth>
-                  <MenuItem disabled value={0}>
+                <Select
+                  onChange={handleRequirementsChange}
+                  placeholder="Select requirement"
+                  value={requirements[requirements.length - 1]}
+                  renderValue={(selected) => {
+                    console.log(selected)
+                    if (selected === '') {
+                      return <>Select requirement</>
+                    }
+                    return selected
+                  }}
+                >
+                  <MenuItem disabled value="">
                     Select requirement
                   </MenuItem>
-                  <MenuItem value={10}>Ten years old</MenuItem>
-                  <MenuItem value={20}>Twenty years old</MenuItem>
-                  <MenuItem value={30}>Thirty years old</MenuItem>
+                  <MenuItem value="Of legal age">Of legal age</MenuItem>
+                  <MenuItem value="Old">Old</MenuItem>
                 </Select>
               </Box>
               <Button
@@ -53,12 +75,6 @@ export default function CreateActivityRequirementsRewards({ children }: Props) {
                 </Stack>
               </Button>
             </Box>
-            {/* <TextField
-            id="activityName"
-            variant="outlined"
-            label="What are the requirements for the attendee?"
-            placeholder="Select requirement"
-          /> */}
             <Stack gap="16px">
               <TextField
                 id="activityName"
@@ -67,20 +83,14 @@ export default function CreateActivityRequirementsRewards({ children }: Props) {
                 placeholder="Enter amount of points"
               />
             </Stack>
-            {/* <TextField
-              id="activityName"
-              variant="outlined"
-              label="Which stamps can the attendee earn?"
-              placeholder="Select stamp"
-            /> */}
-            <Box>
-              <InputLabel>Which stamps can the attendee earn?</InputLabel>
-              <Select id="demo-simple-select" label="Age" onChange={handleChange} autoWidth>
+            {/* <Box>
+              <InputLabel id="stampsLabel">Which stamps can the attendee earn?</InputLabel>
+              <Select id="demo-simple-select" label="stampsLabel" onChange={handleChange}>
                 <MenuItem value={10}>Ten years old</MenuItem>
                 <MenuItem value={20}>Twenty years old</MenuItem>
                 <MenuItem value={30}>Thirty years old</MenuItem>
               </Select>
-            </Box>
+            </Box> */}
           </Stack>
         </Box>
       </CardContent>

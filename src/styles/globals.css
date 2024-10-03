@@ -6,3 +6,6 @@ img {
   width: 112px;
   height: 48px;
 }
+.MuiInputBase-input {
+  color: #989898;
+}
