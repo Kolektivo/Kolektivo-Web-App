@@ -4,27 +4,37 @@ import { type ChangeEvent, useRef, type ReactElement, useState } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import Image from 'next/image'
 
+type UploadImageProps = {
+  placeholder?: string
+  height?: number
+  width?: number
+  previewBase64?: string
+  onChangeImage?: (image: File) => void
+}
+
 const UploadImage = ({
   placeholder = 'Photo',
   height = 450,
   width = 800,
-}: {
-  placeholder?: string
-  height?: number
-  width?: number
-}): ReactElement => {
+  previewBase64,
+  onChangeImage,
+}: UploadImageProps): ReactElement => {
   const inputFileRef = useRef<HTMLInputElement | null>(null)
-  const [preview, setPreview] = useState<string | null>(null)
+  const [preview, setPreview] = useState<string | null>(previewBase64 ?? null)
 
   const handleUploadPhoto = () => {
     if (inputFileRef.current) {
       inputFileRef.current.click()
     }
   }
+
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
-      setPreview(URL.createObjectURL(file) ? URL.createObjectURL(file) : '')
+      setPreview(URL.createObjectURL(file) ?? '')
+      if (onChangeImage) {
+        onChangeImage(file)
+      }
     }
   }
 

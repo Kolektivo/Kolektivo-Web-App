@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Providers from './provider'
 import { lato, materialSymbolsOutlined, poppins } from '@/theme/fonts'
-import Layout from '@/components/Layout'
+import Layout from '@/components/common/Layout'
 import '@/styles/globals.css'
 
 export const metadata: Metadata = {

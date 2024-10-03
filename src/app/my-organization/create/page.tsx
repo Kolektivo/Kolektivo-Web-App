@@ -1,4 +1,4 @@
-import Create from '@/components/my-organization/Create'
+import CreateOrganization from '@/components/organization/CreateOrganization'
 import { type Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 }
 
 export default async function Page() {
-  return <Create></Create>
+  return <CreateOrganization />
 }
