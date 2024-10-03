@@ -1,4 +1,5 @@
 import IconTwoTone from '@/components/common/display/IconTwoTone'
+import AutocompletePlaces from '@/components/common/inputs/autocomplete/AutocompletePlaces'
 import {
   Box,
   Button,
@@ -75,6 +76,8 @@ export default function Home() {
                 }}
               />
             </FormControl>
+            <Box height={10}></Box>
+            <AutocompletePlaces />
             <Box height={10}></Box>
             <Select value={10} displayEmpty>
               <MenuItem value="">

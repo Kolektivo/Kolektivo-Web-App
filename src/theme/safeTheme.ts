@@ -92,6 +92,16 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
           },
         },
       },
+      MuiAutocomplete: {
+        styleOverrides: {
+          inputRoot: {
+            padding: `0 ${spacing * 2}px !important`,
+          },
+          input: {
+            padding: `${spacing * 2}px !important`,
+          },
+        },
+      },
       MuiInputBase: {
         styleOverrides: {
           multiline: {
@@ -107,9 +117,9 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
                   '&::after': {
                     content: '"error"',
                     display: 'block',
-                    'font-family': materialSymbolsOutlined.style.fontFamily,
-                    'font-size': '24px',
-                    'font-variation-settings': '"FILL" 1',
+                    fontFamily: materialSymbolsOutlined.style.fontFamily,
+                    fontSize: '24px',
+                    fontVariationSettings: '"FILL" 1',
                     color: colors.error.main,
                     padding: spacing * 2,
                   },

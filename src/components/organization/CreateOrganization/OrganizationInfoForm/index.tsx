@@ -1,10 +1,11 @@
 import { type MouseEventHandler, type ReactElement } from 'react'
-import { Button, Card, CardActions, CardContent, Icon, InputAdornment, Stack, TextField } from '@mui/material'
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { Button, Card, CardActions, CardContent, Stack, TextField } from '@mui/material'
+import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { type OrganizationInfo } from '@/types/organization'
 import HeaderCard from '@/components/common/cards/HeaderCard'
+import AutocompletePlaces from '@/components/common/inputs/autocomplete/AutocompletePlaces'
 
 const formInfoSchema = z.object({
   name: z.string().min(1),
@@ -23,6 +24,7 @@ type OrganizationInfoFormProps = {
 
 const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: OrganizationInfoFormProps): ReactElement => {
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors, isValid },
@@ -47,21 +49,23 @@ const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: Organizatio
                 }}
                 error={!!errors?.name}
               ></TextField>
-              <TextField
-                label="Location"
-                placeholder="Enter location"
-                slotProps={{
-                  htmlInput: { ...register('location') },
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Icon>search</Icon>
-                      </InputAdornment>
-                    ),
-                  },
+              <Controller
+                control={control}
+                rules={{
+                  required: true,
                 }}
-                error={!!errors?.location}
-              ></TextField>
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <AutocompletePlaces
+                    label="Location"
+                    placeholder="Enter location"
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    error={!!errors?.location}
+                  />
+                )}
+                name="location"
+              />
               <TextField
                 label="Website"
                 placeholder="Enter website URL"
