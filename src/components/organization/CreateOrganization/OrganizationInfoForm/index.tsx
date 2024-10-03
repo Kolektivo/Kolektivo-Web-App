@@ -9,9 +9,9 @@ import HeaderCard from '@/components/common/cards/HeaderCard'
 const formInfoSchema = z.object({
   name: z.string().min(1),
   location: z.string().min(1),
-  website: z.string().url().min(1),
-  email: z.string().email().min(1),
-  description: z.string().min(5),
+  website: z.string().url({ message: 'Invalid url' }).min(1),
+  email: z.string().email({ message: 'Invalid email address' }).min(1),
+  description: z.string().min(5, { message: 'Must be 5 or more characters long' }),
   commitment: z.string(),
 })
 
@@ -29,6 +29,7 @@ const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: Organizatio
   } = useForm<OrganizationInfo>({
     resolver: zodResolver(formInfoSchema),
     defaultValues,
+    mode: 'onBlur',
   })
 
   return (
@@ -69,6 +70,7 @@ const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: Organizatio
                   htmlInput: { ...register('website') },
                 }}
                 error={!!errors?.website}
+                helperText={errors?.website?.message}
               ></TextField>
               <TextField
                 label="Email"
@@ -78,6 +80,7 @@ const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: Organizatio
                   htmlInput: { ...register('email') },
                 }}
                 error={!!errors?.email}
+                helperText={errors?.email?.message}
               ></TextField>
               <TextField
                 label="Description"
@@ -87,6 +90,7 @@ const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: Organizatio
                   htmlInput: { ...register('description') },
                 }}
                 error={!!errors?.description}
+                helperText={errors?.description?.message}
               ></TextField>
               <TextField
                 label="Commitment"
