@@ -10,20 +10,23 @@ const ACTIVITIES = 'activities'
 export async function GET() {
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
   const { data, error } = await supabaseClient.from(ACTIVITIES).select('*')
-  console.log(error)
+  if (error)
+    return NextResponse.json(error)
   return NextResponse.json(data)
 }
 
 export async function POST(req: NextRequest) {
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
-  const { data, error } = await supabaseClient.from(ACTIVITIES).insert([req.json()]).select()
-  console.log(error)
+  const { data, error } = await supabaseClient.from(ACTIVITIES).insert([await req.json()]).select()
+  if (error)
+    return NextResponse.json(error)
   return NextResponse.json(data)
 }
 
 export async function PUT(req: NextRequest) {
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
-  const { data, error } = await supabaseClient.from('activities').upsert(req.json()).select()
-  console.log(error)
+  const { data, error } = await supabaseClient.from(ACTIVITIES).upsert(await req.json()).select()
+  if (error)
+    return NextResponse.json(error)
   return NextResponse.json(data)
 }
