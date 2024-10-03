@@ -31,7 +31,7 @@ export default function CreateActivityRequirementsRewards({ children }: Props) {
     }
     setRequirements([...requirements, value])
   }
-  
+
   return (
     <Card>
       <CardContent>
@@ -40,18 +40,7 @@ export default function CreateActivityRequirementsRewards({ children }: Props) {
             <Box>
               <Box>
                 <InputLabel>What are the requirements for the attendee?</InputLabel>
-                <Select
-                  onChange={handleRequirementsChange}
-                  placeholder="Select requirement"
-                  value={requirements[requirements.length - 1]}
-                  renderValue={(selected) => {
-                    console.log(selected)
-                    if (selected === '') {
-                      return <>Select requirement</>
-                    }
-                    return selected
-                  }}
-                >
+                <Select onChange={handleRequirementsChange} value={requirements[requirements.length - 1]}>
                   <MenuItem disabled value="">
                     Select requirement
                   </MenuItem>

@@ -1,4 +1,4 @@
-import { Card, CardContent, Divider, Icon, InputAdornment, Stack, Typography } from '@mui/material'
+import { Box, Card, CardContent, Divider, Icon, InputAdornment, Stack, Typography } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import React, { type ReactNode } from 'react'
 
@@ -21,7 +21,17 @@ export default function CreateActivityMain({ children }: Props) {
           <Stack gap="16px">
             <Typography variant="h3">When does your activity start and end?</Typography>
             <Stack direction="row" gap="16px">
-              <TextField id="outlined-basic" type="date" variant="outlined" label="Date" />
+              <TextField label="Label text"></TextField>
+              <Box height={10}></Box>
+              <TextField
+                label="Date"
+                slotProps={{
+                  inputLabel: { variant: 'filled' },
+                  input: {
+                    type: 'date',
+                  },
+                }}
+              />
               <TextField id="startTime" type="time" variant="outlined" label="Start time" />
               <TextField id="endTime" type="time" variant="outlined" label="End time" />
             </Stack>
