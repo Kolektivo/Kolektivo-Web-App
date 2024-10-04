@@ -60,7 +60,7 @@ const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: Organizatio
                     placeholder="Enter location"
                     onChange={onChange}
                     onBlur={onBlur}
-                    value={value}
+                    value={value ?? ''}
                     error={!!errors?.location}
                   />
                 )}

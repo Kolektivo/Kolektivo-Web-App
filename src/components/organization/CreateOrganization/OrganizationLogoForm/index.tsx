@@ -5,9 +5,9 @@ import HeaderCard from '@/components/common/cards/HeaderCard'
 import LoadingButton from '@/components/common/buttons/LoadingButton'
 
 type OrganizationLogoFormProps = {
-  defaultLogoBase64?: string
+  defaultLogoBase64: string | null
   loading?: boolean
-  onCancel?: (imageBase64: string | undefined) => void
+  onCancel?: (imageBase64: string | null) => void
   onSubmit: (imageBase64: string) => void
 }
 
@@ -17,7 +17,7 @@ const OrganizationLogo = ({
   onSubmit,
   loading = false,
 }: OrganizationLogoFormProps): ReactElement => {
-  const [logoBase64, setLogoBase64] = useState<string | undefined>(defaultLogoBase64)
+  const [logoBase64, setLogoBase64] = useState<string | null>(defaultLogoBase64)
 
   const handleSubmit = () => {
     onSubmit(logoBase64!)
@@ -27,13 +27,13 @@ const OrganizationLogo = ({
     const reader = new FileReader()
     reader.readAsDataURL(image)
     reader.onload = () => {
-      setLogoBase64(reader.result?.toString())
+      setLogoBase64(reader.result?.toString() ?? null)
     }
   }
 
   const handleCancelation = () => {
     if (onCancel) {
-      onCancel(logoBase64)
+      onCancel(logoBase64 ?? null)
     }
   }
 
@@ -44,7 +44,7 @@ const OrganizationLogo = ({
         <CardContent>
           <UploadImage
             placeholder="Organization Logo"
-            previewBase64={defaultLogoBase64}
+            previewBase64={defaultLogoBase64 ?? undefined}
             onChangeImage={handleChangeLogo}
           />
         </CardContent>
