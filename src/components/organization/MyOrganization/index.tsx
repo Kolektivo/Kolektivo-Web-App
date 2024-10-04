@@ -3,6 +3,7 @@ import { type ReactElement } from 'react'
 import InfoCard from '@/components/common/cards/InfoCard'
 import FallbackImage from '@/components/common/display/FallbackImage'
 import { type Organization } from '@/types/organization'
+import Link from 'next/link'
 
 const MyOrganization = ({ organization }: { organization: Organization }): ReactElement => {
   const InfoItem = ({ title, value }: { title: string; value: string }) => (
@@ -27,9 +28,11 @@ const MyOrganization = ({ organization }: { organization: Organization }): React
           >
             <FallbackImage src={organization.logoSrc ?? ''} alt="my-organization-logo" width={284} height={160} />
             <Box>
-              <Button variant="contained" color="secondary">
-                Update
-              </Button>
+              <Link href="/my-organization/update">
+                <Button variant="contained" color="secondary">
+                  Update
+                </Button>
+              </Link>
             </Box>
           </Stack>
           <Card variant="outlined">
@@ -39,8 +42,8 @@ const MyOrganization = ({ organization }: { organization: Organization }): React
                 <Stack direction={{ xs: 'column', sm: 'row' }} gap={4}>
                   <InfoItem title="Name" value={organization.name ?? ''} />
                   <InfoItem title="Location" value={organization.location ?? ''} />
-                  <InfoItem title="Website" value={organization.location ?? ''} />
-                  <InfoItem title="Email" value={organization.location ?? ''} />
+                  <InfoItem title="Website" value={organization.website ?? ''} />
+                  <InfoItem title="Email" value={organization.email ?? ''} />
                 </Stack>
               </Stack>
             </CardContent>
