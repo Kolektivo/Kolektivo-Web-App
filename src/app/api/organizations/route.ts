@@ -13,12 +13,15 @@ export async function GET() {
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
   const { data, error } = await supabaseClient.from(ORGANIZATIONS).select('*')
   if (error) return NextResponse.json(error)
-  data.forEach((organization) => {
-    const organizationId = organization.id
-    const logoPath = `${logoBasePath}/${organizationId}`
-    organization.logoSrc = downloadFile(supabaseBucket, logoPath)
-  })
-  return NextResponse.json(data)
+
+  const organizationsWithLogos = await Promise.all(
+    data.map(async (organization) => {
+      const logoSrc = await downloadFile(supabaseBucket, organization.logoPath)
+      return { ...organization, logoSrc }
+    }),
+  )
+
+  return NextResponse.json(organizationsWithLogos)
 }
 
 export async function POST(req: NextRequest) {
@@ -54,20 +57,31 @@ async function uploadFile(bucketName: string, filePath: string, base64File: stri
 }
 
 async function downloadFile(bucketName: string, filePath: string) {
+  if (filePath == '' || !filePath) return ''
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
   const { data, error } = await supabaseClient.storage.from(bucketName).download(filePath)
 
   if (error) {
     console.error('Error downloading file:', error.message)
   } else {
-    console.log('File downloaded successfully:')
-    const imageSource = blobToImageSrc(data)
+    const mimeType = filePath.endsWith('png') ? 'image/png' : 'image/jpeg'
+    const base64 = await blobToImageSrc(data)
+    const imageSource = `data:${mimeType};base64,${base64}`
     return imageSource
   }
 }
 
-function blobToImageSrc(blob: Blob): string {
-  return URL.createObjectURL(blob)
+// function blobToImageSrc(blob: Blob): string {
+//   return URL.createObjectURL(blob)
+// }
+
+async function blobToImageSrc(blob: Blob): Promise<string> {
+  // Convierte el Blob a ArrayBuffer
+  const arrayBuffer = await blob.arrayBuffer()
+  // Convierte el ArrayBuffer a un Buffer
+  const buffer = Buffer.from(arrayBuffer)
+  // Convierte el Buffer a base64
+  return buffer.toString('base64')
 }
 
 async function base64ImageSourceToBlob(base64imageSource: string): Promise<Blob> {
