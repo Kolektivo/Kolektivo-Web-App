@@ -1,4 +1,5 @@
 export interface OrganizationInfo {
+  id?: string
   name?: string
   location?: string
   website?: string
