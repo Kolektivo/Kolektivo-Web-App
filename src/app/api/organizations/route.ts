@@ -44,6 +44,12 @@ export async function POST(req: NextRequest) {
   return NextResponse.json(data[0])
 }
 
+export async function PUT(req: NextRequest) {
+  const updateResult = await updateOrganization(await req.json())
+  if (updateResult.error) return NextResponse.json(updateResult.error)
+  return NextResponse.json(updateResult.data)
+}
+
 async function uploadFile(bucketName: string, filePath: string, base64File: string) {
   const fileBlob = await base64ImageSourceToBlob(base64File)
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
@@ -71,16 +77,9 @@ async function downloadFile(bucketName: string, filePath: string) {
   }
 }
 
-// function blobToImageSrc(blob: Blob): string {
-//   return URL.createObjectURL(blob)
-// }
-
 async function blobToImageSrc(blob: Blob): Promise<string> {
-  // Convierte el Blob a ArrayBuffer
   const arrayBuffer = await blob.arrayBuffer()
-  // Convierte el ArrayBuffer a un Buffer
   const buffer = Buffer.from(arrayBuffer)
-  // Convierte el Buffer a base64
   return buffer.toString('base64')
 }
 
@@ -89,15 +88,16 @@ async function base64ImageSourceToBlob(base64imageSource: string): Promise<Blob>
   return await response.blob()
 }
 
-export async function PUT(req: NextRequest) {
-  const updateResult = await updateOrganization(await req.json())
-  if (updateResult.error) return NextResponse.json(updateResult.error)
-  return NextResponse.json(updateResult.data)
-}
-
 async function updateOrganization(organization: Organization) {
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
-  const { data, error } = await supabaseClient.from(ORGANIZATIONS).upsert(organization).select()
+  const { logoSrc, ...organizationWithoutLogoSrc } = organization
+  console.log('Removed :' + logoSrc)
+
+  const { data, error } = await supabaseClient
+    .from(ORGANIZATIONS)
+    .update(organizationWithoutLogoSrc)
+    .eq('id', organization.id)
+    .select()
   return { error, data }
 }
 
