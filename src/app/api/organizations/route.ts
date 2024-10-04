@@ -29,13 +29,16 @@ export async function POST(req: NextRequest) {
 
   const { data, error } = await supabaseClient.from(ORGANIZATIONS).insert([newOrganization]).select()
   if (error) return NextResponse.json(error)
-
   const organizationId = data[0].id
-  const logoPath = `${logoBasePath}/${organizationId}`
-
+  const mimeType = logoSrc.split(';')[0].split(':')[1]
+  const extension = mimeType === 'image/png' ? 'png' : 'jpg'
+  const logoPath = `${logoBasePath}/${organizationId}.${extension}`
+  data[0].logoPath = logoPath
   await uploadFile(supabaseBucket, logoPath, logoSrc)
 
-  return NextResponse.json(data)
+  updateOrganization(data[0])
+  data[0].logoSrc = logoSrc
+  return NextResponse.json(data[0])
 }
 
 async function uploadFile(bucketName: string, filePath: string, base64File: string) {
@@ -73,12 +76,26 @@ async function base64ImageSourceToBlob(base64imageSource: string): Promise<Blob>
 }
 
 export async function PUT(req: NextRequest) {
-  const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
-  const { data, error } = await supabaseClient
-    .from(ORGANIZATIONS)
-    .upsert(await req.json())
-    .select()
+  const updateResult = await updateOrganization(await req.json())
+  if (updateResult.error) return NextResponse.json(updateResult.error)
+  return NextResponse.json(updateResult.data)
+}
 
-  if (error) return NextResponse.json(error)
-  return NextResponse.json(data)
+async function updateOrganization(organization: Organization) {
+  const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
+  const { data, error } = await supabaseClient.from(ORGANIZATIONS).upsert(organization).select()
+  return { error, data }
+}
+
+interface Organization {
+  id: string
+  created_at: string
+  name: string
+  location: string
+  website: string
+  email: string
+  description: string
+  commitment: string
+  logoPath: string
+  logoSrc: string
 }
