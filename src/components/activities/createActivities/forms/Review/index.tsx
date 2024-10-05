@@ -1,9 +1,14 @@
+import { type CreateActivityRequirementsRewardsFormValues } from '@/types/activities'
+import { type OrganizationInfo } from '@/types/organization'
 import { Box, Card, CardContent, Divider, Icon, InputAdornment, Stack, Typography } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import React, { type ReactNode } from 'react'
+import { type SubmitHandler } from 'react-hook-form'
 
 type Props = {
   children: ReactNode
+  submitHandler: SubmitHandler<CreateActivityRequirementsRewardsFormValues>
+  defaultValues?: OrganizationInfo
 }
 export default function CreateActivityReview({ children }: Props) {
   return (
