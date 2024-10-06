@@ -7,6 +7,7 @@ const routesNames: { [key: string]: string } = {
   '/my-organization/update': 'Update Organization',
   '/my-vendor/update': 'Update Vendor',
   '/activities/update': 'Update Activity',
+  '/activities/create': 'Create Activity',
 }
 
 function getNameRoute(pathname: string) {
