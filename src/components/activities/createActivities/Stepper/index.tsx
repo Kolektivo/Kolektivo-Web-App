@@ -128,9 +128,10 @@ export default function CreateActivityStepper() {
       {activeStep == 2 && (
         <Stack gap="24px">
           <HeaderCard title="Requirements & Rewards" />
-          <CreateActivityRequirementsRewards>
-            <StepperButtons />
-          </CreateActivityRequirementsRewards>
+          <CreateActivityRequirementsRewards
+            submitHandler={handleRequirementsRewardsFormSubmit}
+            backHandler={handleBack}
+          />
         </Stack>
       )}
       {activeStep == 3 && (

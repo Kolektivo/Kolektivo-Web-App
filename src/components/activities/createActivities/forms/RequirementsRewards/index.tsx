@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Card,
+  CardActions,
   CardContent,
   Divider,
   Icon,
@@ -13,78 +14,140 @@ import {
   Typography,
 } from '@mui/material'
 import TextField from '@mui/material/TextField'
-import React, { type ReactNode } from 'react'
+import React, { useEffect } from 'react'
+import { requiremetsRewardsFormSchema } from '@/constants/activities/create/schemas'
+import type { SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import type { CreateActivityRequirementsRewardsFormValues } from '@/types/activities'
 
 type Props = {
-  children: ReactNode
+  submitHandler: SubmitHandler<CreateActivityRequirementsRewardsFormValues>
+  backHandler: () => void
 }
 
-export default function CreateActivityRequirementsRewards({ children }: Props) {
-  const [requirements, setRequirements] = React.useState<string[]>([])
+export default function CreateActivityRequirementsRewards({ submitHandler, backHandler }: Props) {
+  const [requirements, setRequirements] = React.useState<string[]>(['0'])
 
-  const handleRequirementsChange = (event: SelectChangeEvent<string>) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<CreateActivityRequirementsRewardsFormValues>({
+    resolver: zodResolver(requiremetsRewardsFormSchema),
+    mode: 'onBlur',
+  })
+
+  const handleRequirementsChange = (event: SelectChangeEvent<string>, index: number) => {
+    console.log(index)
     const {
       target: { value },
     } = event
     if (requirements.includes(value)) {
       return
     }
-    setRequirements([...requirements, value])
+    const updatedRequirements = [...requirements]
+    updatedRequirements[index] = value
+    setRequirements(updatedRequirements)
   }
+
+  const handleAddRequirement = () => {
+    setRequirements([...requirements, ''])
+  }
+
+  const handleRemoverequirements = (_: unknown, index: number) => {
+    console.log(requirements.length)
+    if (requirements.length > 1) {
+      const updatedRequirements = requirements.filter((_, i) => i !== index)
+      setRequirements(updatedRequirements)
+    } else {
+      setRequirements(['0'])
+    }
+  }
+
+  useEffect(() => {
+    console.log(requirements)
+  }, [isValid, requirements])
 
   return (
     <Card>
-      <CardContent>
-        <Box width="64%">
-          <Stack gap="48px">
-            <Box>
+      <form onSubmit={handleSubmit(submitHandler)}>
+        <CardContent>
+          <Box width="64%">
+            <Stack gap="48px">
               <Box>
-                <InputLabel>What are the requirements for the attendee?</InputLabel>
-                <Select onChange={handleRequirementsChange} value={requirements[requirements.length - 1]}>
-                  <MenuItem disabled value="">
-                    Select requirement
+                <Box>
+                  <InputLabel>What are the requirements for the attendee?</InputLabel>
+                  <Stack gap="16px">
+                    {requirements.map((requirement, index) => (
+                      <Stack key={index} direction="row" gap={2}>
+                        <Select onChange={(event) => handleRequirementsChange(event, index)} value={requirement}>
+                          <MenuItem disabled value="0">
+                            Select requirement
+                          </MenuItem>
+                          <MenuItem value="Of legal age">Of legal age</MenuItem>
+                          <MenuItem value="Old">Old</MenuItem>
+                        </Select>
+                        <Button onClick={(event) => handleRemoverequirements(event, index)} sx={{ padding: '8px' }}>
+                          <Icon>close</Icon>
+                        </Button>
+                      </Stack>
+                    ))}
+                  </Stack>
+                </Box>
+                <Button
+                  onClick={handleAddRequirement}
+                  variant="contained"
+                  color="secondary"
+                  size="small"
+                  sx={{ marginTop: '16px', padding: '6px 12px' }}
+                >
+                  <Stack direction="row" alignItems="center" justifyContent="center" gap={1}>
+                    <Icon color="primary" sx={{ fontSize: '16px', lineHeight: '16px' }}>
+                      add_circle
+                    </Icon>
+                    <Typography fontWeight={700} fontSize={14}>
+                      Add other requirement
+                    </Typography>
+                  </Stack>
+                </Button>
+              </Box>
+              <Stack gap="16px">
+                <TextField
+                  id="activityName"
+                  type="number"
+                  variant="outlined"
+                  label="How many Kolektivo Points can each attendee earn? "
+                  placeholder="Enter amount of points"
+                  slotProps={{
+                    htmlInput: { ...register('kolectivoPoints') },
+                  }}
+                  error={!!errors?.kolectivoPoints}
+                />
+              </Stack>
+              <Box>
+                <InputLabel>Which stamps can the attendee earn?</InputLabel>
+                <Select value="0">
+                  <MenuItem disabled value="0">
+                    Select stamp
                   </MenuItem>
-                  <MenuItem value="Of legal age">Of legal age</MenuItem>
-                  <MenuItem value="Old">Old</MenuItem>
+                  <MenuItem value="Of legal age">Stamp 1</MenuItem>
+                  <MenuItem value="Old">Stamp 2</MenuItem>
                 </Select>
               </Box>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="small"
-                sx={{ marginTop: '16px', padding: '6px 12px' }}
-              >
-                <Stack direction="row" alignItems="center" justifyContent="center" gap={1}>
-                  <Icon color="primary" sx={{ fontSize: '16px', lineHeight: '16px' }}>
-                    add_circle
-                  </Icon>
-                  <Typography fontWeight={700} fontSize={14}>
-                    Add other requirement
-                  </Typography>
-                </Stack>
-              </Button>
-            </Box>
-            <Stack gap="16px">
-              <TextField
-                id="activityName"
-                variant="outlined"
-                label="How many Kolektivo Points can each attendee earn? "
-                placeholder="Enter amount of points"
-              />
             </Stack>
-            {/* <Box>
-              <InputLabel id="stampsLabel">Which stamps can the attendee earn?</InputLabel>
-              <Select id="demo-simple-select" label="stampsLabel" onChange={handleChange}>
-                <MenuItem value={10}>Ten years old</MenuItem>
-                <MenuItem value={20}>Twenty years old</MenuItem>
-                <MenuItem value={30}>Thirty years old</MenuItem>
-              </Select>
-            </Box> */}
-          </Stack>
-        </Box>
-      </CardContent>
-      <Divider />
-      {children}
+          </Box>
+        </CardContent>
+        <Divider />
+        <CardActions>
+          <Button onClick={backHandler} color="secondary">
+            Go Back
+          </Button>
+          <Button type="submit" variant="contained" color="primary" className="stepperButton">
+            Next
+          </Button>
+        </CardActions>
+      </form>
     </Card>
   )
 }

@@ -11,40 +11,28 @@ import {
   Typography,
 } from '@mui/material'
 import TextField from '@mui/material/TextField'
-import * as z from 'zod'
 import React from 'react'
-import type { OrganizationInfo } from '@/types/organization'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { type CreateActivityDetailFormValues } from '@/types/activities'
-
-const formMainSchema = z.object({
-  name: z.string().min(3),
-  date: z.string().date(),
-  startTime: z.string().min(4),
-  endTime: z.string().min(4),
-  location: z.string().min(3),
-  description: z.string().min(12),
-})
+import { detailFormShema } from '@/constants/activities/create/schemas'
 
 type Props = {
   submitHandler: SubmitHandler<CreateActivityDetailFormValues>
-  defaultValues?: OrganizationInfo
 }
 
-export default function CreateActivityDetailForm({ submitHandler: onSubmit, defaultValues }: Props) {
+export default function CreateActivityDetailForm({ submitHandler }: Props) {
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<CreateActivityDetailFormValues>({
-    resolver: zodResolver(formMainSchema),
+    resolver: zodResolver(detailFormShema),
     mode: 'onBlur',
-    defaultValues,
   })
   return (
     <Card>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(submitHandler)}>
         <CardContent>
           <Stack gap="48px">
             <TextField
