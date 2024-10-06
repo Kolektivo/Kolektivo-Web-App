@@ -40,6 +40,24 @@ const lightPalette = {
     light: '#E96E3A',
     contrastText: '#E96E3A',
   },
+  bannerLightGray: {
+    dark: '#F2F2F2',
+    main: '#F2F2F2',
+    light: '#F2F2F2',
+    contrastText: '#A9A9A9',
+  },
+  chipOrange: {
+    dark: '#FBCC8E',
+    main: '#FBCC8E',
+    light: '#FBCC8E',
+    contrastText: '#884F05',
+  },
+  notReady: {
+    dark: '#C4C4C4',
+    main: '#C4C4C4',
+    light: '#C4C4C4',
+    contrastText: '#C4C4C4',
+  },
   warning: {
     dark: '#FBCC8E',
     main: '#FBCC8E',

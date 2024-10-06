@@ -25,6 +25,19 @@ declare module '@mui/material/Icon' {
   }
 }
 
+declare module '@mui/material/Chip' {
+  interface ChipPropsColorOverrides {
+    strongOrange: true
+    chipOrange: true
+  }
+}
+
+declare module '@mui/material/Box' {
+  interface BoxPropsColorOverrides {
+    bannerLightGray: true
+  }
+}
+
 const createSafeTheme = (mode: PaletteMode): Theme => {
   const colors = lightPalette
 
@@ -80,14 +93,37 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
           disableAnimation: true,
           sx: {
             position: 'relative',
-            fontSize: '18px',
-            fontWeight: 700,
-            textTransform: { scale: 1 },
-            marginBottom: 2,
-            color: colors.text.primary,
+            // fontSize: '18px',
+            // fontWeight: 700,
+            // textTransform: { scale: 1 },
+            // marginBottom: 2,
+            // color: colors.text.primary,
           },
         },
         styleOverrides: {
+          root: {
+            variants: [
+              {
+                props: { variant: 'standard' },
+                style: {
+                  fontSize: '18px',
+                  fontWeight: 700,
+                  color: colors.text.primary,
+                  transform: 'scale(1) !impmortant',
+                  marginBottom: spacing * 2,
+                },
+              },
+              {
+                props: { variant: 'filled' },
+                style: {
+                  fontSize: '12px',
+                  transform: 'scale(1) !impmortant',
+                  lineHeight: '15px',
+                  marginBottom: '4px',
+                },
+              },
+            ],
+          },
           shrink: {
             transform: 'scale(1) !important',
           },
