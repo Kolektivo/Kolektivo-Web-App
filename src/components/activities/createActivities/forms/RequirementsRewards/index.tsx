@@ -44,15 +44,35 @@ const requirementsOptions = [
   },
 ]
 
+const stampsOptions = [
+  {
+    value: 'Stamp1',
+    label: 'Stamp 1',
+    disabled: false,
+  },
+  {
+    value: 'Stamp2',
+    label: 'Stamp 2',
+    disabled: false,
+  },
+  {
+    value: 'Stamp3',
+    label: 'Stamp3',
+    disabled: false,
+  },
+]
+
 export default function CreateActivityRequirementsRewards({ submitHandler, backHandler }: Props) {
   const [requirements, setRequirements] = React.useState<string[]>(['0'])
+  const [stamps, setStamps] = React.useState<string>('0')
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
   } = useForm<CreateActivityRequirementsRewardsFormValues>({
-    resolver: zodResolver(requiremetsRewardsFormSchema),
+    // resolver: zodResolver(requiremetsRewardsFormSchema),
     mode: 'onBlur',
   })
 
@@ -82,6 +102,15 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
     setRequirements(updatedRequirements)
   }
 
+  const handleStampsChange = (event: SelectChangeEvent<string>) => {
+    const {
+      target: { value },
+    } = event
+    console.log(value)
+    setStamps(value)
+    setValue('stamps', value)
+  }
+
   const handleAddRequirement = () => {
     if (requirements.length <= requirementsOptions.length) setRequirements([...requirements, '0'])
   }
@@ -97,8 +126,17 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
   // }
 
   useEffect(() => {
+    if (requirements.includes('0')) {
+      setValue('requirements', [])
+    } else {
+      setValue('requirements', requirements)
+    }
     console.log(requirements)
-  }, [isValid, requirements])
+  }, [setValue, requirements])
+
+  useEffect(() => {
+    console.log(isValid)
+  }, [isValid])
 
   return (
     <Card>
@@ -155,7 +193,6 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
               <Stack gap="16px">
                 <TextField
                   id="activityName"
-                  type="number"
                   variant="outlined"
                   label="How many Kolektivo Points can each attendee earn? "
                   placeholder="Enter amount of points"
@@ -167,12 +204,15 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
               </Stack>
               <Box>
                 <InputLabel>Which stamps can the attendee earn?</InputLabel>
-                <Select value="0">
+                <Select onChange={handleStampsChange} value={stamps}>
                   <MenuItem disabled value="0">
                     Select stamp
                   </MenuItem>
-                  <MenuItem value="Of legal age">Stamp 1</MenuItem>
-                  <MenuItem value="Old">Stamp 2</MenuItem>
+                  {stampsOptions.map((stampOption) => (
+                    <MenuItem key={stampOption.value} disabled={stampOption.disabled} value={stampOption.value}>
+                      {stampOption.value}
+                    </MenuItem>
+                  ))}
                 </Select>
               </Box>
             </Stack>
