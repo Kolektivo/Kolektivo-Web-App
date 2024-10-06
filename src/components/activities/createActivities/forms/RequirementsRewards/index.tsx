@@ -26,6 +26,24 @@ type Props = {
   backHandler: () => void
 }
 
+const requirementsOptions = [
+  {
+    value: 'Requirement1',
+    label: 'Requirement 1',
+    disabled: false,
+  },
+  {
+    value: 'Requirement2',
+    label: 'Requirement 2',
+    disabled: false,
+  },
+  {
+    value: 'Requirement3',
+    label: 'Requirement 3',
+    disabled: false,
+  },
+]
+
 export default function CreateActivityRequirementsRewards({ submitHandler, backHandler }: Props) {
   const [requirements, setRequirements] = React.useState<string[]>(['0'])
 
@@ -39,31 +57,44 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
   })
 
   const handleRequirementsChange = (event: SelectChangeEvent<string>, index: number) => {
-    console.log(index)
+    console.log('Change')
     const {
       target: { value },
     } = event
     if (requirements.includes(value)) {
       return
     }
+
     const updatedRequirements = [...requirements]
     updatedRequirements[index] = value
+
+    requirementsOptions.forEach((requirementOption) => {
+      requirementOption.disabled = false
+    })
+
+    updatedRequirements.forEach((requirement) => {
+      const selectedRequirementOptionIndex = requirementsOptions.findIndex(
+        (requirementOption) => requirementOption.value == requirement,
+      )
+      requirementsOptions[selectedRequirementOptionIndex].disabled = true
+    })
+
     setRequirements(updatedRequirements)
   }
 
   const handleAddRequirement = () => {
-    setRequirements([...requirements, ''])
+    if (requirements.length <= requirementsOptions.length) setRequirements([...requirements, '0'])
   }
 
-  const handleRemoverequirements = (_: unknown, index: number) => {
-    console.log(requirements.length)
-    if (requirements.length > 1) {
-      const updatedRequirements = requirements.filter((_, i) => i !== index)
-      setRequirements(updatedRequirements)
-    } else {
-      setRequirements(['0'])
-    }
-  }
+  // const handleRemoverequirements = (_: unknown, index: number) => {
+  //   console.log(requirements.length)
+  //   if (requirements.length > 1) {
+  //     const updatedRequirements = requirements.filter((_, i) => i !== index)
+  //     setRequirements(updatedRequirements)
+  //   } else {
+  //     setRequirements(['0'])
+  //   }
+  // }
 
   useEffect(() => {
     console.log(requirements)
@@ -85,12 +116,21 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
                           <MenuItem disabled value="0">
                             Select requirement
                           </MenuItem>
-                          <MenuItem value="Of legal age">Of legal age</MenuItem>
-                          <MenuItem value="Old">Old</MenuItem>
+                          {requirementsOptions.map((requirementOption) => (
+                            <MenuItem
+                              key={requirementOption.value}
+                              disabled={requirementOption.disabled}
+                              value={requirementOption.value}
+                            >
+                              {requirementOption.value}
+                            </MenuItem>
+                          ))}
                         </Select>
-                        <Button onClick={(event) => handleRemoverequirements(event, index)} sx={{ padding: '8px' }}>
-                          <Icon>close</Icon>
-                        </Button>
+                        {/* {requirements.length > 1 && (
+                          <Button onClick={(event) => handleRemoverequirements(event, index)} sx={{ padding: '8px' }}>
+                            <Icon>close</Icon>
+                          </Button>
+                        )} */}
                       </Stack>
                     ))}
                   </Stack>
