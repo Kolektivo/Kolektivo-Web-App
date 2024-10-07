@@ -15,7 +15,6 @@ const CreateOrganization = (): ReactElement => {
 
   const nextStep = () => {
     if (step === 2) {
-      console.log(formData)
       setShowModalComplete(true)
       return
     }

@@ -17,16 +17,37 @@ import {
   type CreateActivityRequirementsRewardsFormValues,
   type CreateActivityDetailFormValues,
 } from '@/types/activities'
+import { useMemo } from 'react'
 
 const steps = ['', '', '', '']
 
 export default function CreateActivityStepper() {
-  const [activeStep, setActiveStep] = React.useState(1)
-  const [open, setOpen] = React.useState<boolean>(false)
-  const [mainFormValues, setMainFormValues] = React.useState<CreateActivityDetailFormValues | null>(null)
+  const [activeStep, setActiveStep] = React.useState(0)
+  const [openDialog, setOpenDialog] = React.useState<boolean>(false)
+
+  const [detailFormValues, setDetailFormValues] = React.useState<CreateActivityDetailFormValues | null>(null)
+  const [banner, setBanner] = React.useState<string>()
   const [requirementsRewardsFormValues, setRequirementsRewardsFormValues] =
     React.useState<CreateActivityRequirementsRewardsFormValues | null>(null)
-  const [banner, setBanner] = React.useState<string>()
+
+  const getReview = (
+    detailFormValues: CreateActivityDetailFormValues,
+    banner: string,
+    requirementsRewardsFormValues: CreateActivityRequirementsRewardsFormValues,
+  ) => {
+    return { detail: detailFormValues, banner, requirementsRewards: requirementsRewardsFormValues }
+  }
+
+  const review = useMemo(
+    () =>
+      getReview(
+        detailFormValues as CreateActivityDetailFormValues,
+        banner as string,
+        requirementsRewardsFormValues as CreateActivityRequirementsRewardsFormValues,
+      ),
+    [detailFormValues, requirementsRewardsFormValues, banner],
+  )
+
   const router = useRouter()
 
   const handleBack = () => {
@@ -38,9 +59,8 @@ export default function CreateActivityStepper() {
   }
 
   const handleDetailFormSubmit = (data: CreateActivityDetailFormValues) => {
-    setMainFormValues(data)
+    setDetailFormValues(data)
     goToNext()
-    console.log('Submit')
   }
 
   const handleBannerSubmit = (img: string) => {
@@ -49,24 +69,22 @@ export default function CreateActivityStepper() {
   }
 
   const handleRequirementsRewardsFormSubmit = (data: CreateActivityRequirementsRewardsFormValues) => {
-    console.log(data)
     setRequirementsRewardsFormValues(data)
+    goToNext()
   }
 
   const handleComplete = () => {
-    setOpen(true)
+    setOpenDialog(true)
   }
 
   const handleDialogSuccessClick = () => {
-    setOpen(false)
+    setOpenDialog(false)
     router.push('/activities')
   }
 
   React.useEffect(() => {
-    console.log(mainFormValues)
-    console.log(requirementsRewardsFormValues)
-    console.log(banner)
-  }, [mainFormValues, banner, requirementsRewardsFormValues])
+    console.log(review)
+  }, [review])
 
   const StepperButtons = () => {
     return (
@@ -111,7 +129,7 @@ export default function CreateActivityStepper() {
       <DialogSuccess
         title="Activity Created"
         description="Your activity has been successfully created"
-        open={open}
+        open={openDialog}
         onClickButton={handleDialogSuccessClick}
       />
       {activeStep == 0 && (

@@ -77,7 +77,6 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
   })
 
   const handleRequirementsChange = (event: SelectChangeEvent<string>, index: number) => {
-    console.log('Change')
     const {
       target: { value },
     } = event
@@ -106,7 +105,6 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
     const {
       target: { value },
     } = event
-    console.log(value)
     setStamps(value)
     setValue('stamps', value)
   }
@@ -116,7 +114,6 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
   }
 
   // const handleRemoverequirements = (_: unknown, index: number) => {
-  //   console.log(requirements.length)
   //   if (requirements.length > 1) {
   //     const updatedRequirements = requirements.filter((_, i) => i !== index)
   //     setRequirements(updatedRequirements)
