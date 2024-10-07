@@ -43,8 +43,8 @@ export default function CreateActivityStepper() {
     console.log('Submit')
   }
 
-  const handleBannerSubmit = (img: string) => {
-    setBanner(img)
+  const handleBannerSubmit = () => {
+    //setBanner(img)
     goToNext()
   }
 
