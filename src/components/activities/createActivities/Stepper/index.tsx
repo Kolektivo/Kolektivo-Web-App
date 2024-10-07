@@ -44,7 +44,7 @@ export default function CreateActivityStepper() {
   }
 
   const handleBannerSubmit = () => {
-    //setBanner(img)
+    setBanner('')
     goToNext()
   }
 
