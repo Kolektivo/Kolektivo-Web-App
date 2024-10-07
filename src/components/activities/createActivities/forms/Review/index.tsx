@@ -1,16 +1,28 @@
-import { type CreateActivityRequirementsRewardsFormValues } from '@/types/activities'
+import { type CreateActivityReview, type CreateActivityRequirementsRewardsFormValues } from '@/types/activities'
 import { type OrganizationInfo } from '@/types/organization'
-import { Box, Card, CardContent, Divider, Icon, InputAdornment, Stack, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Divider,
+  Icon,
+  InputAdornment,
+  Stack,
+  Typography,
+} from '@mui/material'
 import TextField from '@mui/material/TextField'
-import React, { type ReactNode } from 'react'
-import { type SubmitHandler } from 'react-hook-form'
+import Image from 'next/image'
+import React from 'react'
 
 type Props = {
-  children: ReactNode
-  submitHandler: SubmitHandler<CreateActivityRequirementsRewardsFormValues>
+  submitHandler: () => void
+  handleBack: () => void
+  review: CreateActivityReview
   defaultValues?: OrganizationInfo
 }
-export default function CreateActivityReview({ children }: Props) {
+export default function CreateActivityReview({ submitHandler, handleBack, review }: Props) {
   return (
     <Card>
       <CardContent>
@@ -23,14 +35,13 @@ export default function CreateActivityReview({ children }: Props) {
             alignItems="center"
             display="flex"
           >
-            <Typography variant="subtitle2" textTransform="uppercase" color="#A9A9A9">
-              Image
-            </Typography>
+            <Image src={review.banner} alt="Selected" width={285} height={160} style={{ borderRadius: '12px' }} />
           </Box>
           <TextField
             id="activityName"
             variant="outlined"
             label="What’s the name of your activity?"
+            value={review.detail.name}
             placeholder="Beach Cleanup"
           />
           <Stack gap="16px">
@@ -84,8 +95,22 @@ export default function CreateActivityReview({ children }: Props) {
           />
         </Stack>
       </CardContent>
+      <CardActions>
+        <Button onClick={handleBack} color="secondary">
+          Go Back
+        </Button>
+        <Button
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          onClick={(_) => submitHandler()}
+          variant="contained"
+          color="primary"
+          className="stepperButton"
+          disabled={!review}
+        >
+          Complete
+        </Button>
+      </CardActions>
       <Divider />
-      {children}
     </Card>
   )
 }

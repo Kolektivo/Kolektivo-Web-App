@@ -1,6 +1,6 @@
 import UploadImage from '@/components/common/inputs/image/UploadImage'
 import { Button, Card, CardActions, CardContent, Divider } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 type Props = {
   handleBack: () => void
@@ -18,10 +18,6 @@ export default function CreateActivityBannerForm({ handleBack, handleSubmit }: P
 
     reader.readAsDataURL(img)
   }
-
-  useEffect(() => {
-    console.log('Banner: ', banner)
-  }, [banner])
 
   return (
     <Card>

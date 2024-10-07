@@ -4,8 +4,7 @@ import * as React from 'react'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
-import Button from '@mui/material/Button'
-import { CardActions, Link, Stack } from '@mui/material'
+import { Stack } from '@mui/material'
 import HeaderCard from '@/components/common/cards/HeaderCard'
 import CreateActivityDetailForm from '../forms/Detail'
 import CreateActivityBannerForm from '../forms/Banner'
@@ -22,7 +21,7 @@ import { useMemo } from 'react'
 const steps = ['', '', '', '']
 
 export default function CreateActivityStepper() {
-  const [activeStep, setActiveStep] = React.useState(0)
+  const [activeStep, setActiveStep] = React.useState(2)
   const [openDialog, setOpenDialog] = React.useState<boolean>(false)
 
   const [detailFormValues, setDetailFormValues] = React.useState<CreateActivityDetailFormValues | null>(null)
@@ -86,31 +85,6 @@ export default function CreateActivityStepper() {
     console.log(review)
   }, [review])
 
-  const StepperButtons = () => {
-    return (
-      <CardActions>
-        {activeStep == 0 ? (
-          <Link href="/activities">
-            <Button>Cancel</Button>
-          </Link>
-        ) : (
-          <Button onClick={handleBack} color="secondary">
-            Go Back
-          </Button>
-        )}
-        {activeStep == steps.length - 1 ? (
-          <Button onClick={handleComplete} variant="contained" color="primary" className="stepperButton">
-            Complete
-          </Button>
-        ) : (
-          <Button type="submit" variant="contained" color="primary" className="stepperButton">
-            Next
-          </Button>
-        )}
-      </CardActions>
-    )
-  }
-
   return (
     <Stack gap="24px" sx={{ width: '100%' }}>
       <Stepper activeStep={activeStep}>
@@ -156,9 +130,7 @@ export default function CreateActivityStepper() {
       {activeStep == 3 && (
         <Stack gap="24px">
           <HeaderCard title="Review" />
-          <CreateActivityReview submitHandler={handleRequirementsRewardsFormSubmit}>
-            <StepperButtons />
-          </CreateActivityReview>
+          <CreateActivityReview review={review} submitHandler={handleComplete} handleBack={handleBack} />
         </Stack>
       )}
     </Stack>
