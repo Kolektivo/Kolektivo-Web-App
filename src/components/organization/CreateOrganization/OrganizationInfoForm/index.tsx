@@ -1,17 +1,18 @@
 import { type MouseEventHandler, type ReactElement } from 'react'
-import { Button, Card, CardActions, CardContent, Icon, InputAdornment, Stack, TextField } from '@mui/material'
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { Button, Card, CardActions, CardContent, Stack, TextField } from '@mui/material'
+import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { type OrganizationInfo } from '@/types/organization'
 import HeaderCard from '@/components/common/cards/HeaderCard'
+import AutocompletePlaces from '@/components/common/inputs/autocomplete/AutocompletePlaces'
 
 const formInfoSchema = z.object({
   name: z.string().min(1),
   location: z.string().min(1),
-  website: z.string().url().min(1),
-  email: z.string().email().min(1),
-  description: z.string().min(5),
+  website: z.string().url({ message: 'Invalid url' }).min(1),
+  email: z.string().email({ message: 'Invalid email address' }).min(1),
+  description: z.string().min(5, { message: 'Must be 5 or more characters long' }),
   commitment: z.string(),
 })
 
@@ -23,12 +24,14 @@ type OrganizationInfoFormProps = {
 
 const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: OrganizationInfoFormProps): ReactElement => {
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<OrganizationInfo>({
     resolver: zodResolver(formInfoSchema),
     defaultValues,
+    mode: 'onBlur',
   })
 
   return (
@@ -46,21 +49,23 @@ const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: Organizatio
                 }}
                 error={!!errors?.name}
               ></TextField>
-              <TextField
-                label="Location"
-                placeholder="Enter location"
-                slotProps={{
-                  htmlInput: { ...register('location') },
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Icon>search</Icon>
-                      </InputAdornment>
-                    ),
-                  },
+              <Controller
+                control={control}
+                rules={{
+                  required: true,
                 }}
-                error={!!errors?.location}
-              ></TextField>
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <AutocompletePlaces
+                    label="Location"
+                    placeholder="Enter location"
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    error={!!errors?.location}
+                  />
+                )}
+                name="location"
+              />
               <TextField
                 label="Website"
                 placeholder="Enter website URL"
@@ -69,6 +74,7 @@ const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: Organizatio
                   htmlInput: { ...register('website') },
                 }}
                 error={!!errors?.website}
+                helperText={errors?.website?.message}
               ></TextField>
               <TextField
                 label="Email"
@@ -78,6 +84,7 @@ const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: Organizatio
                   htmlInput: { ...register('email') },
                 }}
                 error={!!errors?.email}
+                helperText={errors?.email?.message}
               ></TextField>
               <TextField
                 label="Description"
@@ -87,6 +94,7 @@ const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: Organizatio
                   htmlInput: { ...register('description') },
                 }}
                 error={!!errors?.description}
+                helperText={errors?.description?.message}
               ></TextField>
               <TextField
                 label="Commitment"

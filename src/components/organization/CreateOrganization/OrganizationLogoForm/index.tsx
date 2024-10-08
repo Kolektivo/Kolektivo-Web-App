@@ -2,14 +2,21 @@ import { useState, type ReactElement } from 'react'
 import UploadImage from '@/components/common/inputs/image/UploadImage'
 import { Button, Card, CardActions, CardContent, Stack } from '@mui/material'
 import HeaderCard from '@/components/common/cards/HeaderCard'
+import LoadingButton from '@/components/common/buttons/LoadingButton'
 
 type OrganizationLogoFormProps = {
   defaultLogoBase64?: string
+  loading?: boolean
   onCancel?: (imageBase64: string | undefined) => void
   onSubmit: (imageBase64: string) => void
 }
 
-const OrganizationLogo = ({ defaultLogoBase64, onCancel, onSubmit }: OrganizationLogoFormProps): ReactElement => {
+const OrganizationLogo = ({
+  defaultLogoBase64,
+  onCancel,
+  onSubmit,
+  loading = false,
+}: OrganizationLogoFormProps): ReactElement => {
   const [logoBase64, setLogoBase64] = useState<string | undefined>(defaultLogoBase64)
 
   const handleSubmit = () => {
@@ -42,10 +49,14 @@ const OrganizationLogo = ({ defaultLogoBase64, onCancel, onSubmit }: Organizatio
           />
         </CardContent>
         <CardActions>
-          {onCancel && <Button onClick={handleCancelation}>Go Back</Button>}
-          <Button variant="contained" onClick={handleSubmit} disabled={!logoBase64}>
+          {onCancel && (
+            <Button onClick={handleCancelation} disabled={loading}>
+              Go Back
+            </Button>
+          )}
+          <LoadingButton loading={loading} disabled={!logoBase64} variant="contained" onClick={handleSubmit}>
             Complete
-          </Button>
+          </LoadingButton>
         </CardActions>
       </Card>
     </Stack>
