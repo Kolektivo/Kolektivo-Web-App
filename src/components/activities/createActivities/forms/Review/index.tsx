@@ -1,4 +1,4 @@
-import { type CreateActivityReview, type CreateActivityRequirementsRewardsFormValues } from '@/types/activities'
+import { type CreateActivityReview } from '@/types/activities'
 import { type OrganizationInfo } from '@/types/organization'
 import {
   Box,
@@ -23,6 +23,10 @@ type Props = {
   defaultValues?: OrganizationInfo
 }
 export default function CreateActivityReview({ submitHandler, handleBack, review }: Props) {
+  const formatRequirements = (requirements: string[]) => {
+    return [requirements[0], ...requirements.slice(1).map((requirement) => ` ${requirement}`)]
+  }
+
   return (
     <Card>
       <CardContent>
@@ -47,9 +51,21 @@ export default function CreateActivityReview({ submitHandler, handleBack, review
           <Stack gap="16px">
             <Typography variant="h3">When does your activity start and end?</Typography>
             <Stack direction="row" gap="16px">
-              <TextField id="date" type="date" variant="outlined" placeholder="Date" />
-              <TextField id="startTime" type="time" variant="outlined" placeholder="Start time" />
-              <TextField id="endTime" type="time" variant="outlined" placeholder="End time" />
+              <TextField id="date" type="date" variant="outlined" placeholder="Date" value={review.detail.date} />
+              <TextField
+                id="startTime"
+                type="time"
+                variant="outlined"
+                placeholder="Start time"
+                value={review.detail.startTime}
+              />
+              <TextField
+                id="endTime"
+                type="time"
+                variant="outlined"
+                placeholder="End time"
+                value={review.detail.endTime}
+              />
             </Stack>
           </Stack>
           <TextField
@@ -58,6 +74,7 @@ export default function CreateActivityReview({ submitHandler, handleBack, review
             variant="outlined"
             label="Where is it located?"
             placeholder="Enter location"
+            value={review.detail.location}
             slotProps={{
               input: {
                 startAdornment: (
@@ -73,24 +90,28 @@ export default function CreateActivityReview({ submitHandler, handleBack, review
             variant="outlined"
             label="What can the attendee expect?"
             placeholder="Describe your activity"
+            value={review.detail.description}
             multiline
           />
           <TextField
             id="activityName"
             variant="outlined"
             label="What are the requirements for the attendee?"
+            value={formatRequirements(review.requirementsRewards.requirements)}
             placeholder="Select requirement"
           />
           <TextField
             id="activityName"
             variant="outlined"
             label="How many Kolektivo Points can each attendee earn? "
+            value={review.requirementsRewards.kolectivoPoints}
             placeholder="Enter amount of points"
           />
           <TextField
             id="activityName"
             variant="outlined"
             label="Which stamps can the attendee earn?"
+            value={review.requirementsRewards.stamps}
             placeholder="Select stamp"
           />
         </Stack>
