@@ -53,6 +53,11 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
       borderRadius: 12,
     },
     components: {
+      MuiPaper: {
+        defaultProps: {
+          elevation: 0,
+        },
+      },
       MuiCard: {
         defaultProps: {
           elevation: 0,

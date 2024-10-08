@@ -34,6 +34,16 @@ const lightPalette = {
     light: '#EAF6F6',
     contrastText: '#1E7672',
   },
+  warning: {
+    dark: '#FBCC8E',
+    main: '#FBCC8E',
+    light: '#FBCC8E',
+    contrastText: '#884F05',
+  },
+  background: {
+    default: '#EAF6F6',
+    paper: '#FFF',
+  },
   strongOrange: {
     dark: '#E96E3A',
     main: '#E96E3A',
@@ -57,16 +67,6 @@ const lightPalette = {
     main: '#C4C4C4',
     light: '#C4C4C4',
     contrastText: '#C4C4C4',
-  },
-  warning: {
-    dark: '#FBCC8E',
-    main: '#FBCC8E',
-    light: '#FBCC8E',
-    contrastText: '#884F05',
-  },
-  background: {
-    default: '#EAF6F6',
-    paper: '#FFF',
   },
   border: {
     main: '#D7D7D7',
