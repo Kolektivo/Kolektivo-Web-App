@@ -15,10 +15,10 @@ import {
 } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import React, { useEffect } from 'react'
-import { requiremetsRewardsFormSchema } from '@/constants/activities/create/schemas'
+// import { requiremetsRewardsFormSchema } from '@/constants/activities/create/schemas'
 import type { SubmitHandler } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+// import { zodResolver } from '@hookform/resolvers/zod'
 import type { CreateActivityRequirementsRewardsFormValues } from '@/types/activities'
 
 type Props = {
