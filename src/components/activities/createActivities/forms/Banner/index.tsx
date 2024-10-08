@@ -1,10 +1,10 @@
 import UploadImage from '@/components/common/inputs/image/UploadImage'
 import { Button, Card, CardActions, CardContent, Divider } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 type Props = {
   handleBack: () => void
-  handleSubmit: () => void
+  handleSubmit: (img: string) => void
 }
 
 export default function CreateActivityBannerForm({ handleBack, handleSubmit }: Props) {
@@ -19,10 +19,6 @@ export default function CreateActivityBannerForm({ handleBack, handleSubmit }: P
     reader.readAsDataURL(img)
   }
 
-  useEffect(() => {
-    console.log(banner)
-  }, [banner])
-
   return (
     <Card>
       <CardContent>
@@ -34,7 +30,14 @@ export default function CreateActivityBannerForm({ handleBack, handleSubmit }: P
         <Button onClick={handleBack} color="secondary">
           Go Back
         </Button>
-        <Button onClick={handleSubmit} variant="contained" color="primary" className="stepperButton" disabled={!banner}>
+        <Button
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          onClick={(_) => handleSubmit(banner as string)}
+          variant="contained"
+          color="primary"
+          className="stepperButton"
+          disabled={!banner}
+        >
           Next
         </Button>
       </CardActions>

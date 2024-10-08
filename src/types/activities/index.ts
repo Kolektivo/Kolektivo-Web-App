@@ -10,5 +10,11 @@ export type CreateActivityDetailFormValues = {
 export type CreateActivityRequirementsRewardsFormValues = {
   requirements: string[]
   kolectivoPoints: number
-  stamps: string[]
+  stamps: string
+}
+
+export type CreateActivityReview = {
+  detail: CreateActivityDetailFormValues
+  banner: string
+  requirementsRewards: CreateActivityRequirementsRewardsFormValues
 }
