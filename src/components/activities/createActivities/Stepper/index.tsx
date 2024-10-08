@@ -21,7 +21,7 @@ import { useMemo } from 'react'
 const steps = ['', '', '', '']
 
 export default function CreateActivityStepper() {
-  const [activeStep, setActiveStep] = React.useState(0)
+  const [activeStep, setActiveStep] = React.useState(2)
   const [openDialog, setOpenDialog] = React.useState<boolean>(false)
 
   const [detailFormValues, setDetailFormValues] = React.useState<CreateActivityDetailFormValues | null>(null)
