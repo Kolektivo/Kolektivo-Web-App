@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material'
+import UpdateOrganization from '@/components/organization/UpdateOrganization'
 import { type Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 }
 
 export default async function Page() {
-  return <Typography variant="h1">Update</Typography>
+  return <UpdateOrganization />
 }

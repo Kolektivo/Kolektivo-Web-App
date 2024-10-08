@@ -1,11 +1,15 @@
-import { type MouseEventHandler, type ReactElement } from 'react'
+'use client'
+
+import { type ReactElement } from 'react'
 import { Button, Card, CardActions, CardContent, Stack, TextField } from '@mui/material'
-import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { type OrganizationInfo } from '@/types/organization'
+import { type Organization } from '@/types/organization'
 import HeaderCard from '@/components/common/cards/HeaderCard'
 import AutocompletePlaces from '@/components/common/inputs/autocomplete/AutocompletePlaces'
+import UploadImage from '@/components/common/inputs/image/UploadImage'
+import { useState } from 'react'
 
 const formInfoSchema = z.object({
   name: z.string().min(1),
@@ -17,30 +21,49 @@ const formInfoSchema = z.object({
 })
 
 type OrganizationInfoFormProps = {
-  defaultValues?: OrganizationInfo
-  onCancel?: MouseEventHandler<HTMLButtonElement>
-  onSubmit: SubmitHandler<OrganizationInfo>
+  defaultValues?: Organization
+  onSave: (data: Organization) => void
 }
 
-const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: OrganizationInfoFormProps): ReactElement => {
+const UpdateOrganizationForm = ({ defaultValues, onSave }: OrganizationInfoFormProps): ReactElement => {
   const {
     control,
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<OrganizationInfo>({
+  } = useForm<Organization>({
     resolver: zodResolver(formInfoSchema),
     defaultValues,
     mode: 'onBlur',
   })
+  const [logoBase64, setLogoBase64] = useState<string | null>(defaultValues?.logoSrc || null)
+
+  const handleChangeLogo = (image: File) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(image)
+    reader.onload = () => {
+      setLogoBase64(reader.result?.toString() ?? null)
+    }
+  }
+
+  const handleSave = (data: Organization) => {
+    data.logoSrc = logoBase64!
+    data.id = defaultValues?.id
+    onSave(data)
+  }
 
   return (
     <Stack gap={4}>
-      <HeaderCard title="Organization Info" />
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <HeaderCard title="Update Fields" />
+      <form onSubmit={handleSubmit(handleSave)}>
         <Card>
           <CardContent>
             <Stack maxWidth={592} gap={8}>
+              <UploadImage
+                placeholder="Organization Logo"
+                previewBase64={defaultValues?.logoSrc ?? undefined}
+                onChangeImage={handleChangeLogo}
+              />
               <TextField
                 label="Name"
                 placeholder="Enter organization name"
@@ -108,9 +131,8 @@ const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: Organizatio
             </Stack>
           </CardContent>
           <CardActions>
-            {onCancel && <Button onClick={onCancel}>Cancel</Button>}
             <Button type="submit" variant="contained" disabled={!isValid}>
-              Next
+              Save
             </Button>
           </CardActions>
         </Card>
@@ -119,4 +141,4 @@ const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: Organizatio
   )
 }
 
-export default OrganizationInfoForm
+export default UpdateOrganizationForm

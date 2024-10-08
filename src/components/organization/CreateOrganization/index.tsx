@@ -5,13 +5,18 @@ import OrganizationLogoForm from './OrganizationLogoForm'
 import OrganizationInfoForm from './OrganizationInfoForm'
 import { useRouter } from 'next/navigation'
 import DialogSuccess from '@/components/common/modals/DialogSuccess'
-import { type OrganizationInfo, type Organization } from '@/types/organization'
+import { type OrganizationInfo, type Organization, type OrganizationLogo } from '@/types/organization'
 import { useMutation } from '@tanstack/react-query'
 import organizationsService from '@/features/organizations/services/organizations.service'
 import DialogError from '@/components/common/modals/DialogError'
 
+type CreateOrganizationSteps = {
+  step1?: OrganizationInfo
+  step2?: OrganizationLogo
+}
+
 const CreateOrganization = (): ReactElement => {
-  const [formData, setFormData] = useState<Organization>()
+  const [formData, setFormData] = useState<CreateOrganizationSteps>({})
   const [step, setStep] = useState<number>(1)
   const router = useRouter()
 
@@ -33,14 +38,19 @@ const CreateOrganization = (): ReactElement => {
   }
 
   const handleCompleteInfo = (data: OrganizationInfo) => {
-    setFormData({ ...formData, ...data })
+    setFormData((formData) => {
+      formData.step1 = data
+      return formData
+    })
     nextStep()
   }
 
   const handleCompleteLogo = (logoBase64: string) => {
-    const data = { ...formData, logoBase64 }
-    setFormData(data)
-    mutation.mutate(data)
+    setFormData((formData) => {
+      formData.step2 = { logoSrc: logoBase64 }
+      mutation.mutate(createOrganizationFromSteps(formData))
+      return formData
+    })
   }
 
   const handleModalSuccess = () => {
@@ -51,15 +61,27 @@ const CreateOrganization = (): ReactElement => {
     mutation.reset()
   }
 
+  const createOrganizationFromSteps = (steps: CreateOrganizationSteps): Organization => {
+    return {
+      ...steps.step1,
+      ...steps.step2,
+    }
+  }
+
   return (
     <>
-      {step === 1 && <OrganizationInfoForm defaultValues={formData} onCancel={goBack} onSubmit={handleCompleteInfo} />}
+      {step === 1 && (
+        <OrganizationInfoForm defaultValues={formData.step1} onCancel={goBack} onSubmit={handleCompleteInfo} />
+      )}
       {step >= 2 && (
         <OrganizationLogoForm
-          defaultLogoBase64={formData?.logoBase64}
+          defaultLogoBase64={formData.step2?.logoSrc ?? null}
           loading={mutation.isPending}
           onCancel={(logoBase64) => {
-            setFormData({ ...formData, logoBase64 })
+            setFormData((formData) => {
+              formData.step2 = { logoSrc: logoBase64 ?? undefined }
+              return formData
+            })
             goBack()
           }}
           onSubmit={handleCompleteLogo}

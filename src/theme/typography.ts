@@ -15,11 +15,9 @@ const typography: TypographyOptions = {
     lineHeight: '24px',
   },
   h3: {
-    fontFamily: 'var(--font-lato)',
-    fontWeight: 700,
-    fontSize: '18px',
-    lineHeight: '21.6px',
-    letterSpacing: '0.5px',
+    fontFamily: 'var(--font-poppins)',
+    fontWeight: 500,
+    fontSize: '20px',
   },
   h4: {
     fontFamily: 'var(--font-lato)',
@@ -51,7 +49,12 @@ const typography: TypographyOptions = {
     fontSize: '16px',
     lineHeight: '22.4px',
   },
-  body2: {},
+  body2: {
+    fontFamily: 'var(--font-lato)',
+    fontWeight: 400,
+    fontSize: '14px',
+    lineHeight: '14px',
+  },
   button: {
     fontFamily: 'var(--font-lato)',
     fontWeight: 700,

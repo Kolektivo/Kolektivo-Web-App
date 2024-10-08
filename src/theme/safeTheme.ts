@@ -69,6 +69,7 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
         styleOverrides: {
           root: {
             padding: spacing * 4,
+            borderBottom: `1px solid ${colors.border.main}`,
           },
         },
       },
