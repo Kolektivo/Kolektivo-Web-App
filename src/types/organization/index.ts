@@ -1,4 +1,5 @@
 export interface OrganizationInfo {
+  id?: string
   name?: string
   location?: string
   website?: string
@@ -8,7 +9,7 @@ export interface OrganizationInfo {
 }
 
 export interface OrganizationLogo {
-  logoBase64?: string
+  logoSrc?: string
 }
 
 export type Organization = OrganizationInfo & OrganizationLogo

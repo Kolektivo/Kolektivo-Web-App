@@ -6,10 +6,10 @@ class OrginizationsService {
     baseURL: '/api',
   })
 
-  public async get(): Promise<Organization> {
-    const response = await this.httpInstance.get<Organization>('/organizations')
+  public async get(): Promise<Organization | undefined> {
+    const response = await this.httpInstance.get<Organization[]>('/organizations')
 
-    return response.data
+    return response.data.pop()
   }
 
   public async create(organization: Organization): Promise<Organization> {
