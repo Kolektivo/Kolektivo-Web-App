@@ -76,6 +76,23 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
     mode: 'onBlur',
   })
 
+  const cleanDisabledRequirementsOptions = () => {
+    requirementsOptions.forEach((requirementOption) => {
+      requirementOption.disabled = false
+    })
+  }
+
+  function updateDisabledRequirementsOptions(updatedRequirements: string[]) {
+    updatedRequirements.forEach((requirement) => {
+      const selectedRequirementOptionIndex = requirementsOptions.findIndex(
+        (requirementOption) => requirementOption.value == requirement,
+      )
+      if (selectedRequirementOptionIndex != -1) {
+        requirementsOptions[selectedRequirementOptionIndex].disabled = true
+      }
+    })
+  }
+
   const handleRequirementsChange = (event: SelectChangeEvent<string>, index: number) => {
     console.log('Requirements select change')
     const {
@@ -90,19 +107,9 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
 
     console.log('Value: ' + value)
 
-    requirementsOptions.forEach((requirementOption) => {
-      requirementOption.disabled = false
-    })
+    cleanDisabledRequirementsOptions()
 
-    updatedRequirements.forEach((requirement) => {
-      const selectedRequirementOptionIndex = requirementsOptions.findIndex(
-        (requirementOption) => requirementOption.value == requirement,
-      )
-      console.log('selectedRequirementOptionIndex: ' + selectedRequirementOptionIndex)
-      if (selectedRequirementOptionIndex != -1) {
-        requirementsOptions[selectedRequirementOptionIndex].disabled = true
-      }
-    })
+    updateDisabledRequirementsOptions(updatedRequirements)
 
     setRequirements(updatedRequirements)
   }
@@ -140,6 +147,10 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
   useEffect(() => {
     console.log('Is valid: ' + isValid)
   }, [isValid])
+
+  useEffect(() => {
+    cleanDisabledRequirementsOptions()
+  }, [])
 
   return (
     <Card>
