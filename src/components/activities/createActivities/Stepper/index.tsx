@@ -4,8 +4,7 @@ import * as React from 'react'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
-import Button from '@mui/material/Button'
-import { CardActions, Link, Stack } from '@mui/material'
+import { Stack } from '@mui/material'
 import HeaderCard from '@/components/common/cards/HeaderCard'
 import CreateActivityDetailForm from '../forms/Detail'
 import CreateActivityBannerForm from '../forms/Banner'
@@ -17,16 +16,37 @@ import {
   type CreateActivityRequirementsRewardsFormValues,
   type CreateActivityDetailFormValues,
 } from '@/types/activities'
+import { useMemo } from 'react'
 
 const steps = ['', '', '', '']
 
 export default function CreateActivityStepper() {
-  const [activeStep, setActiveStep] = React.useState(1)
-  const [open, setOpen] = React.useState<boolean>(false)
-  const [mainFormValues, setMainFormValues] = React.useState<CreateActivityDetailFormValues | null>(null)
+  const [activeStep, setActiveStep] = React.useState(0)
+  const [openDialog, setOpenDialog] = React.useState<boolean>(false)
+
+  const [detailFormValues, setDetailFormValues] = React.useState<CreateActivityDetailFormValues | null>(null)
+  const [banner, setBanner] = React.useState<string>()
   const [requirementsRewardsFormValues, setRequirementsRewardsFormValues] =
     React.useState<CreateActivityRequirementsRewardsFormValues | null>(null)
-  const [banner, setBanner] = React.useState<string>()
+
+  const getReview = (
+    detailFormValues: CreateActivityDetailFormValues,
+    banner: string,
+    requirementsRewardsFormValues: CreateActivityRequirementsRewardsFormValues,
+  ) => {
+    return { detail: detailFormValues, banner, requirementsRewards: requirementsRewardsFormValues }
+  }
+
+  const review = useMemo(
+    () =>
+      getReview(
+        detailFormValues as CreateActivityDetailFormValues,
+        banner as string,
+        requirementsRewardsFormValues as CreateActivityRequirementsRewardsFormValues,
+      ),
+    [detailFormValues, requirementsRewardsFormValues, banner],
+  )
+
   const router = useRouter()
 
   const handleBack = () => {
@@ -38,9 +58,8 @@ export default function CreateActivityStepper() {
   }
 
   const handleDetailFormSubmit = (data: CreateActivityDetailFormValues) => {
-    setMainFormValues(data)
+    setDetailFormValues(data)
     goToNext()
-    console.log('Submit')
   }
 
   const handleBannerSubmit = (img: string) => {
@@ -50,47 +69,21 @@ export default function CreateActivityStepper() {
 
   const handleRequirementsRewardsFormSubmit = (data: CreateActivityRequirementsRewardsFormValues) => {
     setRequirementsRewardsFormValues(data)
+    goToNext()
   }
 
   const handleComplete = () => {
-    setOpen(true)
+    setOpenDialog(true)
   }
 
   const handleDialogSuccessClick = () => {
-    setOpen(false)
+    setOpenDialog(false)
     router.push('/activities')
   }
 
   React.useEffect(() => {
-    console.log(mainFormValues)
-    console.log(requirementsRewardsFormValues)
-    console.log(banner)
-  }, [mainFormValues, banner, requirementsRewardsFormValues])
-
-  const StepperButtons = () => {
-    return (
-      <CardActions>
-        {activeStep == 0 ? (
-          <Link href="/activities">
-            <Button>Cancel</Button>
-          </Link>
-        ) : (
-          <Button onClick={handleBack} color="secondary">
-            Go Back
-          </Button>
-        )}
-        {activeStep == steps.length - 1 ? (
-          <Button onClick={handleComplete} variant="contained" color="primary" className="stepperButton">
-            Complete
-          </Button>
-        ) : (
-          <Button type="submit" variant="contained" color="primary" className="stepperButton">
-            Next
-          </Button>
-        )}
-      </CardActions>
-    )
-  }
+    console.log(review)
+  }, [review])
 
   return (
     <Stack gap="24px" sx={{ width: '100%' }}>
@@ -110,7 +103,7 @@ export default function CreateActivityStepper() {
       <DialogSuccess
         title="Activity Created"
         description="Your activity has been successfully created"
-        open={open}
+        open={openDialog}
         onClickButton={handleDialogSuccessClick}
       />
       {activeStep == 0 && (
@@ -128,17 +121,16 @@ export default function CreateActivityStepper() {
       {activeStep == 2 && (
         <Stack gap="24px">
           <HeaderCard title="Requirements & Rewards" />
-          <CreateActivityRequirementsRewards>
-            <StepperButtons />
-          </CreateActivityRequirementsRewards>
+          <CreateActivityRequirementsRewards
+            submitHandler={handleRequirementsRewardsFormSubmit}
+            backHandler={handleBack}
+          />
         </Stack>
       )}
       {activeStep == 3 && (
         <Stack gap="24px">
           <HeaderCard title="Review" />
-          <CreateActivityReview submitHandler={handleRequirementsRewardsFormSubmit}>
-            <StepperButtons />
-          </CreateActivityReview>
+          <CreateActivityReview review={review} submitHandler={handleComplete} handleBack={handleBack} />
         </Stack>
       )}
     </Stack>
