@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 
 type Props = {
   handleBack: () => void
-  handleSubmit: () => void
+  handleSubmit: (img: string) => void
 }
 
 export default function CreateActivityBannerForm({ handleBack, handleSubmit }: Props) {
