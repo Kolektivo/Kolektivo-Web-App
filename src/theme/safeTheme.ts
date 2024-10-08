@@ -93,11 +93,6 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
           disableAnimation: true,
           sx: {
             position: 'relative',
-            // fontSize: '18px',
-            // fontWeight: 700,
-            // textTransform: { scale: 1 },
-            // marginBottom: 2,
-            // color: colors.text.primary,
           },
         },
         styleOverrides: {
