@@ -1,21 +1,43 @@
+'use client'
+
 import { Box, CardContent, Divider } from '@mui/material'
-import { myActivities } from '@/constants/activities/main'
 import React, { type ReactNode } from 'react'
-import Activity from '../Activity'
+import ActivityComponent from '../Activity'
 import ItemsCard from '@/components/common/cards/ItemsCard'
+import { type ActivityType } from '@/types/activities'
+import activitiesService from '@/features/activities/services/activities.service'
+import ErrorDisplay from '@/components/common/display/ErrorDisplay'
+import activityImage from '@/public/images/activities/Event.svg'
+import { useQuery } from '@tanstack/react-query'
 
 export default function MyActivitiesCard({ actions }: { actions?: ReactNode }) {
+  const { data, isLoading, error, refetch } = useQuery<ActivityType[] | undefined>({
+    queryKey: ['getMyActivities'],
+    queryFn: async () => await activitiesService.get(),
+  })
+
+  if (isLoading) return <>Loading...</>
+  if (error) {
+    return (
+      <ErrorDisplay
+        onClickButton={() => {
+          refetch()
+        }}
+      />
+    )
+  }
+
   return (
     <ItemsCard title="My Activities" actions={actions}>
-      {myActivities.map((activity, index) => (
-        <Box key={index}>
+      {data?.map((activity) => (
+        <Box key={activity.id}>
           <Divider />
           <CardContent>
-            <Activity
-              img={activity.imgSrc}
+            <ActivityComponent
+              img={activityImage}
               title={activity.title}
               description={activity.description}
-              state={activity.state}
+              state="Estado pendiente"
             />
           </CardContent>
         </Box>

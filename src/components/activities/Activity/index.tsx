@@ -9,7 +9,7 @@ type Props = {
   state: string
 }
 
-export default function Activity({ img, title, description, state }: Props) {
+export default function ActivityComponent({ img, title, description, state }: Props) {
   return (
     <Stack direction="row" alignItems="center" gap="16px">
       <Image src={img} alt={`vendorImage-${img}`} width={140} height={80} />
