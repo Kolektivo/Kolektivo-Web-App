@@ -280,6 +280,20 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
           },
         },
       },
+      // MuiDateCalendar: {
+      //   styleOverrides: {
+      //     root: {
+      //       color: '#bbdefb',
+      //       borderRadius: '8px',
+      //       borderWidth: '0px',
+      //       borderColor: '#2196f3',
+      //       border: '0px solid',
+      //       backgroundColor: '#0d47a1',
+      //     },
+      //     IconSelect: {
+      //     }
+      //   },
+      // },
     },
   })
 }
