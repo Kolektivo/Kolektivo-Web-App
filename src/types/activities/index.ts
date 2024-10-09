@@ -18,3 +18,5 @@ export type CreateActivityReview = {
   banner: string
   requirementsRewards: CreateActivityRequirementsRewardsFormValues
 }
+
+export type Activity = CreateActivityDetailFormValues & CreateActivityRequirementsRewardsFormValues & { banner: string }
