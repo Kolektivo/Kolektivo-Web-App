@@ -73,6 +73,7 @@ const typography: TypographyOptions = {
     fontWeight: 400,
     fontSize: '16px',
     lineHeight: '16px',
+    textTransform: 'none',
   },
 }
 

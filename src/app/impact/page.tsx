@@ -1,4 +1,6 @@
-import { Typography } from '@mui/material'
+import ImpactLog from '@/components/impact/ImpactLog'
+import StatsImpact from '@/components/impact/StatsImpact'
+import { Stack } from '@mui/material'
 import { type Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -6,5 +8,10 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
-  return <Typography variant="h2">Impact Page</Typography>
+  return (
+    <Stack gap={4}>
+      <StatsImpact />
+      <ImpactLog />
+    </Stack>
+  )
 }
