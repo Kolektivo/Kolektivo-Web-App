@@ -1,4 +1,4 @@
-import { type ActivityType } from '@/types/activities'
+import { type CreateActivityReviewType, type ActivityType } from '@/types/activities'
 import axios from 'axios'
 
 class ActivitiesService {
@@ -9,6 +9,13 @@ class ActivitiesService {
     const response = await this.httpInstance.get<ActivityType[]>('/activities')
 
     return response.data
+  }
+
+  public async post(activityReview: CreateActivityReviewType): Promise<string | undefined> {
+    console.log(activityReview)
+    // const response = await this.httpInstance.post<string>('/activities')
+    // return response.data
+    return ''
   }
 }
 

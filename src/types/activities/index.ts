@@ -13,7 +13,7 @@ export type CreateActivityRequirementsRewardsFormValues = {
   stamps: string
 }
 
-export type CreateActivityReview = {
+export type CreateActivityReviewType = {
   detail: CreateActivityDetailFormValues
   banner: string
   requirementsRewards: CreateActivityRequirementsRewardsFormValues
@@ -30,4 +30,8 @@ export type ActivityType = {
   full_address: string
   badge_contract_address: string
   requirements: string
+  location: string | null
+  points: string | null
+  stamp: string | null
+  banner_src: string | null
 }

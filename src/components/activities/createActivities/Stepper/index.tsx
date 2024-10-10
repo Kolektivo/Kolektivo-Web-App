@@ -9,43 +9,43 @@ import HeaderCard from '@/components/common/cards/HeaderCard'
 import CreateActivityDetailForm from '../forms/Detail'
 import CreateActivityBannerForm from '../forms/Banner'
 import CreateActivityRequirementsRewards from '../forms/RequirementsRewards'
-import CreateActivityReview from '../forms/Review'
 import DialogSuccess from '@/components/common/modals/DialogSuccess'
 import { useRouter } from 'next/navigation'
+import CreateActivityReviewComponent from '../forms/Review'
 import {
   type CreateActivityRequirementsRewardsFormValues,
   type CreateActivityDetailFormValues,
+  type CreateActivityReviewType,
 } from '@/types/activities'
 import { useMemo } from 'react'
+import { useMutation } from '@tanstack/react-query'
+import activitiesService from '@/features/activities/services/activities.service'
 
 const steps = ['', '', '', '']
 
 export default function CreateActivityStepper() {
   const [activeStep, setActiveStep] = React.useState(0)
-  const [openDialog, setOpenDialog] = React.useState<boolean>(false)
+  const [openSuccessDialog, setOpenSuccessDialog] = React.useState<boolean>(false)
 
   const [detailFormValues, setDetailFormValues] = React.useState<CreateActivityDetailFormValues | null>(null)
   const [banner, setBanner] = React.useState<string>()
   const [requirementsRewardsFormValues, setRequirementsRewardsFormValues] =
     React.useState<CreateActivityRequirementsRewardsFormValues | null>(null)
 
-  const getReview = (
-    detailFormValues: CreateActivityDetailFormValues,
-    banner: string,
-    requirementsRewardsFormValues: CreateActivityRequirementsRewardsFormValues,
-  ) => {
-    return { detail: detailFormValues, banner, requirementsRewards: requirementsRewardsFormValues }
-  }
-
   const review = useMemo(
-    () =>
-      getReview(
-        detailFormValues as CreateActivityDetailFormValues,
-        banner as string,
-        requirementsRewardsFormValues as CreateActivityRequirementsRewardsFormValues,
-      ),
-    [detailFormValues, requirementsRewardsFormValues, banner],
+    () => ({
+      detail: detailFormValues as CreateActivityDetailFormValues,
+      banner: banner as string,
+      requirementsRewards: requirementsRewardsFormValues as CreateActivityRequirementsRewardsFormValues,
+    }),
+    [detailFormValues, banner, requirementsRewardsFormValues],
   )
+
+  const { mutate } = useMutation({
+    mutationFn: async (activityReview: CreateActivityReviewType) => {
+      return await activitiesService.post(activityReview)
+    },
+  })
 
   const router = useRouter()
 
@@ -73,11 +73,18 @@ export default function CreateActivityStepper() {
   }
 
   const handleComplete = () => {
-    setOpenDialog(true)
+    mutate(review, {
+      onSuccess: () => {
+        setOpenSuccessDialog(true)
+      },
+      onError: () => {
+        console.log('Error at create activity')
+      },
+    })
   }
 
   const handleDialogSuccessClick = () => {
-    setOpenDialog(false)
+    setOpenSuccessDialog(false)
     router.push('/activities')
   }
 
@@ -103,7 +110,7 @@ export default function CreateActivityStepper() {
       <DialogSuccess
         title="Activity Created"
         description="Your activity has been successfully created"
-        open={openDialog}
+        open={openSuccessDialog}
         onClickButton={handleDialogSuccessClick}
       />
       {activeStep == 0 && (
@@ -130,7 +137,7 @@ export default function CreateActivityStepper() {
       {activeStep == 3 && (
         <Stack gap="24px">
           <HeaderCard title="Review" />
-          <CreateActivityReview review={review} submitHandler={handleComplete} handleBack={handleBack} />
+          <CreateActivityReviewComponent review={review} submitHandler={handleComplete} handleBack={handleBack} />
         </Stack>
       )}
     </Stack>

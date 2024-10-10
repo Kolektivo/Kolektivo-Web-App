@@ -1,4 +1,4 @@
-import { type CreateActivityReview } from '@/types/activities'
+import { type CreateActivityReviewType } from '@/types/activities'
 import { type OrganizationInfo } from '@/types/organization'
 import {
   Box,
@@ -19,10 +19,10 @@ import React from 'react'
 type Props = {
   submitHandler: () => void
   handleBack: () => void
-  review: CreateActivityReview
+  review: CreateActivityReviewType
   defaultValues?: OrganizationInfo
 }
-export default function CreateActivityReview({ submitHandler, handleBack, review }: Props) {
+export default function CreateActivityReviewComponent({ submitHandler, handleBack, review }: Props) {
   const formatRequirements = (requirements: string[]) => {
     return [requirements[0], ...requirements.slice(1).map((requirement) => ` ${requirement}`)]
   }
