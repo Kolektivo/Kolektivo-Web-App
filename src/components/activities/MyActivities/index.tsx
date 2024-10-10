@@ -9,6 +9,7 @@ import activitiesService from '@/features/activities/services/activities.service
 import ErrorDisplay from '@/components/common/display/ErrorDisplay'
 import activityImage from '@/public/images/activities/Event.svg'
 import { useQuery } from '@tanstack/react-query'
+import ActivitySkeleton from '../Activity/Skeleton'
 
 export default function MyActivitiesCard({ actions }: { actions?: ReactNode }) {
   const { data, isLoading, error, refetch } = useQuery<ActivityType[] | undefined>({
@@ -16,7 +17,19 @@ export default function MyActivitiesCard({ actions }: { actions?: ReactNode }) {
     queryFn: async () => await activitiesService.get(),
   })
 
-  if (isLoading) return <>Loading...</>
+  if (isLoading)
+    return (
+      <ItemsCard title="My Activities" actions={actions}>
+        {Array.from({ length: 3 }).map((_, index) => (
+          <Box key={index}>
+            <Divider />
+            <Box paddingLeft={4}>
+              <ActivitySkeleton />
+            </Box>
+          </Box>
+        ))}
+      </ItemsCard>
+    )
   if (error) {
     return (
       <ErrorDisplay
