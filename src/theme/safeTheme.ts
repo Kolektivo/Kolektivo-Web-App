@@ -38,6 +38,12 @@ declare module '@mui/material/Box' {
   }
 }
 
+declare module '@mui/material/Button' {
+  interface ButtonPropsVariantOverrides {
+    outlinedGray: true
+  }
+}
+
 const createSafeTheme = (mode: PaletteMode): Theme => {
   const colors = lightPalette
 
@@ -193,6 +199,19 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
           disableElevation: true,
         },
         styleOverrides: {
+          root: {
+            variants: [
+              {
+                props: { variant: 'outlinedGray' },
+                style: {
+                  padding: '11px 40px',
+                  textTransform: 'none',
+                  border: '1px solid',
+                  borderColor: colors.text.disabled,
+                },
+              },
+            ],
+          },
           contained: {
             padding: '17px 40px',
             textTransform: 'capitalize',
