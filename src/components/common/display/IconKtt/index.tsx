@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { type ReactElement } from 'react'
-import kttIcon from '@/public/images/ktt.svg'
+import kttIcon from '@/public/images/ktt.svg?url'
 
 const IconKtt = ({ size = 32 }: { size?: number }): ReactElement => {
   return <Image src={kttIcon} alt="ktt" height={size} width={size}></Image>

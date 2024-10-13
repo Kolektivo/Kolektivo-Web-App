@@ -1,6 +1,6 @@
 import { Box, Stack } from '@mui/material'
 import Image from 'next/image'
-import logo from '@/public/images/logo.svg'
+import logo from '@/public/images/logo.svg?url'
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
