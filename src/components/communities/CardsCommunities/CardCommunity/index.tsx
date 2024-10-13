@@ -1,13 +1,9 @@
 import IconKtt from '@/components/common/display/IconKtt'
+import { type Community } from '@/types/communities'
 import { Paper, Stack, Typography, Icon } from '@mui/material'
 import { type ReactElement } from 'react'
 
-type CardCommunityProps = {
-  srcImage: string
-  name: string
-  members: number
-  ktts: number
-}
+export interface CardCommunityProps extends Community {}
 
 const CardCommunity = ({ srcImage, name, members, ktts }: CardCommunityProps): ReactElement => {
   const textColor = '#FFF'

@@ -2,9 +2,9 @@ import { CardContent, Card, Typography, Stack, Link as MUILink, TextField, Butto
 import { type Metadata } from 'next'
 import NextLink from 'next/link'
 import Image from 'next/image'
-import IconGoogle from '@/public/images/icons/google.svg'
-import IconFacebook from '@/public/images/icons/facebook.svg'
-import IconApple from '@/public/images/icons/apple.svg'
+import IconGoogle from '@/public/images/icons/google.svg?url'
+import IconFacebook from '@/public/images/icons/facebook.svg?url'
+import IconApple from '@/public/images/icons/apple.svg?url'
 
 export const metadata: Metadata = {
   title: 'Sign In',

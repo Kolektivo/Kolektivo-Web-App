@@ -6,6 +6,8 @@ import typography from './typography'
 import lightPalette from './lightPalette'
 import { materialSymbolsOutlined } from '@/theme/fonts'
 import IconSelect from '@/components/common/inputs/select/IconSelect'
+import CheckOff from '@/public/images/icons/checkbox/check-off.svg'
+import CheckOn from '@/public/images/icons/checkbox/check-on.svg'
 
 const spacing = 6
 
@@ -240,6 +242,18 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
       MuiSelect: {
         defaultProps: {
           IconComponent: IconSelect,
+        },
+      },
+      MuiRadio: {
+        defaultProps: {
+          icon: CheckOff(),
+          checkedIcon: CheckOn(),
+          sx: {
+            padding: 0,
+            '& .MuiSvgIcon-root': {
+              fontSize: 30,
+            },
+          },
         },
       },
       MuiAppBar: {
