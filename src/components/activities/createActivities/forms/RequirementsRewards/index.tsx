@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material'
 import TextField from '@mui/material/TextField'
-import React, { useEffect } from 'react'
+import React, { type ChangeEvent, useEffect } from 'react'
 // import { requiremetsRewardsFormSchema } from '@/constants/activities/create/schemas'
 import type { SubmitHandler } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
@@ -28,36 +28,31 @@ type Props = {
 
 const requirementsOptions = [
   {
-    value: 'Requirement1',
-    label: 'Requirement 1',
+    value: 'Agroforestry - Beginner',
+    label: 'Agroforestry - Beginner',
     disabled: false,
   },
   {
-    value: 'Requirement2',
-    label: 'Requirement 2',
-    disabled: false,
-  },
-  {
-    value: 'Requirement3',
-    label: 'Requirement 3',
+    value: 'agroforestry - advanced',
+    label: 'Agroforestry - Advanced',
     disabled: false,
   },
 ]
 
 const stampsOptions = [
   {
-    value: 'Stamp1',
-    label: 'Stamp 1',
+    value: 'Permaculture',
+    label: 'Permaculture',
     disabled: false,
   },
   {
-    value: 'Stamp2',
-    label: 'Stamp 2',
+    value: 'Agriculture',
+    label: 'Agriculture',
     disabled: false,
   },
   {
-    value: 'Stamp3',
-    label: 'Stamp3',
+    value: 'Plastic',
+    label: 'Plastic',
     disabled: false,
   },
 ]
@@ -93,7 +88,7 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
     })
   }
 
-  const handleRequirementsChange = (event: SelectChangeEvent<string>, index: number) => {
+  const handleRequirementsChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
     console.log('Requirements select change')
     const {
       target: { value },
@@ -160,11 +155,19 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
             <Stack gap="48px">
               <Box>
                 <Box>
-                  <InputLabel>What are the requirements for the attendee?</InputLabel>
                   <Stack gap="16px">
                     {requirements.map((requirement, index) => (
                       <Stack key={index} direction="row" gap={2}>
-                        <Select onChange={(event) => handleRequirementsChange(event, index)} value={requirement}>
+                        <TextField
+                          select
+                          label="What are the requirements for the attendee?"
+                          onChange={(event) => handleRequirementsChange(event, index)}
+                          slotProps={{
+                            htmlInput: { ...register('requirements') },
+                          }}
+                          error={!!errors.requirements}
+                          value={requirement}
+                        >
                           <MenuItem disabled value="0">
                             Select requirement
                           </MenuItem>
@@ -177,7 +180,7 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
                               {requirementOption.label}
                             </MenuItem>
                           ))}
-                        </Select>
+                        </TextField>
                         {/* {requirements.length > 1 && (
                           <Button onClick={(event) => handleRemoverequirements(event, index)} sx={{ padding: '8px' }}>
                             <Icon>close</Icon>
@@ -237,7 +240,13 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
           <Button onClick={backHandler} color="secondary">
             Go Back
           </Button>
-          <Button type="submit" variant="contained" color="primary" className="stepperButton">
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            className="stepperButton"
+            disabled={requirements[0] == '0' || stamps == '0'}
+          >
             Next
           </Button>
         </CardActions>

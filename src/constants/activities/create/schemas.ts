@@ -10,7 +10,7 @@ export const detailFormShema = z.object({
 })
 
 export const requiremetsRewardsFormSchema = z.object({
-  requirements: z.string().array().nonempty(),
+  requirements: z.string(),
   kolectivoPoints: z.string(),
-  stamp: z.string().min(2),
+  stamp: z.string(),
 })
