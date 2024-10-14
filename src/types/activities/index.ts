@@ -20,7 +20,7 @@ export type CreateActivityReviewType = {
 }
 
 export type ActivityType = {
-  id: string
+  id?: string
   created_at: string
   activity_host_id: string
   title: string

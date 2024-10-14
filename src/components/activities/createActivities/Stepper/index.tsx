@@ -43,7 +43,7 @@ export default function CreateActivityStepper() {
 
   const { mutate } = useMutation({
     mutationFn: async (activityReview: CreateActivityReviewType) => {
-      return await activitiesService.post(activityReview)
+      return await activitiesService.create(activityReview)
     },
   })
 
