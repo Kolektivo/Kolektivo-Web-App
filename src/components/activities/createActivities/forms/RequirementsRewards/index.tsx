@@ -118,7 +118,7 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
   }
 
   const handleAddRequirement = () => {
-    if (requirements.length <= requirementsOptions.length) setRequirements([...requirements, '0'])
+    if (requirements.length < requirementsOptions.length) setRequirements([...requirements, '0'])
   }
 
   // const handleRemoverequirements = (_: unknown, index: number) => {
@@ -155,17 +155,17 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
             <Stack gap="48px">
               <Box>
                 <Box>
-                  <Stack gap="16px">
+                  <InputLabel>What are the requirements for the attendee?</InputLabel>
+                  <Stack gap="8px">
                     {requirements.map((requirement, index) => (
                       <Stack key={index} direction="row" gap={2}>
                         <TextField
                           select
-                          label="What are the requirements for the attendee?"
                           onChange={(event) => handleRequirementsChange(event, index)}
-                          slotProps={{
-                            htmlInput: { ...register('requirements') },
-                          }}
-                          error={!!errors.requirements}
+                          // slotProps={{
+                          //   htmlInput: { ...register('requirements') },
+                          // }}
+                          // error={!!errors.requirements}
                           value={requirement}
                         >
                           <MenuItem disabled value="0">

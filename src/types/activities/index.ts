@@ -33,5 +33,6 @@ export type ActivityType = {
   location: string | null
   points: string | null
   stamp: string | null
-  banner_src: string | null
+  banner_src?: string | null
+  banner_path?: string | null
 }

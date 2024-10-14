@@ -24,7 +24,11 @@ type Props = {
 }
 export default function CreateActivityReviewComponent({ submitHandler, handleBack, review }: Props) {
   const formatRequirements = (requirements: string[]) => {
-    return [requirements[0], ...requirements.slice(1).map((requirement) => ` ${requirement}`)]
+    console.log(requirements)
+    if (requirements.length > 1) {
+      return [requirements[0], ...requirements.slice(1).map((requirement) => ` ${requirement}`)]
+    }
+    return requirements[0]
   }
 
   return (

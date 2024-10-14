@@ -27,7 +27,7 @@ class ActivitiesService {
       location: activityReview.detail.location,
       points: `${activityReview.requirementsRewards.kolectivoPoints}`,
       stamp: activityReview.requirementsRewards.stamps,
-      banner_src: 'https://example.com/images/sustainable-living-banner.png',
+      banner_src: activityReview.banner,
     }
     const response = await this.httpInstance.post<ActivityType>('/activities', exampleActivity)
     return response.data

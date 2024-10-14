@@ -7,7 +7,6 @@ import ItemsCard from '@/components/common/cards/ItemsCard'
 import { type ActivityType } from '@/types/activities'
 import activitiesService from '@/features/activities/services/activities.service'
 import ErrorDisplay from '@/components/common/display/ErrorDisplay'
-import activityImage from '@/public/images/activities/Event.svg'
 import { useQuery } from '@tanstack/react-query'
 import ActivitySkeleton from '../Activity/Skeleton'
 
@@ -47,10 +46,10 @@ export default function MyActivitiesCard({ actions }: { actions?: ReactNode }) {
           <Divider />
           <CardContent>
             <ActivityComponent
-              img={activityImage}
+              img={activity.banner_src as string}
               title={activity.title}
               description={activity.description}
-              state="Estado pendiente"
+              state="Upcoming"
             />
           </CardContent>
         </Box>
