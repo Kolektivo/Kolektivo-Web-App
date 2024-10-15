@@ -6,8 +6,8 @@ class ActivitiesService {
     baseURL: '/api',
   })
 
-  public async get(): Promise<ActivityType[] | undefined> {
-    const response = await this.httpInstance.get<ActivityType[]>('/activities')
+  public async get(id?: string): Promise<ActivityType[] | undefined> {
+    const response = await this.httpInstance.get<ActivityType[]>(`/activities${id ? `?id=${id}` : ''}`)
 
     return response.data
   }
