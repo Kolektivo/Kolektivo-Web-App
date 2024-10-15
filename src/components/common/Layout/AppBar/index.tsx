@@ -2,18 +2,28 @@ import { AppBar, Button, Icon, IconButton, Stack, Toolbar, Typography } from '@m
 import { usePathname } from 'next/navigation'
 import { type MouseEventHandler } from 'react'
 
-const routesNames: { [key: string]: string } = {
-  '/my-organization/create': 'Create Organization',
-  '/my-organization/update': 'Update Organization',
-  '/my-vendor/update': 'Update Vendor',
-  '/activities/update': 'Update Activity',
-  '/activities/create': 'Create Activity',
-}
+const routesNames: { [key: string]: string }[] = [
+  {
+    '/my-organization/create': 'Create Organization',
+  },
+  { '/my-organization/update': 'Update Organization' },
+  { '/my-vendor/update': 'Update Vendor' },
+  { '/activities/update/20b7dc94-d801-4c85-b46a-9c53b1925a51': 'Update Activity' },
+  { '/activities/update': 'Update Activity' },
+  { '/activities/create': 'Create Activity' },
+]
 
-function getNameRoute(pathname: string) {
-  if (pathname in routesNames) {
-    return routesNames[pathname]
-  }
+function getRouteName(pathname: string) {
+  let foundRouteName = ''
+  routesNames.forEach((routeName) => {
+    Object.keys(routeName).forEach((key) => {
+      if (pathname.includes(key)) {
+        foundRouteName = routeName[key]
+      }
+    })
+  })
+
+  if (foundRouteName) return foundRouteName
 
   let result = pathname.replace(/\//g, '')
   result = result.replace(/-/g, ' ')
@@ -53,7 +63,7 @@ export default function CustomAppBar({
             <Icon>menu</Icon>
           </IconButton>
           <Typography variant="h1" noWrap component="div">
-            {getNameRoute(pathname)}
+            {getRouteName(pathname)}
           </Typography>
         </Toolbar>
         <Toolbar disableGutters variant="dense" sx={{ gap: 2 }}>

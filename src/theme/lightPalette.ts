@@ -46,17 +46,17 @@ const lightPalette = {
     light: '#F2F2F2',
     contrastText: '#A9A9A9',
   },
-  chipOrange: {
-    dark: '#FBCC8E',
-    main: '#FBCC8E',
-    light: '#FBCC8E',
-    contrastText: '#884F05',
-  },
   upcomingChip: {
     dark: '#C4C4C4',
     main: '#C4C4C4',
     light: '#C4C4C4',
     contrastText: '#454545',
+  },
+  warningButton: {
+    dark: '#FEECEB',
+    main: '#FEECEB',
+    light: '#FEECEB',
+    contrastText: '#DA3E33',
   },
   warning: {
     dark: '#FBCC8E',

@@ -1,28 +1,16 @@
 import { type CreateActivityReviewType } from '@/types/activities'
 import { type OrganizationInfo } from '@/types/organization'
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Divider,
-  Icon,
-  InputAdornment,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Box, Card, CardActions, CardContent, Divider, Icon, InputAdornment, Stack, Typography } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import Image from 'next/image'
-import React from 'react'
+import React, { type ReactNode } from 'react'
 
 type Props = {
-  submitHandler: () => void
-  handleBack: () => void
   review: CreateActivityReviewType
   defaultValues?: OrganizationInfo
+  children: ReactNode
 }
-export default function CreateActivityReviewComponent({ submitHandler, handleBack, review }: Props) {
+export default function ActivityReview({ review, children }: Props) {
   const formatRequirements = (requirements: string[]) => {
     console.log(requirements)
     if (requirements.length > 1) {
@@ -120,21 +108,7 @@ export default function CreateActivityReviewComponent({ submitHandler, handleBac
           />
         </Stack>
       </CardContent>
-      <CardActions>
-        <Button onClick={handleBack} color="secondary">
-          Go Back
-        </Button>
-        <Button
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          onClick={(_) => submitHandler()}
-          variant="contained"
-          color="primary"
-          className="stepperButton"
-          disabled={!review}
-        >
-          Complete
-        </Button>
-      </CardActions>
+      <CardActions>{children}</CardActions>
       <Divider />
     </Card>
   )

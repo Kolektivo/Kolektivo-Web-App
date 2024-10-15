@@ -31,6 +31,12 @@ declare module '@mui/material/Chip' {
   }
 }
 
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    warningButton: true
+  }
+}
+
 declare module '@mui/material/Box' {
   interface BoxPropsColorOverrides {
     bannerLightGray: true

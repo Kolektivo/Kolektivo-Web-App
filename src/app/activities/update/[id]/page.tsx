@@ -1,8 +1,9 @@
 'use client'
 
-import CreateActivityReviewComponent from '@/components/activities/createActivities/forms/Review'
+import ActivityReview from '@/components/activities/createActivities/forms/Review'
 import activitiesService from '@/features/activities/services/activities.service'
 import { type ActivityType } from '@/types/activities'
+import { Button } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
 import React, { useEffect } from 'react'
@@ -14,12 +15,15 @@ export default function UpdateActivity() {
     queryKey: ['getMyActivities'],
     queryFn: async () => await activitiesService.get(id as string),
   })
+
+  const handleDelete = () => {}
+  const handleSave = () => {}
   useEffect(() => {
     console.log(data)
   }, [data])
   if (data)
     return (
-      <CreateActivityReviewComponent
+      <ActivityReview
         review={{
           detail: {
             name: data[0].title,
@@ -36,9 +40,22 @@ export default function UpdateActivity() {
             stamps: data[0].stamp as string,
           },
         }}
-        handleBack={() => {}}
-        submitHandler={() => {}}
-      />
+      >
+        <>
+          <Button onClick={handleDelete} variant="contained" color="warningButton">
+            Delete
+          </Button>
+          <Button
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            onClick={(_) => handleSave()}
+            variant="contained"
+            color="primary"
+            className="stepperButton"
+          >
+            Save
+          </Button>
+        </>
+      </ActivityReview>
     )
   return (
     <div>
