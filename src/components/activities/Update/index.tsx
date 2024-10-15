@@ -1,3 +1,4 @@
+import { requirementsOptions } from '@/constants/activities/commons'
 import { type CreateActivityReviewType } from '@/types/activities'
 import { type OrganizationInfo } from '@/types/organization'
 import {
@@ -24,20 +25,7 @@ type Props = {
   defaultValues?: OrganizationInfo
 }
 
-const requirementsOptions = [
-  {
-    value: 'Agroforestry - Beginner',
-    label: 'Agroforestry - Beginner',
-    disabled: false,
-  },
-  {
-    value: 'agroforestry - advanced',
-    label: 'Agroforestry - Advanced',
-    disabled: false,
-  },
-]
 export default function ActivityUpdate({ review, children }: Props) {
-  
   return (
     <Card>
       <CardContent>

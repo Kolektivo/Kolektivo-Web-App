@@ -20,42 +20,12 @@ import type { SubmitHandler } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 // import { zodResolver } from '@hookform/resolvers/zod'
 import type { CreateActivityRequirementsRewardsFormValues } from '@/types/activities'
+import { requirementsOptions, stampsOptions } from '@/constants/activities/commons'
 
 type Props = {
   submitHandler: SubmitHandler<CreateActivityRequirementsRewardsFormValues>
   backHandler: () => void
 }
-
-const requirementsOptions = [
-  {
-    value: 'Agroforestry - Beginner',
-    label: 'Agroforestry - Beginner',
-    disabled: false,
-  },
-  {
-    value: 'agroforestry - advanced',
-    label: 'Agroforestry - Advanced',
-    disabled: false,
-  },
-]
-
-const stampsOptions = [
-  {
-    value: 'Permaculture',
-    label: 'Permaculture',
-    disabled: false,
-  },
-  {
-    value: 'Agriculture',
-    label: 'Agriculture',
-    disabled: false,
-  },
-  {
-    value: 'Plastic',
-    label: 'Plastic',
-    disabled: false,
-  },
-]
 
 export default function CreateActivityRequirementsRewards({ submitHandler, backHandler }: Props) {
   const [requirements, setRequirements] = React.useState<string[]>(['0'])
