@@ -1,5 +1,5 @@
-import vendor1Image from '@/public/images/vendors/Frame 1000001685.svg'
-import vendor2Image from '@/public/images/vendors/image 14.svg'
+import vendor1Image from '@/public/images/vendors/Frame 1000001685.svg?url'
+import vendor2Image from '@/public/images/vendors/image 14.svg?url'
 
 export const myVendors = [
   {

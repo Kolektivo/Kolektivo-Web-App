@@ -6,6 +6,8 @@ import typography from './typography'
 import lightPalette from './lightPalette'
 import { materialSymbolsOutlined } from '@/theme/fonts'
 import IconSelect from '@/components/common/inputs/select/IconSelect'
+import CheckOff from '@/public/images/icons/checkbox/check-off.svg'
+import CheckOn from '@/public/images/icons/checkbox/check-on.svg'
 
 const spacing = 6
 
@@ -43,6 +45,12 @@ declare module '@mui/material/Box' {
   }
 }
 
+declare module '@mui/material/Button' {
+  interface ButtonPropsVariantOverrides {
+    outlinedGray: true
+  }
+}
+
 const createSafeTheme = (mode: PaletteMode): Theme => {
   const colors = lightPalette
 
@@ -58,6 +66,11 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
       borderRadius: 12,
     },
     components: {
+      MuiPaper: {
+        defaultProps: {
+          elevation: 0,
+        },
+      },
       MuiCard: {
         defaultProps: {
           elevation: 0,
@@ -98,11 +111,6 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
           disableAnimation: true,
           sx: {
             position: 'relative',
-            // fontSize: '18px',
-            // fontWeight: 700,
-            // textTransform: { scale: 1 },
-            // marginBottom: 2,
-            // color: colors.text.primary,
           },
         },
         styleOverrides: {
@@ -201,6 +209,19 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
           disableElevation: true,
         },
         styleOverrides: {
+          root: {
+            variants: [
+              {
+                props: { variant: 'outlinedGray' },
+                style: {
+                  padding: '11px 40px',
+                  textTransform: 'none',
+                  border: '1px solid',
+                  borderColor: colors.text.disabled,
+                },
+              },
+            ],
+          },
           contained: {
             padding: '17px 40px',
             textTransform: 'capitalize',
@@ -229,6 +250,18 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
       MuiSelect: {
         defaultProps: {
           IconComponent: IconSelect,
+        },
+      },
+      MuiRadio: {
+        defaultProps: {
+          icon: CheckOff(),
+          checkedIcon: CheckOn(),
+          sx: {
+            padding: 0,
+            '& .MuiSvgIcon-root': {
+              fontSize: 30,
+            },
+          },
         },
       },
       MuiAppBar: {

@@ -1,4 +1,5 @@
 import { AppBar, Button, Icon, IconButton, Stack, Toolbar, Typography } from '@mui/material'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { type MouseEventHandler } from 'react'
 
@@ -72,9 +73,11 @@ export default function CustomAppBar({
               home
             </Icon>
           </Button>
-          <Button variant="contained" color="secondary" sx={{ borderRadius: 100 }}>
-            Sign In
-          </Button>
+          <Link href="signin">
+            <Button variant="contained" color="secondary" sx={{ borderRadius: 100 }}>
+              Sign In
+            </Button>
+          </Link>
         </Toolbar>
       </Stack>
     </AppBar>

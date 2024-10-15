@@ -1,4 +1,4 @@
-import activityImage from '@/public/images/activities/Event.svg'
+import activityImage from '@/public/images/activities/Event.svg?url'
 
 export const myActivities = [
   {
