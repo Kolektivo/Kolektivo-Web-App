@@ -1,21 +1,11 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Divider,
-  Icon,
-  InputAdornment,
-  Link,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Button, Card, CardActions, CardContent, Divider, Link, Stack, Typography } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { type SubmitHandler, useForm } from 'react-hook-form'
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
 import { type CreateActivityDetailFormValues } from '@/types/activities'
 import { detailFormShema } from '@/constants/activities/create/schemas'
+import AutocompletePlaces from '@/components/common/inputs/autocomplete/AutocompletePlaces'
 
 type Props = {
   submitHandler: SubmitHandler<CreateActivityDetailFormValues>
@@ -23,6 +13,7 @@ type Props = {
 
 export default function CreateActivityDetailForm({ submitHandler }: Props) {
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors, isValid },
@@ -54,27 +45,29 @@ export default function CreateActivityDetailForm({ submitHandler }: Props) {
                     inputLabel: { variant: 'filled' },
                     input: {
                       type: 'date',
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Icon>event</Icon>
-                        </InputAdornment>
-                      ),
                     },
                     htmlInput: { ...register('date') },
                   }}
                   error={!!errors?.date}
                 />
+                {/* <DatePicker label="Date" slotProps={{ inputAdornment: { position: 'start' } }} />
+                <TimePicker
+                  label="Start time"
+                  slotProps={{
+                    inputAdornment: { position: 'start' },
+                    textField: {
+                      slotProps: { inputLabel: { variant: 'filled' }, htmlInput: { ...register('startTime') } },
+                      error: !!errors?.startTime,
+                    },
+                  }}
+                />
+                <TimePicker label="End time" slotProps={{ inputAdornment: { position: 'start' } }} /> */}
                 <TextField
                   label="Start time"
                   slotProps={{
                     inputLabel: { variant: 'filled' },
                     input: {
                       type: 'time',
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Icon>schedule</Icon>
-                        </InputAdornment>
-                      ),
                     },
                     htmlInput: { ...register('startTime') },
                   }}
@@ -86,11 +79,6 @@ export default function CreateActivityDetailForm({ submitHandler }: Props) {
                     inputLabel: { variant: 'filled' },
                     input: {
                       type: 'time',
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Icon>schedule</Icon>
-                        </InputAdornment>
-                      ),
                     },
                     htmlInput: { ...register('endTime') },
                   }}
@@ -98,23 +86,22 @@ export default function CreateActivityDetailForm({ submitHandler }: Props) {
                 />
               </Stack>
             </Stack>
-            <TextField
-              id="location"
-              type="search"
-              variant="outlined"
-              label="Where is it located?"
-              placeholder="Enter location"
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Icon>search</Icon>
-                    </InputAdornment>
-                  ),
-                },
-                htmlInput: { ...register('location') },
+            <Controller
+              control={control}
+              rules={{
+                required: true,
               }}
-              error={!!errors?.location}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <AutocompletePlaces
+                  label="Where is it located?"
+                  placeholder="Enter location"
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  value={value ?? ''}
+                  error={!!errors?.location}
+                />
+              )}
+              name="location"
             />
             <TextField
               id="description"

@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material'
 import TextField from '@mui/material/TextField'
-import React, { useEffect } from 'react'
+import React, { type ChangeEvent, useEffect } from 'react'
 // import { requiremetsRewardsFormSchema } from '@/constants/activities/create/schemas'
 import type { SubmitHandler } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
@@ -28,36 +28,31 @@ type Props = {
 
 const requirementsOptions = [
   {
-    value: 'Requirement1',
-    label: 'Requirement 1',
+    value: 'Agroforestry - Beginner',
+    label: 'Agroforestry - Beginner',
     disabled: false,
   },
   {
-    value: 'Requirement2',
-    label: 'Requirement 2',
-    disabled: false,
-  },
-  {
-    value: 'Requirement3',
-    label: 'Requirement 3',
+    value: 'agroforestry - advanced',
+    label: 'Agroforestry - Advanced',
     disabled: false,
   },
 ]
 
 const stampsOptions = [
   {
-    value: 'Stamp1',
-    label: 'Stamp 1',
+    value: 'Permaculture',
+    label: 'Permaculture',
     disabled: false,
   },
   {
-    value: 'Stamp2',
-    label: 'Stamp 2',
+    value: 'Agriculture',
+    label: 'Agriculture',
     disabled: false,
   },
   {
-    value: 'Stamp3',
-    label: 'Stamp3',
+    value: 'Plastic',
+    label: 'Plastic',
     disabled: false,
   },
 ]
@@ -76,7 +71,25 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
     mode: 'onBlur',
   })
 
-  const handleRequirementsChange = (event: SelectChangeEvent<string>, index: number) => {
+  const cleanDisabledRequirementsOptions = () => {
+    requirementsOptions.forEach((requirementOption) => {
+      requirementOption.disabled = false
+    })
+  }
+
+  function updateDisabledRequirementsOptions(updatedRequirements: string[]) {
+    updatedRequirements.forEach((requirement) => {
+      const selectedRequirementOptionIndex = requirementsOptions.findIndex(
+        (requirementOption) => requirementOption.value == requirement,
+      )
+      if (selectedRequirementOptionIndex != -1) {
+        requirementsOptions[selectedRequirementOptionIndex].disabled = true
+      }
+    })
+  }
+
+  const handleRequirementsChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
+    console.log('Requirements select change')
     const {
       target: { value },
     } = event
@@ -87,16 +100,11 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
     const updatedRequirements = [...requirements]
     updatedRequirements[index] = value
 
-    requirementsOptions.forEach((requirementOption) => {
-      requirementOption.disabled = false
-    })
+    console.log('Value: ' + value)
 
-    updatedRequirements.forEach((requirement) => {
-      const selectedRequirementOptionIndex = requirementsOptions.findIndex(
-        (requirementOption) => requirementOption.value == requirement,
-      )
-      requirementsOptions[selectedRequirementOptionIndex].disabled = true
-    })
+    cleanDisabledRequirementsOptions()
+
+    updateDisabledRequirementsOptions(updatedRequirements)
 
     setRequirements(updatedRequirements)
   }
@@ -110,7 +118,7 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
   }
 
   const handleAddRequirement = () => {
-    if (requirements.length <= requirementsOptions.length) setRequirements([...requirements, '0'])
+    if (requirements.length < requirementsOptions.length) setRequirements([...requirements, '0'])
   }
 
   // const handleRemoverequirements = (_: unknown, index: number) => {
@@ -128,12 +136,16 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
     } else {
       setValue('requirements', requirements)
     }
-    console.log(requirements)
+    console.log('Requirements: ', requirements)
   }, [setValue, requirements])
 
   useEffect(() => {
-    console.log(isValid)
+    console.log('Is valid: ' + isValid)
   }, [isValid])
+
+  useEffect(() => {
+    cleanDisabledRequirementsOptions()
+  }, [])
 
   return (
     <Card>
@@ -144,10 +156,19 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
               <Box>
                 <Box>
                   <InputLabel>What are the requirements for the attendee?</InputLabel>
-                  <Stack gap="16px">
+                  <Stack gap="8px">
                     {requirements.map((requirement, index) => (
                       <Stack key={index} direction="row" gap={2}>
-                        <Select onChange={(event) => handleRequirementsChange(event, index)} value={requirement}>
+                        <TextField
+                          select
+                          onChange={(event) => handleRequirementsChange(event, index)}
+                          // slotProps={{
+                          //   htmlInput: { ...register('requirements') },
+                          // }}
+                          // error={!!errors.requirements}
+                          value={requirement}
+                          sx={{ width: '100%' }}
+                        >
                           <MenuItem disabled value="0">
                             Select requirement
                           </MenuItem>
@@ -157,10 +178,10 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
                               disabled={requirementOption.disabled}
                               value={requirementOption.value}
                             >
-                              {requirementOption.value}
+                              {requirementOption.label}
                             </MenuItem>
                           ))}
-                        </Select>
+                        </TextField>
                         {/* {requirements.length > 1 && (
                           <Button onClick={(event) => handleRemoverequirements(event, index)} sx={{ padding: '8px' }}>
                             <Icon>close</Icon>
@@ -207,7 +228,7 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
                   </MenuItem>
                   {stampsOptions.map((stampOption) => (
                     <MenuItem key={stampOption.value} disabled={stampOption.disabled} value={stampOption.value}>
-                      {stampOption.value}
+                      {stampOption.label}
                     </MenuItem>
                   ))}
                 </Select>
@@ -220,7 +241,13 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
           <Button onClick={backHandler} color="secondary">
             Go Back
           </Button>
-          <Button type="submit" variant="contained" color="primary" className="stepperButton">
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            className="stepperButton"
+            disabled={requirements[0] == '0' || stamps == '0'}
+          >
             Next
           </Button>
         </CardActions>

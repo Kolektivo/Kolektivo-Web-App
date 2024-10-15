@@ -11,7 +11,7 @@ export default function Activities() {
   return (
     <Stack gap={4}>
       <ActivitiesActions />
-      <MyActivitiesCard />
+      <MyActivitiesCard disableRedirect />
     </Stack>
   )
 }

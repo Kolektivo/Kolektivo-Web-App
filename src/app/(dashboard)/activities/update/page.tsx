@@ -4,7 +4,7 @@ import { Button, Stack } from '@mui/material'
 import Link from 'next/link'
 import React from 'react'
 
-export default function UpdateActivity() {
+export default function UpdateActivities() {
   return (
     <Stack gap={4}>
       <HeaderCard title="Select Activity To Update" />
