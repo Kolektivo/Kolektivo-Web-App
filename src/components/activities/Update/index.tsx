@@ -44,27 +44,21 @@ export default function ActivityUpdate({ review, children }: Props) {
             id="activityName"
             variant="outlined"
             label="What’s the name of your activity?"
-            value={review.detail.name}
+            value={review.name}
             placeholder="Beach Cleanup"
           />
           <Stack gap="16px">
             <Typography variant="h3">When does your activity start and end?</Typography>
             <Stack direction="row" gap="16px">
-              <TextField id="date" type="date" variant="outlined" placeholder="Date" value={review.detail.date} />
+              <TextField id="date" type="date" variant="outlined" placeholder="Date" value={review.date} />
               <TextField
                 id="startTime"
                 type="time"
                 variant="outlined"
                 placeholder="Start time"
-                value={review.detail.startTime}
+                value={review.startTime}
               />
-              <TextField
-                id="endTime"
-                type="time"
-                variant="outlined"
-                placeholder="End time"
-                value={review.detail.endTime}
-              />
+              <TextField id="endTime" type="time" variant="outlined" placeholder="End time" value={review.endTime} />
             </Stack>
           </Stack>
           <TextField
@@ -73,7 +67,7 @@ export default function ActivityUpdate({ review, children }: Props) {
             variant="outlined"
             label="Where is it located?"
             placeholder="Enter location"
-            value={review.detail.location}
+            value={review.location}
             slotProps={{
               input: {
                 startAdornment: (
@@ -89,14 +83,14 @@ export default function ActivityUpdate({ review, children }: Props) {
             variant="outlined"
             label="What can the attendee expect?"
             placeholder="Describe your activity"
-            value={review.detail.description}
+            value={review.description}
             multiline
           />
           <Box>
             <Box>
               <InputLabel>What are the requirements for the attendee?</InputLabel>
               <Stack gap="8px">
-                {review.requirementsRewards.requirements.map((requirement, index) => (
+                {review.requirements.map((requirement, index) => (
                   <Stack key={index} direction="row" gap={2}>
                     <TextField
                       select
@@ -151,7 +145,7 @@ export default function ActivityUpdate({ review, children }: Props) {
             id="activityName"
             variant="outlined"
             label="Which stamps can the attendee earn?"
-            value={review.requirementsRewards.stamps}
+            value={review.stamps}
             placeholder="Select stamp"
           />
         </Stack>

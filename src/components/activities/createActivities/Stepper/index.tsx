@@ -34,11 +34,11 @@ export default function CreateActivityStepper() {
     React.useState<CreateActivityRequirementsRewardsFormValues | null>(null)
   const [creatingActivity, setCreatingActivity] = React.useState<boolean>(false)
 
-  const review = useMemo(
+  const review = useMemo<CreateActivityReviewType>(
     () => ({
-      detail: detailFormValues as CreateActivityDetailFormValues,
+      ...(detailFormValues as CreateActivityDetailFormValues),
       banner: banner as string,
-      requirementsRewards: requirementsRewardsFormValues as CreateActivityRequirementsRewardsFormValues,
+      ...(requirementsRewardsFormValues as CreateActivityRequirementsRewardsFormValues),
     }),
     [detailFormValues, banner, requirementsRewardsFormValues],
   )
