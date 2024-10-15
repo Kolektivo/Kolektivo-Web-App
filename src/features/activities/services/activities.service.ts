@@ -32,6 +32,10 @@ class ActivitiesService {
     const response = await this.httpInstance.post<ActivityType>('/activities', exampleActivity)
     return response.data
   }
+  public async delete(id: string) {
+    const response = await this.httpInstance.delete<ActivityType>(`/activities`, { data: { id } })
+    return response.data
+  }
 }
 
 const activitiesService = new ActivitiesService()

@@ -7,12 +7,11 @@ import React, { type ReactNode } from 'react'
 
 type Props = {
   review: CreateActivityReviewType
-  defaultValues?: OrganizationInfo
   children: ReactNode
+  defaultValues?: OrganizationInfo
 }
 export default function ActivityReview({ review, children }: Props) {
   const formatRequirements = (requirements: string[]) => {
-    console.log(requirements)
     if (requirements.length > 1) {
       return [requirements[0], ...requirements.slice(1).map((requirement) => ` ${requirement}`)]
     }

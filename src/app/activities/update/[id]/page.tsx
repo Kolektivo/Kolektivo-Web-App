@@ -1,26 +1,48 @@
 'use client'
 
 import ActivityReview from '@/components/activities/createActivities/forms/Review'
+import LoadingButton from '@/components/common/buttons/LoadingButton'
 import activitiesService from '@/features/activities/services/activities.service'
 import { type ActivityType } from '@/types/activities'
 import { Button } from '@mui/material'
-import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'next/navigation'
-import React, { useEffect } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useParams, useRouter } from 'next/navigation'
+import React, { useState } from 'react'
 
 export default function UpdateActivity() {
+  const router = useRouter()
   const params = useParams()
   const { id } = params // Get the id from the path params
-  const { data, isLoading, error, refetch } = useQuery<ActivityType[] | undefined>({
+  const [onExecution, setOnExecution] = useState<boolean>(false)
+
+  const { mutate: deleteMutate } = useMutation({
+    mutationFn: async (activityId: string) => {
+      setOnExecution(true)
+      return await activitiesService.delete(activityId)
+    },
+  })
+
+  const { data, isLoading, error } = useQuery<ActivityType[] | undefined>({
     queryKey: ['getMyActivities'],
     queryFn: async () => await activitiesService.get(id as string),
   })
 
-  const handleDelete = () => {}
+  const handleDelete = () => {
+    console.log('Delete')
+    deleteMutate(id as string, {
+      onSuccess: () => {
+        setOnExecution(false)
+        router.push('/activities/update')
+      },
+      onError: () => {
+        setOnExecution(false)
+        console.log('Error')
+      },
+    })
+  }
+
   const handleSave = () => {}
-  useEffect(() => {
-    console.log(data)
-  }, [data])
+
   if (data)
     return (
       <ActivityReview
@@ -41,26 +63,37 @@ export default function UpdateActivity() {
           },
         }}
       >
-        <>
-          <Button onClick={handleDelete} variant="contained" color="warningButton">
-            Delete
-          </Button>
-          <Button
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            onClick={(_) => handleSave()}
-            variant="contained"
-            color="primary"
-            className="stepperButton"
-          >
-            Save
-          </Button>
-        </>
+        {onExecution && (
+          <>
+            <LoadingButton loading variant="contained" color="warningButton" className="stepperButton">
+              Delete
+            </LoadingButton>
+            <LoadingButton loading variant="contained" color="primary" className="stepperButton">
+              Save
+            </LoadingButton>
+          </>
+        )}
+        {!onExecution && (
+          <>
+            <Button onClick={handleDelete} variant="contained" color="warningButton">
+              Delete
+            </Button>
+            <Button
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              onClick={(_) => handleSave()}
+              variant="contained"
+              color="primary"
+              className="stepperButton"
+            >
+              Save
+            </Button>
+          </>
+        )}
       </ActivityReview>
     )
   return (
     <div>
-      <div>lalala</div>
-      paadsasd
+      <div>IsLoading</div>
     </div>
   )
 }

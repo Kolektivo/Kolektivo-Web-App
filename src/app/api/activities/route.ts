@@ -71,6 +71,15 @@ export async function PUT(req: NextRequest) {
   return NextResponse.json(data)
 }
 
+export async function DELETE(req: NextRequest) {
+  const id = await req.json().then((body) => body.id)
+  console.log(id)
+  const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
+  const { data, error } = await supabaseClient.from(ACTIVITIES).delete().eq('id', id)
+  if (error) return NextResponse.json(error)
+  return NextResponse.json(data)
+}
+
 async function uploadFile(bucketName: string, filePath: string, base64File: string) {
   const fileBlob = await base64ImageSourceToBlob(base64File)
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
