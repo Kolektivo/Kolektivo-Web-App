@@ -10,18 +10,33 @@ const bannerBasePath = process.env.NEXT_PUBLIC_ACTIVITIES_BANNER_PATH || ''
 
 const ACTIVITIES = 'activities'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url)
+  const id = searchParams.get('id')
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
-  const { data, error } = await supabaseClient.from(ACTIVITIES).select('*')
-  if (error) return NextResponse.json(error)
-  const activitiesWithBanners = await Promise.all(
-    data.map(async (activity) => {
-      const banner_src = await downloadFile(supabaseBucket, activity.banner_path)
-      return { ...activity, banner_src }
-    }),
-  )
+  if (id) {
+    const { data, error } = await supabaseClient.from(ACTIVITIES).select('*').eq('id', id)
+    if (error) return NextResponse.json(error)
+    const activitiesWithBanners = await Promise.all(
+      data.map(async (activity) => {
+        const banner_src = await downloadFile(supabaseBucket, activity.banner_path)
+        return { ...activity, banner_src }
+      }),
+    )
 
-  return NextResponse.json(activitiesWithBanners)
+    return NextResponse.json(activitiesWithBanners)
+  } else {
+    const { data, error } = await supabaseClient.from(ACTIVITIES).select('*')
+    if (error) return NextResponse.json(error)
+    const activitiesWithBanners = await Promise.all(
+      data.map(async (activity) => {
+        const banner_src = await downloadFile(supabaseBucket, activity.banner_path)
+        return { ...activity, banner_src }
+      }),
+    )
+
+    return NextResponse.json(activitiesWithBanners)
+  }
 }
 
 export async function POST(req: NextRequest) {

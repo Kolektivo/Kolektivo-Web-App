@@ -27,8 +27,7 @@ declare module '@mui/material/Icon' {
 
 declare module '@mui/material/Chip' {
   interface ChipPropsColorOverrides {
-    strongOrange: true
-    chipOrange: true
+    upcomingChip: true
   }
 }
 
@@ -138,6 +137,9 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
             padding: `${spacing * 2}px !important`,
           },
         },
+      },
+      MuiChip: {
+        styleOverrides: { root: { fontWeight: '700' } },
       },
       MuiInputBase: {
         styleOverrides: {

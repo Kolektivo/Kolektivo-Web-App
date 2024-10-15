@@ -52,11 +52,11 @@ const lightPalette = {
     light: '#FBCC8E',
     contrastText: '#884F05',
   },
-  notReady: {
+  upcomingChip: {
     dark: '#C4C4C4',
     main: '#C4C4C4',
     light: '#C4C4C4',
-    contrastText: '#C4C4C4',
+    contrastText: '#454545',
   },
   warning: {
     dark: '#FBCC8E',

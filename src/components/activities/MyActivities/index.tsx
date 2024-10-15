@@ -46,6 +46,7 @@ export default function MyActivitiesCard({ actions }: { actions?: ReactNode }) {
           <Divider />
           <CardContent>
             <ActivityComponent
+              id={activity.id as string}
               img={activity.banner_src as string}
               title={activity.title}
               description={activity.description}
