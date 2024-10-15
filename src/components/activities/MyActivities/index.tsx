@@ -10,7 +10,13 @@ import ErrorDisplay from '@/components/common/display/ErrorDisplay'
 import { useQuery } from '@tanstack/react-query'
 import ActivitySkeleton from '../Activity/Skeleton'
 
-export default function MyActivitiesCard({ actions }: { actions?: ReactNode }) {
+export default function MyActivitiesCard({
+  actions,
+  disableRedirect,
+}: {
+  actions?: ReactNode
+  disableRedirect?: boolean
+}) {
   const { data, isLoading, error, refetch } = useQuery<ActivityType[] | undefined>({
     queryKey: ['getMyActivities'],
     queryFn: async () => await activitiesService.get(),
@@ -51,6 +57,7 @@ export default function MyActivitiesCard({ actions }: { actions?: ReactNode }) {
               title={activity.title}
               description={activity.description}
               state="Upcoming"
+              disableRedirect={disableRedirect}
             />
           </CardContent>
         </Box>

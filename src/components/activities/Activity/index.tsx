@@ -9,11 +9,15 @@ type Props = {
   title: string
   description: string
   state: string
+  disableRedirect?: boolean
 }
 
-export default function ActivityComponent({ id, img, title, description, state }: Props) {
+export default function ActivityComponent({ id, img, title, description, state, disableRedirect }: Props) {
   return (
-    <Link href={`/activities/update/${id}`}>
+    <Link
+      href={`${disableRedirect ? '' : `/activities/update/${id}`}`}
+      style={{ textDecoration: 'none', color: '#0F0F0F', cursor: `${disableRedirect ? 'default' : 'pointer'}` }}
+    >
       <Stack direction="row" alignItems="center" gap="16px">
         <Image src={img} alt={`vendorImage-${img}`} width={140} height={80} style={{ borderRadius: '12px' }} />
         <Stack gap="5px">
