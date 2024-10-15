@@ -1,6 +1,6 @@
 'use client'
 
-import ActivityReview from '@/components/activities/createActivities/forms/Review'
+import ActivityUpdate from '@/components/activities/Update'
 import LoadingButton from '@/components/common/buttons/LoadingButton'
 import activitiesService from '@/features/activities/services/activities.service'
 import { type ActivityType } from '@/types/activities'
@@ -45,7 +45,7 @@ export default function UpdateActivity() {
 
   if (data)
     return (
-      <ActivityReview
+      <ActivityUpdate
         review={{
           detail: {
             name: data[0].title,
@@ -89,7 +89,7 @@ export default function UpdateActivity() {
             </Button>
           </>
         )}
-      </ActivityReview>
+      </ActivityUpdate>
     )
   return (
     <div>
