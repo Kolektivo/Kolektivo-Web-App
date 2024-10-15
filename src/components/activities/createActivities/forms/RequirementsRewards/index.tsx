@@ -167,6 +167,7 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
                           // }}
                           // error={!!errors.requirements}
                           value={requirement}
+                          sx={{ width: '100%' }}
                         >
                           <MenuItem disabled value="0">
                             Select requirement

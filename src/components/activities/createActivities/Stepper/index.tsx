@@ -146,7 +146,11 @@ export default function CreateActivityStepper() {
               <Button onClick={handleBack} color="secondary">
                 Go Back
               </Button>
-              {creatingActivity && <LoadingButton loading variant="contained"></LoadingButton>}
+              {creatingActivity && (
+                <LoadingButton loading variant="contained" color="primary" className="stepperButton">
+                  Complete
+                </LoadingButton>
+              )}
               {!creatingActivity && (
                 <Button
                   // eslint-disable-next-line @typescript-eslint/no-unused-vars
