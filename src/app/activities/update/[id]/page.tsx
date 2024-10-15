@@ -22,7 +22,7 @@ export default function UpdateActivity() {
     },
   })
 
-  const { data, isLoading, error } = useQuery<ActivityType[] | undefined>({
+  const { data } = useQuery<ActivityType[] | undefined>({
     queryKey: ['getMyActivities'],
     queryFn: async () => await activitiesService.get(id as string),
   })
