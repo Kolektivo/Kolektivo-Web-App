@@ -4,48 +4,51 @@ import * as React from 'react'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
-import { Stack } from '@mui/material'
+import { Button, Stack } from '@mui/material'
 import HeaderCard from '@/components/common/cards/HeaderCard'
 import CreateActivityDetailForm from '../forms/Detail'
 import CreateActivityBannerForm from '../forms/Banner'
 import CreateActivityRequirementsRewards from '../forms/RequirementsRewards'
-import CreateActivityReview from '../forms/Review'
 import DialogSuccess from '@/components/common/modals/DialogSuccess'
 import { useRouter } from 'next/navigation'
+import ActivityReview from '../forms/Review'
 import {
   type CreateActivityRequirementsRewardsFormValues,
   type CreateActivityDetailFormValues,
+  type CreateActivityReviewType,
 } from '@/types/activities'
 import { useMemo } from 'react'
+import { useMutation } from '@tanstack/react-query'
+import activitiesService from '@/features/activities/services/activities.service'
+import LoadingButton from '@/components/common/buttons/LoadingButton'
 
 const steps = ['', '', '', '']
 
 export default function CreateActivityStepper() {
   const [activeStep, setActiveStep] = React.useState(0)
-  const [openDialog, setOpenDialog] = React.useState<boolean>(false)
+  const [openSuccessDialog, setOpenSuccessDialog] = React.useState<boolean>(false)
 
   const [detailFormValues, setDetailFormValues] = React.useState<CreateActivityDetailFormValues | null>(null)
   const [banner, setBanner] = React.useState<string>()
   const [requirementsRewardsFormValues, setRequirementsRewardsFormValues] =
     React.useState<CreateActivityRequirementsRewardsFormValues | null>(null)
-
-  const getReview = (
-    detailFormValues: CreateActivityDetailFormValues,
-    banner: string,
-    requirementsRewardsFormValues: CreateActivityRequirementsRewardsFormValues,
-  ) => {
-    return { detail: detailFormValues, banner, requirementsRewards: requirementsRewardsFormValues }
-  }
+  const [creatingActivity, setCreatingActivity] = React.useState<boolean>(false)
 
   const review = useMemo(
-    () =>
-      getReview(
-        detailFormValues as CreateActivityDetailFormValues,
-        banner as string,
-        requirementsRewardsFormValues as CreateActivityRequirementsRewardsFormValues,
-      ),
-    [detailFormValues, requirementsRewardsFormValues, banner],
+    () => ({
+      detail: detailFormValues as CreateActivityDetailFormValues,
+      banner: banner as string,
+      requirementsRewards: requirementsRewardsFormValues as CreateActivityRequirementsRewardsFormValues,
+    }),
+    [detailFormValues, banner, requirementsRewardsFormValues],
   )
+
+  const { mutate } = useMutation({
+    mutationFn: async (activityReview: CreateActivityReviewType) => {
+      setCreatingActivity(true)
+      return await activitiesService.create(activityReview)
+    },
+  })
 
   const router = useRouter()
 
@@ -73,11 +76,19 @@ export default function CreateActivityStepper() {
   }
 
   const handleComplete = () => {
-    setOpenDialog(true)
+    mutate(review, {
+      onSuccess: () => {
+        setCreatingActivity(false)
+        setOpenSuccessDialog(true)
+      },
+      onError: () => {
+        console.log('Error at create activity')
+      },
+    })
   }
 
   const handleDialogSuccessClick = () => {
-    setOpenDialog(false)
+    setOpenSuccessDialog(false)
     router.push('/activities')
   }
 
@@ -103,7 +114,7 @@ export default function CreateActivityStepper() {
       <DialogSuccess
         title="Activity Created"
         description="Your activity has been successfully created"
-        open={openDialog}
+        open={openSuccessDialog}
         onClickButton={handleDialogSuccessClick}
       />
       {activeStep == 0 && (
@@ -130,7 +141,30 @@ export default function CreateActivityStepper() {
       {activeStep == 3 && (
         <Stack gap="24px">
           <HeaderCard title="Review" />
-          <CreateActivityReview review={review} submitHandler={handleComplete} handleBack={handleBack} />
+          <ActivityReview review={review}>
+            <>
+              <Button onClick={handleBack} color="secondary">
+                Go Back
+              </Button>
+              {creatingActivity && (
+                <LoadingButton loading variant="contained" color="primary" className="stepperButton">
+                  Complete
+                </LoadingButton>
+              )}
+              {!creatingActivity && (
+                <Button
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  onClick={(_) => handleComplete()}
+                  variant="contained"
+                  color="primary"
+                  className="stepperButton"
+                  disabled={!review}
+                >
+                  Complete
+                </Button>
+              )}
+            </>
+          </ActivityReview>
         </Stack>
       )}
     </Stack>

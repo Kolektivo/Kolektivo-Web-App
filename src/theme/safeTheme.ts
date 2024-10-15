@@ -29,8 +29,13 @@ declare module '@mui/material/Icon' {
 
 declare module '@mui/material/Chip' {
   interface ChipPropsColorOverrides {
-    strongOrange: true
-    chipOrange: true
+    upcomingChip: true
+  }
+}
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    warningButton: true
   }
 }
 
@@ -146,6 +151,9 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
             padding: `${spacing * 2}px !important`,
           },
         },
+      },
+      MuiChip: {
+        styleOverrides: { root: { fontWeight: '700' } },
       },
       MuiInputBase: {
         styleOverrides: {
@@ -313,6 +321,20 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
           },
         },
       },
+      // MuiDateCalendar: {
+      //   styleOverrides: {
+      //     root: {
+      //       color: '#bbdefb',
+      //       borderRadius: '8px',
+      //       borderWidth: '0px',
+      //       borderColor: '#2196f3',
+      //       border: '0px solid',
+      //       backgroundColor: '#0d47a1',
+      //     },
+      //     IconSelect: {
+      //     }
+      //   },
+      // },
     },
   })
 }

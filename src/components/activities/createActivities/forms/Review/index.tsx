@@ -1,30 +1,21 @@
-import { type CreateActivityReview } from '@/types/activities'
+import { type CreateActivityReviewType } from '@/types/activities'
 import { type OrganizationInfo } from '@/types/organization'
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Divider,
-  Icon,
-  InputAdornment,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Box, Card, CardActions, CardContent, Divider, Icon, InputAdornment, Stack, Typography } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import Image from 'next/image'
-import React from 'react'
+import React, { type ReactNode } from 'react'
 
 type Props = {
-  submitHandler: () => void
-  handleBack: () => void
-  review: CreateActivityReview
+  review: CreateActivityReviewType
+  children: ReactNode
   defaultValues?: OrganizationInfo
 }
-export default function CreateActivityReview({ submitHandler, handleBack, review }: Props) {
+export default function ActivityReview({ review, children }: Props) {
   const formatRequirements = (requirements: string[]) => {
-    return [requirements[0], ...requirements.slice(1).map((requirement) => ` ${requirement}`)]
+    if (requirements.length > 1) {
+      return [requirements[0], ...requirements.slice(1).map((requirement) => ` ${requirement}`)]
+    }
+    return requirements[0]
   }
 
   return (
@@ -116,21 +107,7 @@ export default function CreateActivityReview({ submitHandler, handleBack, review
           />
         </Stack>
       </CardContent>
-      <CardActions>
-        <Button onClick={handleBack} color="secondary">
-          Go Back
-        </Button>
-        <Button
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          onClick={(_) => submitHandler()}
-          variant="contained"
-          color="primary"
-          className="stepperButton"
-          disabled={!review}
-        >
-          Complete
-        </Button>
-      </CardActions>
+      <CardActions>{children}</CardActions>
       <Divider />
     </Card>
   )

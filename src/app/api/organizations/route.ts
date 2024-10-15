@@ -26,12 +26,15 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
+
   const newOrganization = await req.json()
+
   const logoSrc = newOrganization.logoSrc
   delete newOrganization.logoSrc
 
   const { data, error } = await supabaseClient.from(ORGANIZATIONS).insert([newOrganization]).select()
   if (error) return NextResponse.json(error)
+
   const organizationId = data[0].id
   const mimeType = logoSrc.split(';')[0].split(':')[1]
   const extension = mimeType === 'image/png' ? 'png' : 'jpg'
