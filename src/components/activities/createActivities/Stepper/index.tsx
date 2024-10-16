@@ -25,7 +25,7 @@ import LoadingButton from '@/components/common/buttons/LoadingButton'
 const steps = ['', '', '', '']
 
 export default function CreateActivityStepper() {
-  const [activeStep, setActiveStep] = React.useState(2)
+  const [activeStep, setActiveStep] = React.useState(0)
   const [openSuccessDialog, setOpenSuccessDialog] = React.useState<boolean>(false)
 
   const [detailFormValues, setDetailFormValues] = React.useState<CreateActivityDetailFormValues | null>(null)

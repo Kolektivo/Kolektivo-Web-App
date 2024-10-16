@@ -1,6 +1,9 @@
-import { requirementsOptions } from '@/constants/activities/commons'
+import LoadingButton from '@/components/common/buttons/LoadingButton'
+import AutocompletePlaces from '@/components/common/inputs/autocomplete/AutocompletePlaces'
+import { requirementsOptions, stampsOptions } from '@/constants/activities/commons'
+import { reviewFormSchema } from '@/constants/activities/create/schemas'
 import { type CreateActivityReviewType } from '@/types/activities'
-import { type OrganizationInfo } from '@/types/organization'
+import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Box,
   Button,
@@ -9,7 +12,6 @@ import {
   CardContent,
   Divider,
   Icon,
-  InputAdornment,
   InputLabel,
   MenuItem,
   Stack,
@@ -17,22 +19,88 @@ import {
 } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import Image from 'next/image'
-import React, { type ReactNode } from 'react'
+import React, { type ChangeEvent, useEffect } from 'react'
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
 
 type Props = {
   review: CreateActivityReviewType
-  children: ReactNode
-  defaultValues?: OrganizationInfo
+  submitHandler: SubmitHandler<CreateActivityReviewType>
+  deleteHandler: () => void
+  onExecution: boolean
 }
 
-export default function ActivityUpdate({ review, children }: Props) {
-  // const handleAddRequirement = () => {
-  //   if (requirements.split(',').length < requirementsOptions.length) setRequirements(`${requirements},0`)
-  //   const [requirements, setRequirements] = React.useState<string>('0')
+export default function ActivityUpdate({ review, submitHandler, deleteHandler, onExecution }: Props) {
+  const [requirements, setRequirements] = React.useState<string>(review.requirements)
+  const {
+    control,
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<CreateActivityReviewType>({
+    resolver: zodResolver(reviewFormSchema),
+    mode: 'onBlur',
+  })
+
+  const cleanDisabledRequirementsOptions = () => {
+    requirementsOptions.forEach((requirementOption) => {
+      requirementOption.disabled = false
+    })
+  }
+
+  function updateDisabledRequirementsOptions(updatedRequirements: string) {
+    updatedRequirements.split(',').forEach((requirement) => {
+      const selectedRequirementOptionIndex = requirementsOptions.findIndex(
+        (requirementOption) => requirementOption.value == requirement,
+      )
+      if (selectedRequirementOptionIndex != -1) {
+        requirementsOptions[selectedRequirementOptionIndex].disabled = true
+      }
+    })
+  }
+
+  const handleRequirementsChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
+    console.log('Requirements select change')
+    const {
+      target: { value },
+    } = event
+    if (requirements.includes(value)) {
+      return
+    }
+    const updatedRequirements = requirements.split(',')
+    updatedRequirements[index] = value
+
+    const updatedRequirementsStr = updatedRequirements.join(',')
+
+    console.log('UpdatedRequirementsStr: ', updatedRequirementsStr)
+
+    cleanDisabledRequirementsOptions()
+
+    updateDisabledRequirementsOptions(updatedRequirementsStr)
+
+    setRequirements(updatedRequirementsStr)
+  }
+
+  const handleAddRequirement = () => {
+    if (requirements.split(',').length < requirementsOptions.length) setRequirements(`${requirements},0`)
+  }
+
+  // const handleRemoverequirements = (_: unknown, index: number) => {
+  //   if (requirements.length > 1) {
+  //     const updatedRequirements = requirements.filter((_, i) => i !== index)
+  //     setRequirements(updatedRequirements)
+  //   } else {
+  //     setRequirements(['0'])
+  //   }
   // }
+
+  useEffect(() => {
+    cleanDisabledRequirementsOptions()
+    updateDisabledRequirementsOptions(review.requirements)
+  }, [review.requirements])
+
   return (
     <Card>
-      <form>
+      <form onSubmit={handleSubmit(submitHandler)}>
         <CardContent>
           <Stack gap="48px">
             <Box
@@ -49,45 +117,68 @@ export default function ActivityUpdate({ review, children }: Props) {
               id="activityName"
               variant="outlined"
               label="What’s the name of your activity?"
-              value={review.name}
+              defaultValue={review.name}
               placeholder="Beach Cleanup"
+              slotProps={{
+                htmlInput: { ...register('name') },
+              }}
+              error={!!errors?.name}
             />
             <Stack gap="16px">
               <Typography variant="h3">When does your activity start and end?</Typography>
               <Stack direction="row" gap="16px">
-                <TextField id="date" type="date" variant="outlined" placeholder="Date" defaultValue={review.date} />
+                <TextField
+                  id="date"
+                  type="date"
+                  variant="outlined"
+                  placeholder="Date"
+                  defaultValue={new Date(review.date).toISOString().split('T')[0]}
+                  slotProps={{
+                    htmlInput: { ...register('date') },
+                  }}
+                  error={!!errors?.date}
+                />
                 <TextField
                   id="startTime"
                   type="time"
                   variant="outlined"
                   placeholder="Start time"
-                  defaultValue={review.startTime}
+                  defaultValue={new Date(review.startTime).toISOString().split('T')[1].substring(0, 5)}
+                  slotProps={{
+                    htmlInput: { ...register('startTime') },
+                  }}
+                  error={!!errors?.startTime}
                 />
                 <TextField
                   id="endTime"
                   type="time"
                   variant="outlined"
                   placeholder="End time"
-                  defaultValue={review.endTime}
+                  defaultValue={new Date(review.endTime).toISOString().split('T')[1].substring(0, 5)}
+                  slotProps={{
+                    htmlInput: { ...register('endTime') },
+                  }}
+                  error={!!errors?.endTime}
                 />
               </Stack>
             </Stack>
-            <TextField
-              id="location"
-              type="search"
-              variant="outlined"
-              label="Where is it located?"
-              placeholder="Enter location"
-              defaultValue={review.location}
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Icon>search</Icon>
-                    </InputAdornment>
-                  ),
-                },
+            <Controller
+              control={control}
+              rules={{
+                required: true,
               }}
+              defaultValue={review.location}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <AutocompletePlaces
+                  label="Where is it located?"
+                  placeholder="Enter location"
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  value={value ?? ''}
+                  error={!!errors?.location}
+                />
+              )}
+              name="location"
             />
             <TextField
               id="description"
@@ -96,20 +187,24 @@ export default function ActivityUpdate({ review, children }: Props) {
               placeholder="Describe your activity"
               defaultValue={review.description}
               multiline
+              slotProps={{
+                htmlInput: { ...register('description') },
+              }}
+              error={!!errors?.description}
             />
             <Box>
               <Box>
                 <InputLabel>What are the requirements for the attendee?</InputLabel>
                 <Stack gap="8px">
-                  {review.requirements.split(',').map((requirement, index) => (
+                  {requirements.split(',').map((requirement, index) => (
                     <Stack key={index} direction="row" gap={2}>
                       <TextField
                         select
-                        // onChange={(event) => handleRequirementsChange(event, index)}
-                        // slotProps={{
-                        //   htmlInput: { ...register('requirements') },
-                        // }}
-                        // error={!!errors.requirements}
+                        onChange={(event) => handleRequirementsChange(event, index)}
+                        slotProps={{
+                          htmlInput: { ...register('requirements') },
+                        }}
+                        error={!!errors.requirements}
                         defaultValue={requirement}
                         sx={{ width: '100%' }}
                       >
@@ -136,7 +231,7 @@ export default function ActivityUpdate({ review, children }: Props) {
                 </Stack>
               </Box>
               <Button
-                // onClick={handleAddRequirement}
+                onClick={handleAddRequirement}
                 variant="contained"
                 color="secondary"
                 size="small"
@@ -155,13 +250,57 @@ export default function ActivityUpdate({ review, children }: Props) {
             <TextField
               id="activityName"
               variant="outlined"
+              label="How many Kolektivo Points can each attendee earn? "
+              placeholder="Enter amount of points"
+              defaultValue={review.kolectivoPoints}
+              slotProps={{
+                htmlInput: { ...register('kolectivoPoints') },
+              }}
+              error={!!errors?.kolectivoPoints}
+            />
+            <TextField
+              select
               label="Which stamps can the attendee earn?"
               defaultValue={review.stamps}
-              placeholder="Select stamp"
-            />
+              sx={{ width: '100%' }}
+              slotProps={{
+                htmlInput: { ...register('stamps') },
+              }}
+              error={!!errors?.stamps}
+            >
+              <MenuItem disabled value="0">
+                Select stamp
+              </MenuItem>
+              {stampsOptions.map((stampOption) => (
+                <MenuItem key={stampOption.value} disabled={stampOption.disabled} value={stampOption.value}>
+                  {stampOption.label}
+                </MenuItem>
+              ))}
+            </TextField>
           </Stack>
         </CardContent>
-        <CardActions>{children}</CardActions>
+        <CardActions>
+          {onExecution && (
+            <>
+              <LoadingButton loading variant="contained" color="warningButton" className="stepperButton">
+                Delete
+              </LoadingButton>
+              <LoadingButton loading variant="contained" color="primary" className="stepperButton">
+                Save
+              </LoadingButton>
+            </>
+          )}
+          {!onExecution && (
+            <>
+              <Button onClick={deleteHandler} variant="contained" color="warningButton">
+                Delete
+              </Button>
+              <Button type="submit" variant="contained" color="primary" className="stepperButton" disabled={!isValid}>
+                Save
+              </Button>
+            </>
+          )}
+        </CardActions>
         <Divider />
       </form>
     </Card>

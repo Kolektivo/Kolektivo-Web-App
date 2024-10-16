@@ -31,7 +31,6 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
   const {
     register,
     handleSubmit,
-    trigger,
     formState: { errors, isValid },
   } = useForm<CreateActivityRequirementsRewardsFormValues>({
     resolver: zodResolver(requiremetsRewardsFormSchema),
@@ -155,39 +154,35 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
                   </Stack>
                 </Button>
               </Box>
-              <Stack gap="16px">
-                <TextField
-                  id="activityName"
-                  variant="outlined"
-                  label="How many Kolektivo Points can each attendee earn? "
-                  placeholder="Enter amount of points"
-                  slotProps={{
-                    htmlInput: { ...register('kolectivoPoints') },
-                  }}
-                  error={!!errors?.kolectivoPoints}
-                />
-              </Stack>
-              <Box>
-                <InputLabel>Which stamps can the attendee earn?</InputLabel>
-                <TextField
-                  select
-                  defaultValue="0"
-                  sx={{ width: '100%' }}
-                  slotProps={{
-                    htmlInput: { ...register('stamps') },
-                  }}
-                  error={!!errors?.stamps}
-                >
-                  <MenuItem disabled value="0">
-                    Select stamp
+              <TextField
+                id="activityName"
+                variant="outlined"
+                label="How many Kolektivo Points can each attendee earn? "
+                placeholder="Enter amount of points"
+                slotProps={{
+                  htmlInput: { ...register('kolectivoPoints') },
+                }}
+                error={!!errors?.kolectivoPoints}
+              />
+              <TextField
+                select
+                label="Which stamps can the attendee earn?"
+                defaultValue="0"
+                sx={{ width: '100%' }}
+                slotProps={{
+                  htmlInput: { ...register('stamps') },
+                }}
+                error={!!errors?.stamps}
+              >
+                <MenuItem disabled value="0">
+                  Select stamp
+                </MenuItem>
+                {stampsOptions.map((stampOption) => (
+                  <MenuItem key={stampOption.value} disabled={stampOption.disabled} value={stampOption.value}>
+                    {stampOption.label}
                   </MenuItem>
-                  {stampsOptions.map((stampOption) => (
-                    <MenuItem key={stampOption.value} disabled={stampOption.disabled} value={stampOption.value}>
-                      {stampOption.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Box>
+                ))}
+              </TextField>
             </Stack>
           </Box>
         </CardContent>
