@@ -26,6 +26,10 @@ type Props = {
 }
 
 export default function ActivityUpdate({ review, children }: Props) {
+  // const handleAddRequirement = () => {
+  //   if (requirements.split(',').length < requirementsOptions.length) setRequirements(`${requirements},0`)
+  //   const [requirements, setRequirements] = React.useState<string>('0')
+  // }
   return (
     <Card>
       <form>
@@ -51,15 +55,21 @@ export default function ActivityUpdate({ review, children }: Props) {
             <Stack gap="16px">
               <Typography variant="h3">When does your activity start and end?</Typography>
               <Stack direction="row" gap="16px">
-                <TextField id="date" type="date" variant="outlined" placeholder="Date" value={review.date} />
+                <TextField id="date" type="date" variant="outlined" placeholder="Date" defaultValue={review.date} />
                 <TextField
                   id="startTime"
                   type="time"
                   variant="outlined"
                   placeholder="Start time"
-                  value={review.startTime}
+                  defaultValue={review.startTime}
                 />
-                <TextField id="endTime" type="time" variant="outlined" placeholder="End time" value={review.endTime} />
+                <TextField
+                  id="endTime"
+                  type="time"
+                  variant="outlined"
+                  placeholder="End time"
+                  defaultValue={review.endTime}
+                />
               </Stack>
             </Stack>
             <TextField
@@ -68,7 +78,7 @@ export default function ActivityUpdate({ review, children }: Props) {
               variant="outlined"
               label="Where is it located?"
               placeholder="Enter location"
-              value={review.location}
+              defaultValue={review.location}
               slotProps={{
                 input: {
                   startAdornment: (
@@ -84,14 +94,14 @@ export default function ActivityUpdate({ review, children }: Props) {
               variant="outlined"
               label="What can the attendee expect?"
               placeholder="Describe your activity"
-              value={review.description}
+              defaultValue={review.description}
               multiline
             />
             <Box>
               <Box>
                 <InputLabel>What are the requirements for the attendee?</InputLabel>
                 <Stack gap="8px">
-                  {review.requirements.map((requirement, index) => (
+                  {review.requirements.split(',').map((requirement, index) => (
                     <Stack key={index} direction="row" gap={2}>
                       <TextField
                         select
@@ -100,7 +110,7 @@ export default function ActivityUpdate({ review, children }: Props) {
                         //   htmlInput: { ...register('requirements') },
                         // }}
                         // error={!!errors.requirements}
-                        value={requirement}
+                        defaultValue={requirement}
                         sx={{ width: '100%' }}
                       >
                         <MenuItem disabled value="0">
@@ -146,7 +156,7 @@ export default function ActivityUpdate({ review, children }: Props) {
               id="activityName"
               variant="outlined"
               label="Which stamps can the attendee earn?"
-              value={review.stamps}
+              defaultValue={review.stamps}
               placeholder="Select stamp"
             />
           </Stack>

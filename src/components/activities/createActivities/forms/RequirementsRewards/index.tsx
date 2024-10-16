@@ -8,8 +8,6 @@ import {
   Icon,
   InputLabel,
   MenuItem,
-  Select,
-  type SelectChangeEvent,
   Stack,
   Typography,
 } from '@mui/material'
@@ -29,12 +27,11 @@ type Props = {
 
 export default function CreateActivityRequirementsRewards({ submitHandler, backHandler }: Props) {
   const [requirements, setRequirements] = React.useState<string>('0')
-  const [stamps, setStamps] = React.useState<string>('0')
 
   const {
     register,
     handleSubmit,
-    setValue,
+    trigger,
     formState: { errors, isValid },
   } = useForm<CreateActivityRequirementsRewardsFormValues>({
     resolver: zodResolver(requiremetsRewardsFormSchema),
@@ -78,15 +75,6 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
     updateDisabledRequirementsOptions(updatedRequirementsStr)
 
     setRequirements(updatedRequirementsStr)
-  }
-
-  const handleStampsChange = (event: SelectChangeEvent<string>) => {
-    const {
-      target: { value },
-    } = event
-    setStamps(value)
-    console.log(value)
-    setValue('stamps', value)
   }
 
   const handleAddRequirement = () => {
@@ -181,7 +169,15 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
               </Stack>
               <Box>
                 <InputLabel>Which stamps can the attendee earn?</InputLabel>
-                <Select onChange={handleStampsChange} value={stamps}>
+                <TextField
+                  select
+                  defaultValue="0"
+                  sx={{ width: '100%' }}
+                  slotProps={{
+                    htmlInput: { ...register('stamps') },
+                  }}
+                  error={!!errors?.stamps}
+                >
                   <MenuItem disabled value="0">
                     Select stamp
                   </MenuItem>
@@ -190,7 +186,7 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
                       {stampOption.label}
                     </MenuItem>
                   ))}
-                </Select>
+                </TextField>
               </Box>
             </Stack>
           </Box>

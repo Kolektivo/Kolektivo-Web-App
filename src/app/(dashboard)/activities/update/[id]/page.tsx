@@ -55,7 +55,7 @@ export default function UpdateActivity() {
           startTime: data[0].start_date,
           banner: data[0].banner_src as string,
           kolectivoPoints: Number(data[0].points),
-          requirements: data[0].requirements.split(','),
+          requirements: data[0].requirements,
           stamps: data[0].stamp as string,
         }}
       >
