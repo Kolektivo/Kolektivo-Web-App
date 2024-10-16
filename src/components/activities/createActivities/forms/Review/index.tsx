@@ -11,12 +11,12 @@ type Props = {
   defaultValues?: OrganizationInfo
 }
 export default function ActivityReview({ review, children }: Props) {
-  const formatRequirements = (requirements: string[]) => {
-    if (requirements.length > 1) {
-      return [requirements[0], ...requirements.slice(1).map((requirement) => ` ${requirement}`)]
-    }
-    return requirements[0]
-  }
+  // const formatRequirements = (requirements: string[]) => {
+  //   if (requirements.length > 1) {
+  //     return [requirements[0], ...requirements.slice(1).map((requirement) => ` ${requirement}`)]
+  //   }
+  //   return requirements[0]
+  // }
 
   return (
     <Card>
@@ -82,7 +82,7 @@ export default function ActivityReview({ review, children }: Props) {
             id="activityName"
             variant="outlined"
             label="What are the requirements for the attendee?"
-            value={formatRequirements(review.requirements)}
+            value={review.requirements}
             placeholder="Select requirement"
           />
           <TextField

@@ -71,6 +71,7 @@ export default function CreateActivityStepper() {
   }
 
   const handleRequirementsRewardsFormSubmit = (data: CreateActivityRequirementsRewardsFormValues) => {
+    console.log(data)
     setRequirementsRewardsFormValues(data)
     goToNext()
   }
@@ -83,6 +84,7 @@ export default function CreateActivityStepper() {
       },
       onError: () => {
         console.log('Error at create activity')
+        setCreatingActivity(false)
       },
     })
   }

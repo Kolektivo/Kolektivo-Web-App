@@ -15,10 +15,10 @@ import {
 } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import React, { type ChangeEvent, useEffect } from 'react'
-// import { requiremetsRewardsFormSchema } from '@/constants/activities/create/schemas'
+import { requiremetsRewardsFormSchema } from '@/constants/activities/create/schemas'
 import type { SubmitHandler } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
-// import { zodResolver } from '@hookform/resolvers/zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import type { CreateActivityRequirementsRewardsFormValues } from '@/types/activities'
 import { requirementsOptions, stampsOptions } from '@/constants/activities/commons'
 
@@ -28,7 +28,7 @@ type Props = {
 }
 
 export default function CreateActivityRequirementsRewards({ submitHandler, backHandler }: Props) {
-  const [requirements, setRequirements] = React.useState<string[]>(['0'])
+  const [requirements, setRequirements] = React.useState<string>('0')
   const [stamps, setStamps] = React.useState<string>('0')
 
   const {
@@ -37,7 +37,7 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
     setValue,
     formState: { errors, isValid },
   } = useForm<CreateActivityRequirementsRewardsFormValues>({
-    // resolver: zodResolver(requiremetsRewardsFormSchema),
+    resolver: zodResolver(requiremetsRewardsFormSchema),
     mode: 'onBlur',
   })
 
@@ -47,8 +47,8 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
     })
   }
 
-  function updateDisabledRequirementsOptions(updatedRequirements: string[]) {
-    updatedRequirements.forEach((requirement) => {
+  function updateDisabledRequirementsOptions(updatedRequirements: string) {
+    updatedRequirements.split(',').forEach((requirement) => {
       const selectedRequirementOptionIndex = requirementsOptions.findIndex(
         (requirementOption) => requirementOption.value == requirement,
       )
@@ -66,17 +66,18 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
     if (requirements.includes(value)) {
       return
     }
-
-    const updatedRequirements = [...requirements]
+    const updatedRequirements = requirements.split(',')
     updatedRequirements[index] = value
 
-    console.log('Value: ' + value)
+    const updatedRequirementsStr = updatedRequirements.join(',')
+
+    console.log('UpdatedRequirementsStr: ', updatedRequirementsStr)
 
     cleanDisabledRequirementsOptions()
 
-    updateDisabledRequirementsOptions(updatedRequirements)
+    updateDisabledRequirementsOptions(updatedRequirementsStr)
 
-    setRequirements(updatedRequirements)
+    setRequirements(updatedRequirementsStr)
   }
 
   const handleStampsChange = (event: SelectChangeEvent<string>) => {
@@ -84,11 +85,12 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
       target: { value },
     } = event
     setStamps(value)
+    console.log(value)
     setValue('stamps', value)
   }
 
   const handleAddRequirement = () => {
-    if (requirements.length < requirementsOptions.length) setRequirements([...requirements, '0'])
+    if (requirements.split(',').length < requirementsOptions.length) setRequirements(`${requirements},0`)
   }
 
   // const handleRemoverequirements = (_: unknown, index: number) => {
@@ -101,25 +103,12 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
   // }
 
   useEffect(() => {
-    if (requirements.includes('0')) {
-      setValue('requirements', [])
-    } else {
-      setValue('requirements', requirements)
-    }
-    console.log('Requirements: ', requirements)
-  }, [setValue, requirements])
-
-  useEffect(() => {
-    console.log('Is valid: ' + isValid)
-  }, [isValid])
-
-  useEffect(() => {
     cleanDisabledRequirementsOptions()
   }, [])
 
   return (
     <Card>
-      <form onSubmit={handleSubmit(submitHandler)}>
+      <form onSubmit={handleSubmit((data) => submitHandler({ ...data, requirements }))}>
         <CardContent>
           <Box width="64%">
             <Stack gap="48px">
@@ -127,17 +116,17 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
                 <Box>
                   <InputLabel>What are the requirements for the attendee?</InputLabel>
                   <Stack gap="8px">
-                    {requirements.map((requirement, index) => (
+                    {requirements.split(',').map((requirement, index) => (
                       <Stack key={index} direction="row" gap={2}>
                         <TextField
                           select
                           onChange={(event) => handleRequirementsChange(event, index)}
-                          // slotProps={{
-                          //   htmlInput: { ...register('requirements') },
-                          // }}
-                          // error={!!errors.requirements}
                           value={requirement}
                           sx={{ width: '100%' }}
+                          slotProps={{
+                            htmlInput: { ...register('requirements') },
+                          }}
+                          error={!!errors?.requirements}
                         >
                           <MenuItem disabled value="0">
                             Select requirement
@@ -211,13 +200,7 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
           <Button onClick={backHandler} color="secondary">
             Go Back
           </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className="stepperButton"
-            disabled={requirements[0] == '0' || stamps == '0'}
-          >
+          <Button type="submit" variant="contained" color="primary" className="stepperButton" disabled={!isValid}>
             Next
           </Button>
         </CardActions>

@@ -8,7 +8,7 @@ export type CreateActivityDetailFormValues = {
 }
 
 export type CreateActivityRequirementsRewardsFormValues = {
-  requirements: string[]
+  requirements: string
   kolectivoPoints: number
   stamps: string
 }
