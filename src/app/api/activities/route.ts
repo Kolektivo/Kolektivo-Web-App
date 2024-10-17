@@ -62,13 +62,9 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
-  const { data, error } = await supabaseClient
-    .from(ACTIVITIES)
-    .upsert(await req.json())
-    .select()
-  if (error) return NextResponse.json(error)
-  return NextResponse.json(data)
+  const updateResult = await updateActivity(await req.json())
+  if (updateResult.error) return NextResponse.json(updateResult.error)
+  return NextResponse.json(updateResult.data)
 }
 
 export async function DELETE(req: NextRequest) {

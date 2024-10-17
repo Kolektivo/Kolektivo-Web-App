@@ -33,9 +33,10 @@ class ActivitiesService {
     return response.data
   }
 
-  public async update(activityReview: ActivityReviewType): Promise<ActivityType | undefined> {
+  public async update(activityReview: ActivityReviewType, id: string): Promise<ActivityType | undefined> {
     console.log(activityReview)
     const exampleActivity: ActivityType = {
+      id,
       created_at: '2024-09-15T14:45:00+00:00',
       activity_host_id: 'd1b49c7c-d7e6-475e-96d7-0023eb0a1857',
       title: activityReview.name,
@@ -50,7 +51,7 @@ class ActivitiesService {
       stamp: activityReview.stamps,
       banner_src: activityReview.banner,
     }
-    const response = await this.httpInstance.post<ActivityType>('/activities', exampleActivity)
+    const response = await this.httpInstance.put<ActivityType>('/activities', exampleActivity)
     return response.data
   }
   public async delete(id: string) {

@@ -21,9 +21,9 @@ export default function UpdateActivity() {
   })
 
   const { mutate: updateMutate } = useMutation({
-    mutationFn: async (review: ActivityReviewType) => {
+    mutationFn: async (activityData: { review: ActivityReviewType; id: string }) => {
       setOnExecution(true)
-      return await activitiesService.update(review)
+      return await activitiesService.update(activityData.review, activityData.id)
     },
   })
 
@@ -47,17 +47,21 @@ export default function UpdateActivity() {
   }
 
   const handleSave = (review: ActivityReviewType) => {
+    console.log('GetReview: ', review)
     console.log('Update')
-    updateMutate(review, {
-      onSuccess: () => {
-        setOnExecution(false)
-        router.push('/activities/update')
+    updateMutate(
+      { review, id: id as string },
+      {
+        onSuccess: () => {
+          setOnExecution(false)
+          router.push('/activities/update')
+        },
+        onError: () => {
+          setOnExecution(false)
+          console.log('Error')
+        },
       },
-      onError: () => {
-        setOnExecution(false)
-        console.log('Error')
-      },
-    })
+    )
   }
 
   if (data)

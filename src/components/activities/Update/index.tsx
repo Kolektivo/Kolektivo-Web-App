@@ -96,11 +96,11 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, o
   useEffect(() => {
     cleanDisabledRequirementsOptions()
     updateDisabledRequirementsOptions(review.requirements)
-  }, [review.requirements])
+  }, [review])
 
   return (
     <Card>
-      <form onSubmit={handleSubmit(submitHandler)}>
+      <form onSubmit={handleSubmit((data) => submitHandler({ ...data, requirements }))}>
         <CardContent>
           <Stack gap="48px">
             <Box
@@ -111,7 +111,19 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, o
               alignItems="center"
               display="flex"
             >
-              <Image src={review.banner} alt="Selected" width={285} height={160} style={{ borderRadius: '12px' }} />
+              {review.banner ? (
+                <Image src={review.banner} alt="Selected" width={285} height={160} style={{ borderRadius: '12px' }} />
+              ) : (
+                <Stack
+                  sx={{ backgroundColor: '#F2F2F2', borderRadius: '12px' }}
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Typography fontWeight={700} fontSize={20} textTransform="uppercase" color="#A9A9A9">
+                    Activity Banner
+                  </Typography>
+                </Stack>
+              )}
             </Box>
             <TextField
               id="activityName"
