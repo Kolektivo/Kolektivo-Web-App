@@ -1,6 +1,7 @@
 'use client'
 
 import ActivityUpdate from '@/components/activities/Update'
+import ActivityUpdateSekelton from '@/components/activities/Update/Skeleton'
 import activitiesService from '@/features/activities/services/activities.service'
 import { type ActivityReviewType, type ActivityType } from '@/types/activities'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -84,9 +85,5 @@ export default function UpdateActivity() {
         onExecution={onExecution}
       />
     )
-  return (
-    <div>
-      <div>IsLoading</div>
-    </div>
-  )
+  return <ActivityUpdateSekelton />
 }
