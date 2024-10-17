@@ -1,10 +1,11 @@
-import { CardContent, Card, Typography, Stack, Link as MUILink, TextField, Button, Container } from '@mui/material'
+import { CardContent, Card, Typography, Stack, Link as MUILink, Button, Container } from '@mui/material'
 import { type Metadata } from 'next'
 import NextLink from 'next/link'
 import Image from 'next/image'
 import IconGoogle from '@/public/images/icons/google.svg?url'
 import IconFacebook from '@/public/images/icons/facebook.svg?url'
 import IconApple from '@/public/images/icons/apple.svg?url'
+import EmailForm from '@/components/auth/signin/EmailForm'
 
 export const metadata: Metadata = {
   title: 'Sign In',
@@ -30,9 +31,7 @@ export default function Page() {
         <Card>
           <CardContent>
             <Stack gap={4}>
-              <TextField label="Email" placeholder="Email address" />
-              <TextField label="Password" placeholder="Password" type="password" />
-              <Button variant="contained">Log In</Button>
+              <EmailForm />
               <Typography variant="body2" align="center" color="text.secondary" sx={{ fontSize: '18px' }}>
                 Or
               </Typography>

@@ -2,6 +2,7 @@ import { AppBar, Button, Icon, IconButton, Stack, Toolbar, Typography } from '@m
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { type MouseEventHandler } from 'react'
+import AccountMenu from './AccountMenu'
 
 const routesNames: { [key: string]: string }[] = [
   {
@@ -68,16 +69,14 @@ export default function CustomAppBar({
           </Typography>
         </Toolbar>
         <Toolbar disableGutters variant="dense" sx={{ gap: 2 }}>
-          <Button variant="contained" color="secondary" sx={{ borderRadius: 100, minWidth: 0, padding: 2 }}>
-            <Icon color="primary" sx={{ lineHeight: '22px' }}>
-              home
-            </Icon>
-          </Button>
-          <Link href="signin">
-            <Button variant="contained" color="secondary" sx={{ borderRadius: 100 }}>
-              Sign In
+          <Link href="/">
+            <Button variant="contained" color="secondary" sx={{ borderRadius: 100, minWidth: 0, padding: 2 }}>
+              <Icon color="primary" sx={{ lineHeight: '22px' }}>
+                home
+              </Icon>
             </Button>
           </Link>
+          <AccountMenu />
         </Toolbar>
       </Stack>
     </AppBar>
