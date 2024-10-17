@@ -13,7 +13,7 @@ export type CreateActivityRequirementsRewardsFormValues = {
   stamps: string
 }
 
-export type CreateActivityReviewType = CreateActivityDetailFormValues &
+export type ActivityReviewType = CreateActivityDetailFormValues &
   CreateActivityRequirementsRewardsFormValues & { banner: string }
 
 export type ActivityType = {

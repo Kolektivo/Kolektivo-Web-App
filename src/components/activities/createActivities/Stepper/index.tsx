@@ -15,7 +15,7 @@ import ActivityReview from '../forms/Review'
 import {
   type CreateActivityRequirementsRewardsFormValues,
   type CreateActivityDetailFormValues,
-  type CreateActivityReviewType,
+  type ActivityReviewType,
 } from '@/types/activities'
 import { useMemo } from 'react'
 import { useMutation } from '@tanstack/react-query'
@@ -34,7 +34,7 @@ export default function CreateActivityStepper() {
     React.useState<CreateActivityRequirementsRewardsFormValues | null>(null)
   const [creatingActivity, setCreatingActivity] = React.useState<boolean>(false)
 
-  const review = useMemo<CreateActivityReviewType>(
+  const review = useMemo<ActivityReviewType>(
     () => ({
       ...(detailFormValues as CreateActivityDetailFormValues),
       banner: banner as string,
@@ -44,7 +44,7 @@ export default function CreateActivityStepper() {
   )
 
   const { mutate } = useMutation({
-    mutationFn: async (activityReview: CreateActivityReviewType) => {
+    mutationFn: async (activityReview: ActivityReviewType) => {
       setCreatingActivity(true)
       return await activitiesService.create(activityReview)
     },

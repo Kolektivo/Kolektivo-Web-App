@@ -1,4 +1,4 @@
-import { type CreateActivityReviewType } from '@/types/activities'
+import { type ActivityReviewType } from '@/types/activities'
 import { type OrganizationInfo } from '@/types/organization'
 import { Box, Card, CardActions, CardContent, Divider, Icon, InputAdornment, Stack, Typography } from '@mui/material'
 import TextField from '@mui/material/TextField'
@@ -6,7 +6,7 @@ import Image from 'next/image'
 import React, { type ReactNode } from 'react'
 
 type Props = {
-  review: CreateActivityReviewType
+  review: ActivityReviewType
   children: ReactNode
   defaultValues?: OrganizationInfo
 }

@@ -2,7 +2,7 @@
 
 import ActivityUpdate from '@/components/activities/Update'
 import activitiesService from '@/features/activities/services/activities.service'
-import { type ActivityType } from '@/types/activities'
+import { type ActivityReviewType, type ActivityType } from '@/types/activities'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
@@ -17,6 +17,13 @@ export default function UpdateActivity() {
     mutationFn: async (activityId: string) => {
       setOnExecution(true)
       return await activitiesService.delete(activityId)
+    },
+  })
+
+  const { mutate: updateMutate } = useMutation({
+    mutationFn: async (review: ActivityReviewType) => {
+      setOnExecution(true)
+      return await activitiesService.update(review)
     },
   })
 
@@ -39,7 +46,19 @@ export default function UpdateActivity() {
     })
   }
 
-  const handleSave = () => {}
+  const handleSave = (review: ActivityReviewType) => {
+    console.log('Update')
+    updateMutate(review, {
+      onSuccess: () => {
+        setOnExecution(false)
+        router.push('/activities/update')
+      },
+      onError: () => {
+        setOnExecution(false)
+        console.log('Error')
+      },
+    })
+  }
 
   if (data)
     return (

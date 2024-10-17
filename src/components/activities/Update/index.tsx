@@ -2,7 +2,7 @@ import LoadingButton from '@/components/common/buttons/LoadingButton'
 import AutocompletePlaces from '@/components/common/inputs/autocomplete/AutocompletePlaces'
 import { requirementsOptions, stampsOptions } from '@/constants/activities/commons'
 import { reviewFormSchema } from '@/constants/activities/create/schemas'
-import { type CreateActivityReviewType } from '@/types/activities'
+import { type ActivityReviewType } from '@/types/activities'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Box,
@@ -23,8 +23,8 @@ import React, { type ChangeEvent, useEffect } from 'react'
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
 
 type Props = {
-  review: CreateActivityReviewType
-  submitHandler: SubmitHandler<CreateActivityReviewType>
+  review: ActivityReviewType
+  submitHandler: SubmitHandler<ActivityReviewType>
   deleteHandler: () => void
   onExecution: boolean
 }
@@ -36,7 +36,7 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, o
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<CreateActivityReviewType>({
+  } = useForm<ActivityReviewType>({
     resolver: zodResolver(reviewFormSchema),
     mode: 'onBlur',
   })
