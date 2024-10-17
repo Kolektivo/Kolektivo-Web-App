@@ -321,6 +321,19 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
           },
         },
       },
+      MuiAlert: {
+        styleOverrides: {
+          root: {
+            lineHeight: 'normal',
+            variants: [
+              {
+                props: { variant: 'outlined' },
+                style: { borderColor: colors.error.main },
+              },
+            ],
+          },
+        },
+      },
       // MuiDateCalendar: {
       //   styleOverrides: {
       //     root: {
