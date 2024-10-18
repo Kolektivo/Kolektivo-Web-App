@@ -334,6 +334,13 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
           },
         },
       },
+      MuiAvatar: {
+        styleOverrides: {
+          root: {
+            borderColor: `${colors.background.default} !important`,
+          },
+        },
+      },
       // MuiDateCalendar: {
       //   styleOverrides: {
       //     root: {

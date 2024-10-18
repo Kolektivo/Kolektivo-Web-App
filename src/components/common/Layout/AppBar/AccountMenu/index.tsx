@@ -42,7 +42,13 @@ const AccountMenu = (): ReactElement => {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
       >
-        <Avatar sx={{ width: 48, height: 48, border: '5px solid' }}>{user?.email?.charAt(0).toUpperCase()}</Avatar>
+        <Avatar
+          alt="user-avatar"
+          src={user?.user_metadata.avatar_url}
+          sx={{ width: 48, height: 48, border: '5px solid' }}
+        >
+          {user?.email?.charAt(0).toUpperCase()}
+        </Avatar>
       </IconButton>
       <Menu
         id="account-menu"
