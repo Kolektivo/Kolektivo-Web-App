@@ -1,6 +1,6 @@
 import { type ActivityReviewType } from '@/types/activities'
 import { type OrganizationInfo } from '@/types/organization'
-import { Box, Card, CardActions, CardContent, Divider, Icon, InputAdornment, Stack, Typography } from '@mui/material'
+import { Box, Card, CardActions, CardContent, Icon, InputAdornment, Stack, Typography } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import Image from 'next/image'
 import React, { type ReactNode } from 'react'
@@ -102,7 +102,6 @@ export default function ActivityReview({ review, children }: Props) {
         </Stack>
       </CardContent>
       <CardActions>{children}</CardActions>
-      <Divider />
     </Card>
   )
 }

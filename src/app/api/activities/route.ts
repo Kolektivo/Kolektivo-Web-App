@@ -74,7 +74,7 @@ export async function PUT(req: NextRequest) {
     const activityId = data[0].id
     const mimeType = bannerSrc?.split(';')[0].split(':')[1]
     const extension = mimeType === 'image/png' ? 'png' : 'jpg'
-    const bannerPath = `${bannerBasePath}/${activityId}${bannerSrc?.split(',')[1].slice(0, 5)}.${extension}`
+    const bannerPath = `${bannerBasePath}/${activityId}${bannerSrc?.split(',')[1].slice(0, 10)}.${extension}`
     data[0].banner_path = bannerPath
     await uploadFile(supabaseBucket, bannerPath, bannerSrc as string)
     updateActivity(data[0])
@@ -93,12 +93,20 @@ export async function DELETE(req: NextRequest) {
 async function uploadFile(bucketName: string, filePath: string, base64File: string) {
   const fileBlob = await base64ImageSourceToBlob(base64File)
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
-  const { data, error } = await supabaseClient.storage.from(bucketName).upload(filePath, fileBlob)
-
-  if (error) {
-    console.error('Error uploading file:', error.message)
+  const { data: dataDelete, error: errorDelete } = await supabaseClient.storage.from(bucketName).remove([filePath])
+  if (errorDelete) {
+    console.error('Error uploading file:', errorDelete.message)
   } else {
-    console.log('File uploaded successfully:', data)
+    console.log('File deleted successfully:', dataDelete)
+  }
+  const { data: dataUpload, error: errorUpload } = await supabaseClient.storage
+    .from(bucketName)
+    .upload(filePath, fileBlob)
+
+  if (errorUpload) {
+    console.error('Error uploading file:', errorUpload.message)
+  } else {
+    console.log('File uploaded successfully:', dataUpload)
   }
 }
 
