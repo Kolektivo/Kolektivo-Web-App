@@ -28,6 +28,23 @@ export async function signIn(state: AuthState, formData: FormData) {
   redirect('/')
 }
 
+export async function signInWithGoogle() {
+  const supabase = createClient()
+
+  const { error, data } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: `http://localhost:3000/signin/callback`,
+    },
+  })
+
+  if (error) {
+    return { error: true, message: error.message }
+  }
+
+  return { error: false, data }
+}
+
 export async function signOut() {
   const supabase = createClient()
 

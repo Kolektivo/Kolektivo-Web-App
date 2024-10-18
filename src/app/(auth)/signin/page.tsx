@@ -2,10 +2,10 @@ import { CardContent, Card, Typography, Stack, Link as MUILink, Button, Containe
 import { type Metadata } from 'next'
 import NextLink from 'next/link'
 import Image from 'next/image'
-import IconGoogle from '@/public/images/icons/google.svg?url'
 import IconFacebook from '@/public/images/icons/facebook.svg?url'
 import IconApple from '@/public/images/icons/apple.svg?url'
 import EmailForm from '@/components/auth/signin/EmailForm'
+import ButtonSignInGoogle from '@/components/auth/signin/ButtonSignInGoogle'
 
 export const metadata: Metadata = {
   title: 'Sign In',
@@ -36,21 +36,18 @@ export default function Page() {
                 Or
               </Typography>
               <Stack gap={2}>
-                <Button
-                  startIcon={<Image src={IconGoogle} alt="icon-google" width={24} height={24} />}
-                  variant="outlinedGray"
-                >
-                  Continue with Google
-                </Button>
+                <ButtonSignInGoogle />
                 <Button
                   startIcon={<Image src={IconFacebook} alt="icon-facebook" width={24} height={24} />}
                   variant="outlinedGray"
+                  disabled
                 >
                   Continue with Facebook
                 </Button>
                 <Button
                   startIcon={<Image src={IconApple} alt="icon-apple" width={24} height={24} />}
                   variant="outlinedGray"
+                  disabled
                 >
                   Continue with Apple
                 </Button>

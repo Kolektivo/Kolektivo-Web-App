@@ -3,13 +3,14 @@ import { Box, Button, type ButtonProps, CircularProgress } from '@mui/material'
 
 interface LoadingButtonProps extends ButtonProps {
   loading?: boolean
+  disabledMargin?: boolean
 }
 
-const LoadingButton = ({ loading, children, ...props }: LoadingButtonProps): ReactElement => {
+const LoadingButton = ({ loading, disabledMargin = false, children, ...props }: LoadingButtonProps): ReactElement => {
   props.disabled = props.disabled || loading
 
   return (
-    <Box sx={{ m: 1, position: 'relative' }}>
+    <Box sx={{ m: disabledMargin ? 0 : 1, position: 'relative' }}>
       <Button {...props}>{children}</Button>
       {loading && (
         <CircularProgress
