@@ -17,16 +17,17 @@ import { requiremetsRewardsFormSchema } from '@/constants/activities/create/sche
 import type { SubmitHandler } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import type { CreateActivityRequirementsRewardsFormValues } from '@/types/activities'
+import type { ActivityReviewType, CreateActivityRequirementsRewardsFormValues } from '@/types/activities'
 import { requirementsOptions, stampsOptions } from '@/constants/activities/commons'
 
 type Props = {
+  review: ActivityReviewType
   submitHandler: SubmitHandler<CreateActivityRequirementsRewardsFormValues>
   backHandler: () => void
 }
 
-export default function CreateActivityRequirementsRewards({ submitHandler, backHandler }: Props) {
-  const [requirements, setRequirements] = React.useState<string>('0')
+export default function CreateActivityRequirementsRewards({ review, submitHandler, backHandler }: Props) {
+  const [requirements, setRequirements] = React.useState<string>(review.requirements || '0')
 
   const {
     register,
@@ -159,6 +160,7 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
                 variant="outlined"
                 label="How many Kolektivo Points can each attendee earn? "
                 placeholder="Enter amount of points"
+                defaultValue={review.kolectivoPoints ?? '0'}
                 slotProps={{
                   htmlInput: { ...register('kolectivoPoints') },
                 }}
@@ -167,7 +169,7 @@ export default function CreateActivityRequirementsRewards({ submitHandler, backH
               <TextField
                 select
                 label="Which stamps can the attendee earn?"
-                defaultValue="0"
+                defaultValue={review.stamps ?? '0'}
                 sx={{ width: '100%' }}
                 slotProps={{
                   htmlInput: { ...register('stamps') },

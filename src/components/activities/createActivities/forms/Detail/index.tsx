@@ -1,17 +1,18 @@
 import { Button, Card, CardActions, CardContent, Divider, Link, Stack, Typography } from '@mui/material'
 import TextField from '@mui/material/TextField'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
-import { type CreateActivityDetailFormValues } from '@/types/activities'
+import { type ActivityReviewType, type CreateActivityDetailFormValues } from '@/types/activities'
 import { detailFormShema } from '@/constants/activities/create/schemas'
 import AutocompletePlaces from '@/components/common/inputs/autocomplete/AutocompletePlaces'
 
 type Props = {
+  review: ActivityReviewType
   submitHandler: SubmitHandler<CreateActivityDetailFormValues>
 }
 
-export default function CreateActivityDetailForm({ submitHandler }: Props) {
+export default function CreateActivityDetailForm({ review, submitHandler }: Props) {
   const {
     control,
     register,
@@ -21,6 +22,10 @@ export default function CreateActivityDetailForm({ submitHandler }: Props) {
     resolver: zodResolver(detailFormShema),
     mode: 'onBlur',
   })
+
+  useEffect(() => {
+    console.log(review)
+  }, [review])
   return (
     <Card>
       <form onSubmit={handleSubmit(submitHandler)}>
@@ -31,6 +36,7 @@ export default function CreateActivityDetailForm({ submitHandler }: Props) {
               variant="outlined"
               label="What’s the name of your activity?"
               placeholder="Beach Cleanup"
+              defaultValue={review.name}
               slotProps={{
                 htmlInput: { ...register('name') },
               }}
@@ -41,6 +47,7 @@ export default function CreateActivityDetailForm({ submitHandler }: Props) {
               <Stack direction="row" gap="16px">
                 <TextField
                   label="Date"
+                  defaultValue={review.date}
                   slotProps={{
                     inputLabel: { variant: 'filled' },
                     input: {
@@ -50,20 +57,9 @@ export default function CreateActivityDetailForm({ submitHandler }: Props) {
                   }}
                   error={!!errors?.date}
                 />
-                {/* <DatePicker label="Date" slotProps={{ inputAdornment: { position: 'start' } }} />
-                <TimePicker
-                  label="Start time"
-                  slotProps={{
-                    inputAdornment: { position: 'start' },
-                    textField: {
-                      slotProps: { inputLabel: { variant: 'filled' }, htmlInput: { ...register('startTime') } },
-                      error: !!errors?.startTime,
-                    },
-                  }}
-                />
-                <TimePicker label="End time" slotProps={{ inputAdornment: { position: 'start' } }} /> */}
                 <TextField
                   label="Start time"
+                  defaultValue={review.startTime}
                   slotProps={{
                     inputLabel: { variant: 'filled' },
                     input: {
@@ -75,6 +71,7 @@ export default function CreateActivityDetailForm({ submitHandler }: Props) {
                 />
                 <TextField
                   label="End time"
+                  defaultValue={review.endTime}
                   slotProps={{
                     inputLabel: { variant: 'filled' },
                     input: {
@@ -91,6 +88,7 @@ export default function CreateActivityDetailForm({ submitHandler }: Props) {
               rules={{
                 required: true,
               }}
+              defaultValue={review.location}
               render={({ field: { onChange, onBlur, value } }) => (
                 <AutocompletePlaces
                   label="Where is it located?"
@@ -109,6 +107,7 @@ export default function CreateActivityDetailForm({ submitHandler }: Props) {
               label="What can the attendee expect?"
               placeholder="Describe your activity"
               multiline
+              defaultValue={review.description}
               error={!!errors?.description}
               slotProps={{
                 htmlInput: { ...register('description') },

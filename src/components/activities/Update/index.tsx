@@ -1,5 +1,6 @@
 import LoadingButton from '@/components/common/buttons/LoadingButton'
 import AutocompletePlaces from '@/components/common/inputs/autocomplete/AutocompletePlaces'
+import UploadImage from '@/components/common/inputs/image/UploadImage'
 import { requirementsOptions, stampsOptions } from '@/constants/activities/commons'
 import { reviewFormSchema } from '@/constants/activities/create/schemas'
 import { type ActivityReviewType } from '@/types/activities'
@@ -18,8 +19,7 @@ import {
   Typography,
 } from '@mui/material'
 import TextField from '@mui/material/TextField'
-import Image from 'next/image'
-import React, { type ChangeEvent, useEffect } from 'react'
+import React, { type ChangeEvent, useEffect, useState } from 'react'
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
 
 type Props = {
@@ -31,6 +31,7 @@ type Props = {
 
 export default function ActivityUpdate({ review, submitHandler, deleteHandler, onExecution }: Props) {
   const [requirements, setRequirements] = React.useState<string>(review.requirements)
+  const [banner, setBanner] = useState<string>(review.banner)
   const {
     control,
     register,
@@ -84,34 +85,31 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, o
     if (requirements.split(',').length < requirementsOptions.length) setRequirements(`${requirements},0`)
   }
 
-  // const handleRemoverequirements = (_: unknown, index: number) => {
-  //   if (requirements.length > 1) {
-  //     const updatedRequirements = requirements.filter((_, i) => i !== index)
-  //     setRequirements(updatedRequirements)
-  //   } else {
-  //     setRequirements(['0'])
-  //   }
-  // }
+  const handleBannerChange = (img: File) => {
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setBanner(reader.result as string)
+    }
+
+    reader.readAsDataURL(img)
+  }
 
   useEffect(() => {
     cleanDisabledRequirementsOptions()
     updateDisabledRequirementsOptions(review.requirements)
   }, [review])
 
+  useEffect(() => {
+    console.log('Banner: ', banner)
+  }, [banner])
+
   return (
     <Card>
-      <form onSubmit={handleSubmit((data) => submitHandler({ ...data, requirements }))}>
+      <form onSubmit={handleSubmit((data) => submitHandler({ ...data, requirements, banner }))}>
         <CardContent>
           <Stack gap="48px">
-            <Box
-              width={285}
-              height={160}
-              sx={{ backgroundColor: '#F2F2F2', borderRadius: '12px' }}
-              justifyContent="center"
-              alignItems="center"
-              display="flex"
-            >
-              {review.banner ? (
+            <UploadImage onChangeImage={handleBannerChange} previewBase64={banner} />
+            {/* {review.banner ? (
                 <Image src={review.banner} alt="Selected" width={285} height={160} style={{ borderRadius: '12px' }} />
               ) : (
                 <Stack
@@ -123,8 +121,7 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, o
                     Activity Banner
                   </Typography>
                 </Stack>
-              )}
-            </Box>
+              )} */}
             <TextField
               id="activityName"
               variant="outlined"
@@ -233,11 +230,6 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, o
                           </MenuItem>
                         ))}
                       </TextField>
-                      {/* {requirements.length > 1 && (
-                          <Button onClick={(event) => handleRemoverequirements(event, index)} sx={{ padding: '8px' }}>
-                            <Icon>close</Icon>
-                          </Button>
-                        )} */}
                     </Stack>
                   ))}
                 </Stack>

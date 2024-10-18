@@ -122,19 +122,24 @@ export default function CreateActivityStepper() {
       {activeStep == 0 && (
         <Stack gap="24px">
           <HeaderCard title="Activity Details" />
-          <CreateActivityDetailForm submitHandler={handleDetailFormSubmit} />
+          <CreateActivityDetailForm submitHandler={handleDetailFormSubmit} review={review} />
         </Stack>
       )}
       {activeStep == 1 && (
         <Stack gap="24px">
           <HeaderCard title="Activity Image" />
-          <CreateActivityBannerForm handleSubmit={handleBannerSubmit} handleBack={handleBack} />
+          <CreateActivityBannerForm
+            handleSubmit={handleBannerSubmit}
+            handleBack={handleBack}
+            reviewBanner={review.banner}
+          />
         </Stack>
       )}
       {activeStep == 2 && (
         <Stack gap="24px">
           <HeaderCard title="Requirements & Rewards" />
           <CreateActivityRequirementsRewards
+            review={review}
             submitHandler={handleRequirementsRewardsFormSubmit}
             backHandler={handleBack}
           />
