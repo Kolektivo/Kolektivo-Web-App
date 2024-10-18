@@ -15,7 +15,7 @@ import ActivityReview from '../forms/Review'
 import {
   type CreateActivityRequirementsRewardsFormValues,
   type CreateActivityDetailFormValues,
-  type CreateActivityReviewType,
+  type ActivityReviewType,
 } from '@/types/activities'
 import { useMemo } from 'react'
 import { useMutation } from '@tanstack/react-query'
@@ -34,17 +34,17 @@ export default function CreateActivityStepper() {
     React.useState<CreateActivityRequirementsRewardsFormValues | null>(null)
   const [creatingActivity, setCreatingActivity] = React.useState<boolean>(false)
 
-  const review = useMemo(
+  const review = useMemo<ActivityReviewType>(
     () => ({
-      detail: detailFormValues as CreateActivityDetailFormValues,
+      ...(detailFormValues as CreateActivityDetailFormValues),
       banner: banner as string,
-      requirementsRewards: requirementsRewardsFormValues as CreateActivityRequirementsRewardsFormValues,
+      ...(requirementsRewardsFormValues as CreateActivityRequirementsRewardsFormValues),
     }),
     [detailFormValues, banner, requirementsRewardsFormValues],
   )
 
   const { mutate } = useMutation({
-    mutationFn: async (activityReview: CreateActivityReviewType) => {
+    mutationFn: async (activityReview: ActivityReviewType) => {
       setCreatingActivity(true)
       return await activitiesService.create(activityReview)
     },
@@ -82,7 +82,7 @@ export default function CreateActivityStepper() {
         setOpenSuccessDialog(true)
       },
       onError: () => {
-        console.log('Error at create activity')
+        setCreatingActivity(false)
       },
     })
   }
@@ -91,10 +91,6 @@ export default function CreateActivityStepper() {
     setOpenSuccessDialog(false)
     router.push('/activities')
   }
-
-  React.useEffect(() => {
-    console.log(review)
-  }, [review])
 
   return (
     <Stack gap="24px" sx={{ width: '100%' }}>
@@ -120,19 +116,24 @@ export default function CreateActivityStepper() {
       {activeStep == 0 && (
         <Stack gap="24px">
           <HeaderCard title="Activity Details" />
-          <CreateActivityDetailForm submitHandler={handleDetailFormSubmit} />
+          <CreateActivityDetailForm submitHandler={handleDetailFormSubmit} review={review} />
         </Stack>
       )}
       {activeStep == 1 && (
         <Stack gap="24px">
           <HeaderCard title="Activity Image" />
-          <CreateActivityBannerForm handleSubmit={handleBannerSubmit} handleBack={handleBack} />
+          <CreateActivityBannerForm
+            handleSubmit={handleBannerSubmit}
+            handleBack={handleBack}
+            reviewBanner={review.banner}
+          />
         </Stack>
       )}
       {activeStep == 2 && (
         <Stack gap="24px">
           <HeaderCard title="Requirements & Rewards" />
           <CreateActivityRequirementsRewards
+            review={review}
             submitHandler={handleRequirementsRewardsFormSubmit}
             backHandler={handleBack}
           />

@@ -1,22 +1,22 @@
-import { type CreateActivityReviewType } from '@/types/activities'
+import { type ActivityReviewType } from '@/types/activities'
 import { type OrganizationInfo } from '@/types/organization'
-import { Box, Card, CardActions, CardContent, Divider, Icon, InputAdornment, Stack, Typography } from '@mui/material'
+import { Box, Card, CardActions, CardContent, Icon, InputAdornment, Stack, Typography } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import Image from 'next/image'
 import React, { type ReactNode } from 'react'
 
 type Props = {
-  review: CreateActivityReviewType
+  review: ActivityReviewType
   children: ReactNode
   defaultValues?: OrganizationInfo
 }
 export default function ActivityReview({ review, children }: Props) {
-  const formatRequirements = (requirements: string[]) => {
-    if (requirements.length > 1) {
-      return [requirements[0], ...requirements.slice(1).map((requirement) => ` ${requirement}`)]
-    }
-    return requirements[0]
-  }
+  // const formatRequirements = (requirements: string[]) => {
+  //   if (requirements.length > 1) {
+  //     return [requirements[0], ...requirements.slice(1).map((requirement) => ` ${requirement}`)]
+  //   }
+  //   return requirements[0]
+  // }
 
   return (
     <Card>
@@ -36,27 +36,21 @@ export default function ActivityReview({ review, children }: Props) {
             id="activityName"
             variant="outlined"
             label="What’s the name of your activity?"
-            value={review.detail.name}
+            value={review.name}
             placeholder="Beach Cleanup"
           />
           <Stack gap="16px">
             <Typography variant="h3">When does your activity start and end?</Typography>
             <Stack direction="row" gap="16px">
-              <TextField id="date" type="date" variant="outlined" placeholder="Date" value={review.detail.date} />
+              <TextField id="date" type="date" variant="outlined" placeholder="Date" value={review.date} />
               <TextField
                 id="startTime"
                 type="time"
                 variant="outlined"
                 placeholder="Start time"
-                value={review.detail.startTime}
+                value={review.startTime}
               />
-              <TextField
-                id="endTime"
-                type="time"
-                variant="outlined"
-                placeholder="End time"
-                value={review.detail.endTime}
-              />
+              <TextField id="endTime" type="time" variant="outlined" placeholder="End time" value={review.endTime} />
             </Stack>
           </Stack>
           <TextField
@@ -65,7 +59,7 @@ export default function ActivityReview({ review, children }: Props) {
             variant="outlined"
             label="Where is it located?"
             placeholder="Enter location"
-            value={review.detail.location}
+            value={review.location}
             slotProps={{
               input: {
                 startAdornment: (
@@ -81,34 +75,33 @@ export default function ActivityReview({ review, children }: Props) {
             variant="outlined"
             label="What can the attendee expect?"
             placeholder="Describe your activity"
-            value={review.detail.description}
+            value={review.description}
             multiline
           />
           <TextField
             id="activityName"
             variant="outlined"
             label="What are the requirements for the attendee?"
-            value={formatRequirements(review.requirementsRewards.requirements)}
+            value={review.requirements}
             placeholder="Select requirement"
           />
           <TextField
             id="activityName"
             variant="outlined"
             label="How many Kolektivo Points can each attendee earn? "
-            value={review.requirementsRewards.kolectivoPoints}
+            value={review.kolectivoPoints}
             placeholder="Enter amount of points"
           />
           <TextField
             id="activityName"
             variant="outlined"
             label="Which stamps can the attendee earn?"
-            value={review.requirementsRewards.stamps}
+            value={review.stamps}
             placeholder="Select stamp"
           />
         </Stack>
       </CardContent>
       <CardActions>{children}</CardActions>
-      <Divider />
     </Card>
   )
 }

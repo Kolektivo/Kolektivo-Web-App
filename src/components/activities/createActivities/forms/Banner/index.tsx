@@ -3,12 +3,13 @@ import { Button, Card, CardActions, CardContent, Divider } from '@mui/material'
 import React, { useState } from 'react'
 
 type Props = {
+  reviewBanner: string
   handleBack: () => void
   handleSubmit: (img: string) => void
 }
 
-export default function CreateActivityBannerForm({ handleBack, handleSubmit }: Props) {
-  const [banner, setBanner] = useState<string>()
+export default function CreateActivityBannerForm({ handleBack, handleSubmit, reviewBanner }: Props) {
+  const [banner, setBanner] = useState<string>(reviewBanner)
 
   const handleBannerChange = (img: File) => {
     const reader = new FileReader()
