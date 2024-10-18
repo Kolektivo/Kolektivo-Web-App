@@ -74,7 +74,7 @@ export async function PUT(req: NextRequest) {
     const activityId = data[0].id
     const mimeType = bannerSrc?.split(';')[0].split(':')[1]
     const extension = mimeType === 'image/png' ? 'png' : 'jpg'
-    const bannerPath = `${bannerBasePath}/${activityId}${bannerSrc?.split(',')[1].slice(0, 10)}.${extension}`
+    const bannerPath = `${bannerBasePath}/${activityId}.${extension}`
     data[0].banner_path = bannerPath
     await uploadFile(supabaseBucket, bannerPath, bannerSrc as string)
     updateActivity(data[0])

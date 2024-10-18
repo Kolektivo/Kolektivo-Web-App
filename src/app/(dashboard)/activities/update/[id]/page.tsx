@@ -14,19 +14,20 @@ export default function UpdateActivity() {
   const params = useParams()
   const { id } = params
   const [data, setData] = useState<ActivityType[] | undefined>()
-  const [onExecution, setOnExecution] = useState<boolean>(false)
+  const [saveonExecution, setSaveOnExecution] = useState<boolean>(false)
+  const [deleteOnExecution, setDeleteOnExecution] = useState<boolean>(false)
   const [openSuccessDialog, setOpenSuccessDialog] = useState<boolean>(false)
 
   const { mutate: deleteMutate } = useMutation({
     mutationFn: async (activityId: string) => {
-      setOnExecution(true)
+      setDeleteOnExecution(true)
       return await activitiesService.delete(activityId)
     },
   })
 
   const { mutate: updateMutate } = useMutation({
     mutationFn: async (activityData: { review: ActivityReviewType; id: string }) => {
-      setOnExecution(true)
+      setSaveOnExecution(true)
       return await activitiesService.update(activityData.review, activityData.id)
     },
   })
@@ -34,11 +35,11 @@ export default function UpdateActivity() {
   const handleDelete = () => {
     deleteMutate(id as string, {
       onSuccess: () => {
-        setOnExecution(false)
+        setDeleteOnExecution(false)
         router.push('/activities/update')
       },
       onError: () => {
-        setOnExecution(false)
+        setDeleteOnExecution(false)
       },
     })
   }
@@ -48,11 +49,11 @@ export default function UpdateActivity() {
       { review, id: id as string },
       {
         onSuccess: () => {
-          setOnExecution(false)
+          setSaveOnExecution(false)
           setOpenSuccessDialog(true)
         },
         onError: () => {
-          setOnExecution(false)
+          setSaveOnExecution(false)
         },
       },
     )
@@ -95,7 +96,8 @@ export default function UpdateActivity() {
           }}
           submitHandler={handleSave}
           deleteHandler={handleDelete}
-          onExecution={onExecution}
+          deleteOnExecution={deleteOnExecution}
+          saveOnExecution={saveonExecution}
         />
       </>
     )

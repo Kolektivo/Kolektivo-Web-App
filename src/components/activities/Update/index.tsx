@@ -26,10 +26,17 @@ type Props = {
   review: ActivityReviewType
   submitHandler: SubmitHandler<ActivityReviewType>
   deleteHandler: () => void
-  onExecution: boolean
+  deleteOnExecution: boolean
+  saveOnExecution: boolean
 }
 
-export default function ActivityUpdate({ review, submitHandler, deleteHandler, onExecution }: Props) {
+export default function ActivityUpdate({
+  review,
+  submitHandler,
+  deleteHandler,
+  deleteOnExecution,
+  saveOnExecution,
+}: Props) {
   const [requirements, setRequirements] = React.useState<string>(review.requirements)
   const [banner, setBanner] = useState<string>(review.banner)
   const {
@@ -277,25 +284,36 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, o
           </Stack>
         </CardContent>
         <CardActions>
-          {onExecution && (
-            <>
-              <LoadingButton loading variant="contained" color="warningButton" className="stepperButton">
-                Delete
-              </LoadingButton>
-              <LoadingButton loading variant="contained" color="primary" className="stepperButton">
-                Save
-              </LoadingButton>
-            </>
+          {deleteOnExecution && (
+            <LoadingButton loading variant="contained" color="warningButton" className="stepperButton">
+              Delete
+            </LoadingButton>
           )}
-          {!onExecution && (
-            <>
-              <Button onClick={deleteHandler} variant="contained" color="warningButton">
-                Delete
-              </Button>
-              <Button type="submit" variant="contained" color="primary" className="stepperButton" disabled={!isValid}>
-                Save
-              </Button>
-            </>
+          {!deleteOnExecution && (
+            <Button
+              onClick={deleteHandler}
+              variant="contained"
+              color="warningButton"
+              disabled={saveOnExecution || !isValid}
+            >
+              Delete
+            </Button>
+          )}
+          {!saveOnExecution && (
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className="stepperButton"
+              disabled={!isValid || deleteOnExecution}
+            >
+              Save
+            </Button>
+          )}
+          {saveOnExecution && (
+            <LoadingButton loading variant="contained" color="primary" className="stepperButton">
+              Save
+            </LoadingButton>
           )}
         </CardActions>
         <Divider />
