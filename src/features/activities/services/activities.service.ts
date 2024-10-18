@@ -13,7 +13,6 @@ class ActivitiesService {
   }
 
   public async create(activityReview: ActivityReviewType): Promise<ActivityType | undefined> {
-    console.log(activityReview)
     const exampleActivity: ActivityType = {
       created_at: '2024-09-15T14:45:00+00:00',
       activity_host_id: 'd1b49c7c-d7e6-475e-96d7-0023eb0a1857',
@@ -34,7 +33,6 @@ class ActivitiesService {
   }
 
   public async update(activityReview: ActivityReviewType, id: string): Promise<ActivityType | undefined> {
-    console.log(activityReview)
     const exampleActivity: ActivityType = {
       id,
       created_at: '2024-09-15T14:45:00+00:00',

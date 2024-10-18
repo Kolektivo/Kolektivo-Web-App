@@ -71,7 +71,6 @@ export default function CreateActivityStepper() {
   }
 
   const handleRequirementsRewardsFormSubmit = (data: CreateActivityRequirementsRewardsFormValues) => {
-    console.log(data)
     setRequirementsRewardsFormValues(data)
     goToNext()
   }
@@ -83,7 +82,6 @@ export default function CreateActivityStepper() {
         setOpenSuccessDialog(true)
       },
       onError: () => {
-        console.log('Error at create activity')
         setCreatingActivity(false)
       },
     })
@@ -93,10 +91,6 @@ export default function CreateActivityStepper() {
     setOpenSuccessDialog(false)
     router.push('/activities')
   }
-
-  React.useEffect(() => {
-    console.log(review)
-  }, [review])
 
   return (
     <Stack gap="24px" sx={{ width: '100%' }}>

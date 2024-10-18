@@ -1,6 +1,6 @@
 import { Button, Card, CardActions, CardContent, Divider, Link, Stack, Typography } from '@mui/material'
 import TextField from '@mui/material/TextField'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
 import { type ActivityReviewType, type CreateActivityDetailFormValues } from '@/types/activities'
@@ -23,9 +23,6 @@ export default function CreateActivityDetailForm({ review, submitHandler }: Prop
     mode: 'onBlur',
   })
 
-  useEffect(() => {
-    console.log(review)
-  }, [review])
   return (
     <Card>
       <form onSubmit={handleSubmit(submitHandler)}>

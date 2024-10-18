@@ -60,7 +60,6 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, o
   }
 
   const handleRequirementsChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
-    console.log('Requirements select change')
     const {
       target: { value },
     } = event
@@ -71,8 +70,6 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, o
     updatedRequirements[index] = value
 
     const updatedRequirementsStr = updatedRequirements.join(',')
-
-    console.log('UpdatedRequirementsStr: ', updatedRequirementsStr)
 
     cleanDisabledRequirementsOptions()
 
@@ -98,10 +95,6 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, o
     cleanDisabledRequirementsOptions()
     updateDisabledRequirementsOptions(review.requirements)
   }, [review])
-
-  useEffect(() => {
-    console.log('Banner: ', banner)
-  }, [banner])
 
   return (
     <Card>

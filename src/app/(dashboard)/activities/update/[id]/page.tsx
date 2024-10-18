@@ -34,7 +34,6 @@ export default function UpdateActivity() {
   })
 
   const handleDelete = () => {
-    console.log('Delete')
     deleteMutate(id as string, {
       onSuccess: () => {
         setOnExecution(false)
@@ -42,14 +41,11 @@ export default function UpdateActivity() {
       },
       onError: () => {
         setOnExecution(false)
-        console.log('Error')
       },
     })
   }
 
   const handleSave = (review: ActivityReviewType) => {
-    console.log('GetReview: ', review)
-    console.log('Update')
     updateMutate(
       { review, id: id as string },
       {
@@ -59,7 +55,6 @@ export default function UpdateActivity() {
         },
         onError: () => {
           setOnExecution(false)
-          console.log('Error')
         },
       },
     )

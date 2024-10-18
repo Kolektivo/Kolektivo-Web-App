@@ -56,7 +56,6 @@ export default function CreateActivityRequirementsRewards({ review, submitHandle
   }
 
   const handleRequirementsChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
-    console.log('Requirements select change')
     const {
       target: { value },
     } = event
@@ -67,8 +66,6 @@ export default function CreateActivityRequirementsRewards({ review, submitHandle
     updatedRequirements[index] = value
 
     const updatedRequirementsStr = updatedRequirements.join(',')
-
-    console.log('UpdatedRequirementsStr: ', updatedRequirementsStr)
 
     cleanDisabledRequirementsOptions()
 
