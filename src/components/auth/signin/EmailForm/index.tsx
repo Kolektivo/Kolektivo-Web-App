@@ -1,9 +1,9 @@
 'use client'
+import LoadingButton from '@/components/common/buttons/LoadingButton'
 import { type AuthState, signIn } from '@/features/auth/actions'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Alert, Button, Stack, TextField } from '@mui/material'
-import { useEffect, type ReactElement } from 'react'
-import { useFormState } from 'react-dom'
+import { Alert, Stack, TextField } from '@mui/material'
+import { useEffect, useState, useTransition, type ReactElement } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
@@ -13,8 +13,8 @@ const formSignInSchema = z.object({
 })
 
 const EmailForm = (): ReactElement => {
-  const initialState: AuthState = { error: false, message: null }
-  const [state, formAction] = useFormState(signIn, initialState)
+  const [state, setState] = useState<AuthState>({ error: false, message: null })
+  const [isPending, startTransition] = useTransition()
   const {
     register,
     resetField,
@@ -25,13 +25,20 @@ const EmailForm = (): ReactElement => {
   })
 
   useEffect(() => {
-    if (state.error) {
+    if (state?.error) {
       resetField('password')
     }
   }, [state, resetField])
 
+  const handleSubmit = async (data: FormData) => {
+    startTransition(async () => {
+      const resp = await signIn(data)
+      setState(resp)
+    })
+  }
+
   return (
-    <form action={formAction}>
+    <form action={handleSubmit}>
       <Stack gap={4}>
         <TextField
           label="Email"
@@ -50,14 +57,21 @@ const EmailForm = (): ReactElement => {
           }}
           error={!!errors?.password}
         />
-        {state.error && !isValid && (
+        {state?.error && !isValid && (
           <Alert variant="outlined" severity="error">
             {state.message}
           </Alert>
         )}
-        <Button variant="contained" type="submit" disabled={!isValid}>
+        <LoadingButton
+          variant="contained"
+          type="submit"
+          loading={isPending}
+          disabled={!isValid}
+          fullWidth
+          disabledMargin
+        >
           Log In
-        </Button>
+        </LoadingButton>
       </Stack>
     </form>
   )

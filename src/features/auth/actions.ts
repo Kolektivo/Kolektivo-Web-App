@@ -11,7 +11,7 @@ export type AuthState = {
   message: string | null
 }
 
-export async function signIn(state: AuthState, formData: FormData) {
+export async function signIn(formData: FormData) {
   const supabase = createClient()
 
   const data = {

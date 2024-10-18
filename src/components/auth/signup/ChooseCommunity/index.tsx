@@ -1,13 +1,14 @@
 'use client'
 
 import HeaderCard from '@/components/common/cards/HeaderCard'
-import { Card, CardContent, Stack, Button } from '@mui/material'
+import { Card, CardContent, Stack, Button, Box } from '@mui/material'
 import { type ReactElement } from 'react'
 import OptionCommunity from './OptionCommunity'
 import { useState } from 'react'
 import { communities } from '@/constants/communities/main'
 import { type Community } from '@/types/communities'
 import CardCommunity from '@/components/communities/CardsCommunities/CardCommunity'
+import Link from 'next/link'
 
 const ChooseCommunity = (): ReactElement => {
   const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(null)
@@ -38,12 +39,18 @@ const ChooseCommunity = (): ReactElement => {
             <Stack gap={4}>
               <CardCommunity {...selectedCommunity!} />
               <Stack gap={2} direction="row">
-                <Button onClick={handleBackStep} variant="contained" color="secondary" fullWidth>
-                  Go Back
-                </Button>
-                <Button variant="contained" fullWidth>
-                  Confirm
-                </Button>
+                <Box flex={1}>
+                  <Button onClick={handleBackStep} variant="contained" color="secondary" fullWidth>
+                    Go Back
+                  </Button>
+                </Box>
+                <Box flex={1}>
+                  <Link href="/">
+                    <Button variant="contained" fullWidth>
+                      Confirm
+                    </Button>
+                  </Link>
+                </Box>
               </Stack>
             </Stack>
           </CardContent>
