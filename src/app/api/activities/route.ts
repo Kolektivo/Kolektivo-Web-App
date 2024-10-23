@@ -97,7 +97,7 @@ async function uploadFile(bucketName: string, filePath: string, base64File: stri
   if (errorDelete) {
     console.error('Error uploading file:', errorDelete.message)
   } else {
-    console.log('File deleted successfully:', dataDelete)
+    console.log('File deleted successfully', dataDelete.length)
   }
   const { data: dataUpload, error: errorUpload } = await supabaseClient.storage
     .from(bucketName)
@@ -106,7 +106,7 @@ async function uploadFile(bucketName: string, filePath: string, base64File: stri
   if (errorUpload) {
     console.error('Error uploading file:', errorUpload.message)
   } else {
-    console.log('File uploaded successfully:', dataUpload)
+    console.log('File uploaded successfully', dataUpload.id)
   }
 }
 
@@ -139,7 +139,7 @@ async function base64ImageSourceToBlob(base64imageSource: string): Promise<Blob>
 async function updateActivity(activity: ActivityType) {
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
   const { banner_src: banner_src, ...organizationWithoutLogoSrc } = activity
-  console.log('Removed :' + banner_src)
+  console.log('Removed ', banner_src?.substring(0, 10))
 
   const { data, error } = await supabaseClient
     .from(ACTIVITIES)

@@ -8,8 +8,8 @@ class OrginizationsService {
 
   public async get(): Promise<Organization | undefined> {
     const response = await this.httpInstance.get<Organization[]>('/organizations')
-
-    return response.data.pop()
+    if (response.data.length > 0) return response.data.pop()
+    else return {} as Organization
   }
 
   public async create(organization: Organization): Promise<Organization> {

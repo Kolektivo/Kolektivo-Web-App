@@ -40,10 +40,10 @@ const UpdateOrganizationForm = ({ defaultValues, onSave }: OrganizationInfoFormP
 
   const handleChangeLogo = (image: File) => {
     const reader = new FileReader()
-    reader.readAsDataURL(image)
-    reader.onload = () => {
+    reader.onloadend = () => {
       setLogoBase64(reader.result?.toString() ?? null)
     }
+    reader.readAsDataURL(image)
   }
 
   const handleSave = (data: Organization) => {

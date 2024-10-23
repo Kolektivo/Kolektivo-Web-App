@@ -48,20 +48,23 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  const updateResult = await updateOrganization(await req.json())
+  const organization = await req.json()
+  const updateResult = await updateOrganization(organization)
   if (updateResult.error) return NextResponse.json(updateResult.error)
+  await uploadFile(supabaseBucket, updateResult.data![0].logoPath, organization.logoSrc)
   return NextResponse.json(updateResult.data)
 }
 
 async function uploadFile(bucketName: string, filePath: string, base64File: string) {
-  const fileBlob = await base64ImageSourceToBlob(base64File)
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
   const { data: dataDelete, error: errorDelete } = await supabaseClient.storage.from(bucketName).remove([filePath])
   if (errorDelete) {
     console.error('Error uploading file:', errorDelete.message)
   } else {
-    console.log('File deleted successfully:', dataDelete)
+    console.log('File deleted successfully ', dataDelete.length)
   }
+
+  const fileBlob = await base64ImageSourceToBlob(base64File)
   const { data: dataUpload, error: errorUpload } = await supabaseClient.storage
     .from(bucketName)
     .upload(filePath, fileBlob)
@@ -69,7 +72,7 @@ async function uploadFile(bucketName: string, filePath: string, base64File: stri
   if (errorUpload) {
     console.error('Error uploading file:', errorUpload.message)
   } else {
-    console.log('File uploaded successfully:', dataUpload)
+    console.log('File uploaded successfully', dataUpload.id)
   }
 }
 
@@ -102,7 +105,7 @@ async function base64ImageSourceToBlob(base64imageSource: string): Promise<Blob>
 async function updateOrganization(organization: Organization) {
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
   const { logoSrc, ...organizationWithoutLogoSrc } = organization
-  console.log('Removed :' + logoSrc)
+  console.log('Removed ', logoSrc?.substring(0, 10))
 
   const { data, error } = await supabaseClient
     .from(ORGANIZATIONS)

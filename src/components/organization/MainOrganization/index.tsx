@@ -29,7 +29,7 @@ const MainOrganization = (): ReactElement => {
     return <MyOrganizationSkeleton />
   }
 
-  if (data) {
+  if (data && data.id) {
     return <MyOrganization organization={data} />
   }
 
