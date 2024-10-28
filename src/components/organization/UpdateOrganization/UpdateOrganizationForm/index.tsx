@@ -10,6 +10,7 @@ import HeaderCard from '@/components/common/cards/HeaderCard'
 import AutocompletePlaces from '@/components/common/inputs/autocomplete/AutocompletePlaces'
 import UploadImage from '@/components/common/inputs/image/UploadImage'
 import { useState } from 'react'
+import LoadingButton from '@/components/common/buttons/LoadingButton'
 
 const formInfoSchema = z.object({
   name: z.string().min(1),
@@ -23,9 +24,10 @@ const formInfoSchema = z.object({
 type OrganizationInfoFormProps = {
   defaultValues?: Organization
   onSave: (data: Organization) => void
+  saving: boolean
 }
 
-const UpdateOrganizationForm = ({ defaultValues, onSave }: OrganizationInfoFormProps): ReactElement => {
+const UpdateOrganizationForm = ({ defaultValues, onSave, saving }: OrganizationInfoFormProps): ReactElement => {
   const {
     control,
     register,
@@ -131,9 +133,15 @@ const UpdateOrganizationForm = ({ defaultValues, onSave }: OrganizationInfoFormP
             </Stack>
           </CardContent>
           <CardActions>
-            <Button type="submit" variant="contained" disabled={!isValid}>
-              Save
-            </Button>
+            {saving ? (
+              <LoadingButton loading variant="contained" color="primary" className="stepperButton">
+                Save
+              </LoadingButton>
+            ) : (
+              <Button type="submit" variant="contained" disabled={!isValid}>
+                Save
+              </Button>
+            )}
           </CardActions>
         </Card>
       </form>
