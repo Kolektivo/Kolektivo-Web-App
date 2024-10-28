@@ -12,7 +12,7 @@ export default function VendorsActions() {
           title="Create New Vendor profile"
           description="Set up new vendor profiles for your community."
           textButton="Create"
-          href="/my-vendor/create"
+          href=""
         />
       </Box>
       <Box flex={1}>

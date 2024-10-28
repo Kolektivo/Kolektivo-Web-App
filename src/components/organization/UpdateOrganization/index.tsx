@@ -9,7 +9,9 @@ import UpdateOrganizationForm from './UpdateOrganizationForm'
 import DialogError from '@/components/common/modals/DialogError'
 import DialogSuccess from '@/components/common/modals/DialogSuccess'
 import { useRouter } from 'next/navigation'
-import { Box, CircularProgress } from '@mui/material'
+import HeaderCard from '@/components/common/cards/HeaderCard'
+import { Stack } from '@mui/material'
+import UpdateOrganizationSkeleton from './Skeleton'
 
 const UpdateOrganization = (): ReactElement => {
   const [saving, setSaving] = useState<boolean>(false)
@@ -54,9 +56,12 @@ const UpdateOrganization = (): ReactElement => {
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center">
-        <CircularProgress></CircularProgress>
-      </Box>
+      <>
+        <Stack gap={4}>
+          <HeaderCard title="Update Fields" />
+          <UpdateOrganizationSkeleton />
+        </Stack>
+      </>
     )
   }
 
