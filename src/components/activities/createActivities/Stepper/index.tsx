@@ -71,6 +71,10 @@ export default function CreateActivityStepper() {
   }
 
   const handleRequirementsRewardsFormSubmit = (data: CreateActivityRequirementsRewardsFormValues) => {
+    data.requirements = data.requirements
+      .split(',')
+      .filter((requirement) => requirement != '0')
+      .join(',')
     setRequirementsRewardsFormValues(data)
     goToNext()
   }
