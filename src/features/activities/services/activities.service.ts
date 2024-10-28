@@ -12,10 +12,10 @@ class ActivitiesService {
     return response.data
   }
 
-  public async create(activityReview: ActivityReviewType): Promise<ActivityType | undefined> {
+  public async create(activityReview: ActivityReviewType, hostId: string): Promise<ActivityType | undefined> {
     const exampleActivity: ActivityType = {
-      created_at: '2024-09-15T14:45:00+00:00',
-      activity_host_id: 'd1b49c7c-d7e6-475e-96d7-0023eb0a1857',
+      created_at: new Date().toISOString(),
+      activity_host_id: hostId,
       title: activityReview.name,
       description: activityReview.description,
       start_date: activityReview.date,

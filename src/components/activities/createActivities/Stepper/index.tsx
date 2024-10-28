@@ -21,10 +21,12 @@ import { useMemo } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import activitiesService from '@/features/activities/services/activities.service'
 import LoadingButton from '@/components/common/buttons/LoadingButton'
+import { useAuth } from '@/features/auth/hooks/useAuth'
 
 const steps = ['', '', '', '']
 
 export default function CreateActivityStepper() {
+  const { user } = useAuth()
   const [activeStep, setActiveStep] = React.useState(0)
   const [openSuccessDialog, setOpenSuccessDialog] = React.useState<boolean>(false)
 
@@ -44,9 +46,9 @@ export default function CreateActivityStepper() {
   )
 
   const { mutate } = useMutation({
-    mutationFn: async (activityReview: ActivityReviewType) => {
+    mutationFn: async (data: { review: ActivityReviewType; hostId: string }) => {
       setCreatingActivity(true)
-      return await activitiesService.create(activityReview)
+      return await activitiesService.create(data.review, data.hostId)
     },
   })
 
@@ -80,15 +82,18 @@ export default function CreateActivityStepper() {
   }
 
   const handleComplete = () => {
-    mutate(review, {
-      onSuccess: () => {
-        setCreatingActivity(false)
-        setOpenSuccessDialog(true)
+    mutate(
+      { review, hostId: user?.id ?? '' },
+      {
+        onSuccess: () => {
+          setCreatingActivity(false)
+          setOpenSuccessDialog(true)
+        },
+        onError: () => {
+          setCreatingActivity(false)
+        },
       },
-      onError: () => {
-        setCreatingActivity(false)
-      },
-    })
+    )
   }
 
   const handleDialogSuccessClick = () => {
