@@ -1,14 +1,14 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import Bucket from '@/utils/supabase/bucket'
-import { createClient } from '@/utils/supabase/server'
 import { type Vendor } from '@/types/vendors'
 import FileUtils from '@/utils/files/fileUtils'
+import { createAnonymousClient } from '@/utils/supabase/anonymousClient'
 
 const VENDORS = 'vendors'
 
 export async function GET() {
-  const supabaseClient = createClient()
+  const supabaseClient = createAnonymousClient()
   const { data, error } = await supabaseClient.from(VENDORS).select('*')
   if (error) return NextResponse.json(error, { status: 500 })
 
@@ -33,7 +33,7 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const supabaseClient = createClient()
+  const supabaseClient = createAnonymousClient()
 
   const newVendor = (await req.json()) as Vendor
 

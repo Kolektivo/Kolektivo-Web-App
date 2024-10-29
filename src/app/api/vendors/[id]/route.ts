@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server'
 import Bucket from '@/utils/supabase/bucket'
-import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { createAnonymousClient } from '@/utils/supabase/anonymousClient'
 
 const VENDORS = 'vendors'
 
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
-  const supabaseClient = createClient()
+  const supabaseClient = createAnonymousClient()
   const id = (await params).id
 
   const { data, error } = await supabaseClient.from(VENDORS).select('*').eq('id', id).single()
@@ -30,7 +30,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
 }
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const supabaseClient = createClient()
+  const supabaseClient = createAnonymousClient()
   const id = (await params).id
   const vendor = await req.json()
 
@@ -63,7 +63,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 }
 
 export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
-  const supabaseClient = createClient()
+  const supabaseClient = createAnonymousClient()
   const id = (await params).id
 
   const { data, error } = await supabaseClient.from(VENDORS).delete().eq('id', id).select().single()
