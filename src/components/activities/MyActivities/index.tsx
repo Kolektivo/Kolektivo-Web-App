@@ -9,6 +9,7 @@ import activitiesService from '@/features/activities/services/activities.service
 import ErrorDisplay from '@/components/common/display/ErrorDisplay'
 import { useQuery } from '@tanstack/react-query'
 import ActivitySkeleton from '../Activity/Skeleton'
+import { useAuth } from '@/features/auth/hooks/useAuth'
 
 export default function MyActivitiesCard({
   actions,
@@ -17,9 +18,10 @@ export default function MyActivitiesCard({
   actions?: ReactNode
   disableRedirect?: boolean
 }) {
+  const { user } = useAuth()
   const { data, isLoading, error, refetch } = useQuery<ActivityType[] | undefined>({
     queryKey: ['getMyActivities'],
-    queryFn: async () => await activitiesService.get(),
+    queryFn: async () => await activitiesService.get(user?.id ?? ''),
   })
 
   if (isLoading)

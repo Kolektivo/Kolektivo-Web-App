@@ -13,6 +13,7 @@ const ACTIVITIES = 'activities'
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const id = searchParams.get('id')
+  const hostId = searchParams.get('hostId')
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
   if (id) {
     const { data, error } = await supabaseClient.from(ACTIVITIES).select('*').eq('id', id)
@@ -25,8 +26,8 @@ export async function GET(req: NextRequest) {
     )
 
     return NextResponse.json(activitiesWithBanners)
-  } else {
-    const { data, error } = await supabaseClient.from(ACTIVITIES).select('*')
+  } else if (hostId) {
+    const { data, error } = await supabaseClient.from(ACTIVITIES).select('*').eq('activity_host_id', hostId)
     if (error) return NextResponse.json(error)
     const activitiesWithBanners = await Promise.all(
       data.map(async (activity) => {
@@ -36,6 +37,8 @@ export async function GET(req: NextRequest) {
     )
 
     return NextResponse.json(activitiesWithBanners)
+  } else {
+    return NextResponse.json('Bad request: undefined id and hostId')
   }
 }
 
