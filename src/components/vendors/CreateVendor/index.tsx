@@ -8,6 +8,7 @@ import VendorLogoForm from './VendorLogoForm'
 import { useMutation } from '@tanstack/react-query'
 import DialogSuccess from '@/components/common/modals/DialogSuccess'
 import DialogError from '@/components/common/modals/DialogError'
+import vendorsService from '@/features/vendors/services/vendors.service'
 
 type CreateVendorSteps = {
   step1?: VendorInfo
@@ -20,9 +21,7 @@ const CreateVendor = (): ReactElement => {
   const router = useRouter()
 
   const mutation = useMutation({
-    mutationFn: async (data: Vendor) => {
-      console.log(data)
-    },
+    mutationFn: async (data: Vendor) => await vendorsService.create(data),
   })
 
   const nextStep = () => {
@@ -47,11 +46,16 @@ const CreateVendor = (): ReactElement => {
   }
 
   const handleCompleteLogo = (logoBase64: string) => {
+    let newFormData
     setFormData((formData) => {
+      newFormData = {
+        ...formData,
+        step2: { logoSrc: logoBase64 },
+      }
       formData.step2 = { logoSrc: logoBase64 }
-      mutation.mutate(createVendorFromSteps(formData))
-      return formData
+      return newFormData
     })
+    mutation.mutate(createVendorFromSteps(newFormData!))
   }
 
   const handleModalSuccess = () => {
@@ -75,6 +79,7 @@ const CreateVendor = (): ReactElement => {
       {step >= 2 && (
         <VendorLogoForm
           defaultLogoBase64={formData.step2?.logoSrc ?? null}
+          loading={mutation.isPending}
           onCancel={(logoBase64) => {
             setFormData((formData) => {
               formData.step2 = { logoSrc: logoBase64 ?? undefined }

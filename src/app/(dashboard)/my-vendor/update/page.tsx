@@ -19,6 +19,7 @@ export default function UpdateVendors() {
             <Button>Go back</Button>
           </Link>
         }
+        isUpdate
       />
     </Stack>
   )
