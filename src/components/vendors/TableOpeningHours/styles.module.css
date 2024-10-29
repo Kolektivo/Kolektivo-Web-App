@@ -1,0 +1,10 @@
+.tableHead {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--mui-palette-text-disabled);
+  text-align: left;
+}
+
+.tableCell {
+  padding-bottom: calc(var(--mui-spacing) * 2);
+}
