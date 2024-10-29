@@ -38,7 +38,7 @@ const VendorLogoForm = ({
   }
 
   return (
-    <Stack>
+    <Stack gap={4}>
       <HeaderCard title="Vendor Logo" />
       <Card>
         <CardContent>
