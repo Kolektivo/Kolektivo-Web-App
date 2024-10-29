@@ -13,8 +13,35 @@ const ACTIVITIES = 'activities'
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const id = searchParams.get('id')
+  const hostId = searchParams.get('hostId')
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
-  if (id) {
+  if (hostId && id) {
+    const { data, error } = await supabaseClient
+      .from(ACTIVITIES)
+      .select('*')
+      .eq('activity_host_id', hostId)
+      .eq('id', id)
+    if (error) return NextResponse.json(error)
+    const activitiesWithBanners = await Promise.all(
+      data.map(async (activity) => {
+        const banner_src = await downloadFile(supabaseBucket, activity.banner_path)
+        return { ...activity, banner_src }
+      }),
+    )
+
+    return NextResponse.json(activitiesWithBanners)
+  } else if (hostId) {
+    const { data, error } = await supabaseClient.from(ACTIVITIES).select('*').eq('activity_host_id', hostId)
+    if (error) return NextResponse.json(error)
+    const activitiesWithBanners = await Promise.all(
+      data.map(async (activity) => {
+        const banner_src = await downloadFile(supabaseBucket, activity.banner_path)
+        return { ...activity, banner_src }
+      }),
+    )
+
+    return NextResponse.json(activitiesWithBanners)
+  } else if (id) {
     const { data, error } = await supabaseClient.from(ACTIVITIES).select('*').eq('id', id)
     if (error) return NextResponse.json(error)
     const activitiesWithBanners = await Promise.all(
