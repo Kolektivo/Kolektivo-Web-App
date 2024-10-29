@@ -1,40 +1,63 @@
 import HeaderCard from '@/components/common/cards/HeaderCard'
-import { type VendorInfo } from '@/types/vendors'
-import { Stack, Card, CardContent, TextField, MenuItem, Button, CardActions } from '@mui/material'
-import { type MouseEventHandler, type ReactElement } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import AutocompletePlaces from '@/components/common/inputs/autocomplete/AutocompletePlaces'
 import PhoneField from '@/components/common/inputs/text/PhoneField'
 import { vendorsCategories, wifiAvailability } from '@/constants/vendors/create'
-import TableOpeningHours from '../../TableOpeningHours'
 import { vendorInfoSchema } from '@/features/vendors/validations'
+import { type Vendor } from '@/types/vendors'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button, Card, CardActions, CardContent, MenuItem, Stack, TextField } from '@mui/material'
+import { type MouseEventHandler, type ReactElement, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import TableOpeningHours from '../../TableOpeningHours'
+import UploadImage from '@/components/common/inputs/image/UploadImage'
+import LoadingButton from '@/components/common/buttons/LoadingButton'
 
-type VendorInfoFormProps = {
-  defaultValues?: VendorInfo
-  onCancel?: MouseEventHandler<HTMLButtonElement>
-  onSubmit: SubmitHandler<VendorInfo>
+type UpdateVendorFormProps = {
+  defaultValues?: Vendor
+  onDelete?: MouseEventHandler<HTMLButtonElement>
+  onSave: (data: Vendor) => void
+  saving: boolean
 }
 
-const VendorInfoForm = ({ defaultValues, onCancel, onSubmit }: VendorInfoFormProps): ReactElement => {
+const UpdateVendorForm = ({ defaultValues, onDelete, onSave, saving }: UpdateVendorFormProps): ReactElement => {
   const {
     control,
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<VendorInfo>({
+  } = useForm<Vendor>({
     resolver: zodResolver(vendorInfoSchema),
     defaultValues,
     mode: 'onBlur',
   })
+  const [logoBase64, setLogoBase64] = useState<string | null>(defaultValues?.logoSrc || null)
+
+  const handleChangeLogo = (image: File) => {
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setLogoBase64(reader.result?.toString() ?? null)
+    }
+    reader.readAsDataURL(image)
+  }
+
+  const handleSave = (data: Vendor) => {
+    data.logoSrc = logoBase64!
+    data.id = defaultValues?.id
+    onSave(data)
+  }
 
   return (
     <Stack gap={4}>
-      <HeaderCard title="Vendor Info" />
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <HeaderCard title="Update Fields" />
+      <form onSubmit={handleSubmit(handleSave)}>
         <Card>
           <CardContent>
             <Stack maxWidth={592} gap={8}>
+              <UploadImage
+                placeholder="Vendor Logo"
+                previewBase64={defaultValues?.logoSrc ?? undefined}
+                onChangeImage={handleChangeLogo}
+              />
               <TextField
                 label="Name"
                 placeholder="Vendor name"
@@ -133,10 +156,14 @@ const VendorInfoForm = ({ defaultValues, onCancel, onSubmit }: VendorInfoFormPro
             </Stack>
           </CardContent>
           <CardActions>
-            {onCancel && <Button onClick={onCancel}>Cancel</Button>}
-            <Button type="submit" variant="contained" disabled={!isValid}>
-              Next
-            </Button>
+            {onDelete && (
+              <Button onClick={onDelete} variant="contained" color="error">
+                Delete
+              </Button>
+            )}
+            <LoadingButton loading={saving} type="submit" variant="contained" disabled={!isValid}>
+              Save
+            </LoadingButton>
           </CardActions>
         </Card>
       </form>
@@ -144,4 +171,4 @@ const VendorInfoForm = ({ defaultValues, onCancel, onSubmit }: VendorInfoFormPro
   )
 }
 
-export default VendorInfoForm
+export default UpdateVendorForm

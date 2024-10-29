@@ -12,7 +12,7 @@ import VendorItemSkeleton from '../VendorItem/Skeleton'
 export default function MyVendorsCard({ actions, isUpdate = false }: { actions?: ReactNode; isUpdate?: boolean }) {
   const { data, isLoading, error, refetch } = useQuery<Vendor[] | undefined>({
     queryKey: ['getMyVendors'],
-    queryFn: async () => await vendorsService.get(),
+    queryFn: async () => await vendorsService.getAll(),
   })
 
   return (

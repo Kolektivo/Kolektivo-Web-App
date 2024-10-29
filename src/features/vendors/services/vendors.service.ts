@@ -6,10 +6,15 @@ class VendorsService {
     baseURL: '/api',
   })
 
-  public async get(): Promise<Vendor[] | undefined> {
+  public async getAll(): Promise<Vendor[] | undefined> {
     const response = await this.httpInstance.get<Vendor[]>('/vendors')
     if (response.data.length > 0) return response.data
     else return [] as Vendor[]
+  }
+
+  public async get(id: string): Promise<Vendor | undefined> {
+    const response = await this.httpInstance.get<Vendor>(`/vendors/${id}`)
+    if (response.data) return response.data
   }
 
   public async create(vendor: Vendor): Promise<Vendor> {
@@ -19,7 +24,7 @@ class VendorsService {
   }
 
   public async update(vendor: Vendor): Promise<Vendor> {
-    const response = await this.httpInstance.put<Vendor>('/vendors', vendor)
+    const response = await this.httpInstance.put<Vendor>(`/vendors/${vendor.id}`, vendor)
 
     return response.data
   }

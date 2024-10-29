@@ -5,20 +5,11 @@ import { createClient } from './server'
 const Bucket = {
   uploadFile: async (filePath: string, base64File: string) => {
     const supabaseClient = createClient()
-    const { data: dataDelete, error: errorDelete } = await supabaseClient.storage
-      .from(SUPABASE_BUCKET)
-      .remove([filePath])
-
-    if (errorDelete) {
-      console.error('Error uploading file:', errorDelete.message)
-    } else {
-      console.log('File deleted successfully ', dataDelete.length)
-    }
 
     const fileBlob = await FileUtils.base64ImageSourceToBlob(base64File)
     const { data: dataUpload, error: errorUpload } = await supabaseClient.storage
       .from(SUPABASE_BUCKET)
-      .upload(filePath, fileBlob)
+      .upload(filePath, fileBlob, { upsert: true })
 
     if (errorUpload) {
       console.error('Error uploading file:', errorUpload.message)
