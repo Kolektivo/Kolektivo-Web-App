@@ -52,7 +52,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   if (error) return NextResponse.json(error, { status: 500 })
 
   try {
-    await Bucket.uploadFile(data.logoPath, vendor.logoSrc)
+    await Bucket.uploadFile(data.logo_path, vendor.logoSrc)
   } catch (error) {
     return NextResponse.json(error, { status: 500 })
   }
