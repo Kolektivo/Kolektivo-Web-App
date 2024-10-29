@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import Bucket from '@/utils/supabase/bucket'
 import { createClient } from '@/utils/supabase/server'
 import { type Vendor } from '@/types/vendors'
+import FileUtils from '@/utils/files/fileUtils'
 
 const VENDORS = 'vendors'
 
@@ -13,7 +14,7 @@ export async function GET() {
 
   const vendorsWithLogos = await Promise.all(
     data.map(async (vendor) => {
-      const logoSrc = await Bucket.downloadFile(`vendors/logos/${vendor.id}`)
+      const logoSrc = await Bucket.downloadFile(vendor.logo_path)
       return {
         id: vendor.id,
         name: vendor.name,
@@ -58,8 +59,10 @@ export async function POST(req: NextRequest) {
 
   const vendorId = data[0].id
   try {
-    const logoPath = `vendors/logos/${vendorId}`
+    const extension = FileUtils.getFileExtensionFromBase64(logoSrc)
+    const logoPath = `vendors/logos/${vendorId}.${extension}`
     await Bucket.uploadFile(logoPath, logoSrc)
+    await supabaseClient.from(VENDORS).update({ logo_path: logoPath }).eq('id', vendorId)
   } catch (error) {
     await supabaseClient.from(VENDORS).delete().eq('id', vendorId)
     return NextResponse.json(error, { status: 500 })
