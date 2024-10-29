@@ -1,13 +1,11 @@
 'use client'
 
 import { Box, CardContent, Divider } from '@mui/material'
-import React, { type ReactNode } from 'react'
+import React, { useEffect, useState, type ReactNode } from 'react'
 import ActivityComponent from '../Activity'
 import ItemsCard from '@/components/common/cards/ItemsCard'
 import { type ActivityType } from '@/types/activities'
 import activitiesService from '@/features/activities/services/activities.service'
-import ErrorDisplay from '@/components/common/display/ErrorDisplay'
-import { useQuery } from '@tanstack/react-query'
 import ActivitySkeleton from '../Activity/Skeleton'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 
@@ -21,12 +19,17 @@ export default function MyActivitiesCard({
   onlyShowOwnerActivities?: boolean
 }) {
   const { user } = useAuth()
-  const { data, isLoading, error, refetch } = useQuery<ActivityType[] | undefined>({
-    queryKey: ['getMyActivities'],
-    queryFn: async () => await activitiesService.get(onlyShowOwnerActivities && user ? user : undefined),
-  })
+  const [data, setData] = useState<ActivityType[] | undefined>(undefined)
 
-  if (isLoading)
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await activitiesService.get(onlyShowOwnerActivities && user ? user : undefined)
+      setData(data)
+    }
+    fetchData()
+  }, [onlyShowOwnerActivities, user])
+
+  if (!data)
     return (
       <ItemsCard title="My Activities" actions={actions}>
         {Array.from({ length: 3 }).map((_, index) => (
@@ -39,15 +42,9 @@ export default function MyActivitiesCard({
         ))}
       </ItemsCard>
     )
-  if (error) {
-    return (
-      <ErrorDisplay
-        onClickButton={() => {
-          refetch()
-        }}
-      />
-    )
-  }
+  // if (error) {
+  //   return <ErrorDisplay />
+  // }
 
   return (
     <ItemsCard title="My Activities" actions={actions}>
