@@ -5,6 +5,7 @@ import React from 'react'
 
 type Props = {
   id: string
+  user: string
   img: string
   title: string
   description: string
@@ -12,7 +13,7 @@ type Props = {
   disableRedirect?: boolean
 }
 
-export default function ActivityComponent({ id, img, title, description, state, disableRedirect }: Props) {
+export default function ActivityComponent({ id, user, img, title, description, state, disableRedirect }: Props) {
   return (
     <Link
       href={`${disableRedirect ? '' : `/activities/update/${id}`}`}
@@ -40,7 +41,7 @@ export default function ActivityComponent({ id, img, title, description, state, 
             <Chip label={state} color="upcomingChip" />
           </Stack>
           <Typography variant="body1" color="text.secondary">
-            {description}
+            {user} • {description}
           </Typography>
         </Stack>
       </Stack>

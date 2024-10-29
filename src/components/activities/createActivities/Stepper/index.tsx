@@ -21,10 +21,13 @@ import { useMemo } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import activitiesService from '@/features/activities/services/activities.service'
 import LoadingButton from '@/components/common/buttons/LoadingButton'
+import { useAuth } from '@/features/auth/hooks/useAuth'
+import { type User } from '@supabase/supabase-js'
 
 const steps = ['', '', '', '']
 
 export default function CreateActivityStepper() {
+  const { user } = useAuth()
   const [activeStep, setActiveStep] = React.useState(0)
   const [openSuccessDialog, setOpenSuccessDialog] = React.useState<boolean>(false)
 
@@ -44,9 +47,9 @@ export default function CreateActivityStepper() {
   )
 
   const { mutate } = useMutation({
-    mutationFn: async (activityReview: ActivityReviewType) => {
+    mutationFn: async (review: ActivityReviewType) => {
       setCreatingActivity(true)
-      return await activitiesService.create(activityReview)
+      return await activitiesService.create(review, user as User)
     },
   })
 
@@ -71,6 +74,10 @@ export default function CreateActivityStepper() {
   }
 
   const handleRequirementsRewardsFormSubmit = (data: CreateActivityRequirementsRewardsFormValues) => {
+    data.requirements = data.requirements
+      .split(',')
+      .filter((requirement) => requirement != '0')
+      .join(',')
     setRequirementsRewardsFormValues(data)
     goToNext()
   }

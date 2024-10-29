@@ -20,6 +20,7 @@ export type ActivityType = {
   id?: string
   created_at: string
   activity_host_id: string
+  user_created: string
   title: string
   description: string
   start_date: string

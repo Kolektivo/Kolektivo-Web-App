@@ -4,21 +4,27 @@ import ErrorDisplay from '@/components/common/display/ErrorDisplay'
 import organizationsService from '@/features/organizations/services/organizations.service'
 import { type Organization } from '@/types/organization'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { type ReactElement } from 'react'
+import { useEffect, useState, type ReactElement } from 'react'
 import UpdateOrganizationForm from './UpdateOrganizationForm'
 import DialogError from '@/components/common/modals/DialogError'
 import DialogSuccess from '@/components/common/modals/DialogSuccess'
 import { useRouter } from 'next/navigation'
-import { Box, CircularProgress } from '@mui/material'
+import HeaderCard from '@/components/common/cards/HeaderCard'
+import { Stack } from '@mui/material'
+import UpdateOrganizationSkeleton from './Skeleton'
 
 const UpdateOrganization = (): ReactElement => {
+  const [saving, setSaving] = useState<boolean>(false)
   const { data, error, isLoading, refetch } = useQuery<Organization | undefined>({
     queryKey: ['getMyOrganization'],
     queryFn: async () => await organizationsService.get(),
   })
 
   const mutation = useMutation({
-    mutationFn: async (data: Organization) => await organizationsService.update(data),
+    mutationFn: async (data: Organization) => {
+      setSaving(true)
+      await organizationsService.update(data)
+    },
   })
   const router = useRouter()
 
@@ -34,6 +40,10 @@ const UpdateOrganization = (): ReactElement => {
     mutation.reset()
   }
 
+  useEffect(() => {
+    setSaving(false)
+  }, [mutation.isSuccess, mutation.isError])
+
   if (error) {
     return (
       <ErrorDisplay
@@ -46,15 +56,18 @@ const UpdateOrganization = (): ReactElement => {
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center">
-        <CircularProgress></CircularProgress>
-      </Box>
+      <>
+        <Stack gap={4}>
+          <HeaderCard title="Update Fields" />
+          <UpdateOrganizationSkeleton />
+        </Stack>
+      </>
     )
   }
 
   return (
     <>
-      <UpdateOrganizationForm defaultValues={data} onSave={handleSave} />
+      <UpdateOrganizationForm defaultValues={data} onSave={handleSave} saving={saving} />
       <DialogSuccess
         open={mutation.isSuccess}
         title="Profile Updated"

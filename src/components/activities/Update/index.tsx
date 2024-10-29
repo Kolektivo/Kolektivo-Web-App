@@ -26,17 +26,11 @@ type Props = {
   review: ActivityReviewType
   submitHandler: SubmitHandler<ActivityReviewType>
   deleteHandler: () => void
-  deleteOnExecution: boolean
-  saveOnExecution: boolean
+  deleting: boolean
+  saving: boolean
 }
 
-export default function ActivityUpdate({
-  review,
-  submitHandler,
-  deleteHandler,
-  deleteOnExecution,
-  saveOnExecution,
-}: Props) {
+export default function ActivityUpdate({ review, submitHandler, deleteHandler, deleting, saving }: Props) {
   const [requirements, setRequirements] = React.useState<string>(review.requirements)
   const [banner, setBanner] = useState<string>(review.banner)
   const {
@@ -284,33 +278,28 @@ export default function ActivityUpdate({
           </Stack>
         </CardContent>
         <CardActions>
-          {deleteOnExecution && (
+          {deleting && (
             <LoadingButton loading variant="contained" color="warningButton" className="stepperButton">
               Delete
             </LoadingButton>
           )}
-          {!deleteOnExecution && (
-            <Button
-              onClick={deleteHandler}
-              variant="contained"
-              color="warningButton"
-              disabled={saveOnExecution || !isValid}
-            >
+          {!deleting && (
+            <Button onClick={deleteHandler} variant="contained" color="warningButton" disabled={saving || !isValid}>
               Delete
             </Button>
           )}
-          {!saveOnExecution && (
+          {!saving && (
             <Button
               type="submit"
               variant="contained"
               color="primary"
               className="stepperButton"
-              disabled={!isValid || deleteOnExecution}
+              disabled={!isValid || deleting}
             >
               Save
             </Button>
           )}
-          {saveOnExecution && (
+          {saving && (
             <LoadingButton loading variant="contained" color="primary" className="stepperButton">
               Save
             </LoadingButton>
