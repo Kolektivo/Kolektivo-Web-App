@@ -175,6 +175,7 @@ const createSafeTheme = (mode: PaletteMode): Theme => {
                     fontVariationSettings: '"FILL" 1',
                     color: colors.error.main,
                     padding: spacing * 2,
+                    zIndex: 1,
                   },
                 },
               },
