@@ -31,6 +31,17 @@ const Bucket = {
       return imageSource
     }
   },
+  deleteFile: async (filePath: string) => {
+    if (filePath == '' || !filePath) return ''
+    const supabaseClient = createClient()
+    const { error } = await supabaseClient.storage.from(SUPABASE_BUCKET).remove([filePath])
+
+    if (error) {
+      throw error
+    } else {
+      console.log('File deleted successfully')
+    }
+  },
 }
 
 export default Bucket

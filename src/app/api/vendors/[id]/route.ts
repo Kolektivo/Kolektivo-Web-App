@@ -12,7 +12,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
   const { data, error } = await supabaseClient.from(VENDORS).select('*').eq('id', id).single()
   if (error) return NextResponse.json(error, { status: 500 })
 
-  const logoSrc = await Bucket.downloadFile(`vendors/logo/${data.id}`)
+  const logoSrc = await Bucket.downloadFile(`vendors/logos/${data.id}`)
 
   const vendorWithLogo = {
     id: data.id,
@@ -52,7 +52,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   if (error) return NextResponse.json(error, { status: 500 })
 
   try {
-    await Bucket.uploadFile(`vendors/logo/${vendor.id}`, vendor.logoSrc)
+    await Bucket.uploadFile(`vendors/logos/${vendor.id}`, vendor.logoSrc)
   } catch (error) {
     return NextResponse.json(error, { status: 500 })
   }
@@ -60,4 +60,20 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   revalidatePath('/api/vendors')
 
   return NextResponse.json(data)
+}
+
+export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
+  const supabaseClient = createClient()
+  const id = (await params).id
+
+  const { error } = await supabaseClient.from(VENDORS).delete().eq('id', id)
+  if (error) return NextResponse.json(error, { status: 500 })
+
+  try {
+    await Bucket.deleteFile(`vendors/logos/${id}`)
+  } catch (error) {
+    return NextResponse.json(error, { status: 500 })
+  }
+
+  return NextResponse.json({})
 }

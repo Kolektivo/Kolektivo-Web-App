@@ -13,7 +13,7 @@ export async function GET() {
 
   const vendorsWithLogos = await Promise.all(
     data.map(async (vendor) => {
-      const logoSrc = await Bucket.downloadFile(`vendors/logo/${vendor.id}`)
+      const logoSrc = await Bucket.downloadFile(`vendors/logos/${vendor.id}`)
       return {
         id: vendor.id,
         name: vendor.name,
@@ -56,11 +56,12 @@ export async function POST(req: NextRequest) {
 
   if (error) return NextResponse.json(error, { status: 500 })
 
+  const vendorId = data[0].id
   try {
-    const vendorId = data[0].id
-    const logoPath = `vendors/logo/${vendorId}`
+    const logoPath = `vendors/logos/${vendorId}`
     await Bucket.uploadFile(logoPath, logoSrc)
   } catch (error) {
+    await supabaseClient.from(VENDORS).delete().eq('id', vendorId)
     return NextResponse.json(error, { status: 500 })
   }
 
