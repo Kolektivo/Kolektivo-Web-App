@@ -22,6 +22,7 @@ import { useMutation } from '@tanstack/react-query'
 import activitiesService from '@/features/activities/services/activities.service'
 import LoadingButton from '@/components/common/buttons/LoadingButton'
 import { useAuth } from '@/features/auth/hooks/useAuth'
+import { type User } from '@supabase/supabase-js'
 
 const steps = ['', '', '', '']
 
@@ -46,9 +47,9 @@ export default function CreateActivityStepper() {
   )
 
   const { mutate } = useMutation({
-    mutationFn: async (data: { review: ActivityReviewType; hostId: string }) => {
+    mutationFn: async (review: ActivityReviewType) => {
       setCreatingActivity(true)
-      return await activitiesService.create(data.review, data.hostId)
+      return await activitiesService.create(review, user as User)
     },
   })
 
@@ -82,18 +83,15 @@ export default function CreateActivityStepper() {
   }
 
   const handleComplete = () => {
-    mutate(
-      { review, hostId: user?.id ?? '' },
-      {
-        onSuccess: () => {
-          setCreatingActivity(false)
-          setOpenSuccessDialog(true)
-        },
-        onError: () => {
-          setCreatingActivity(false)
-        },
+    mutate(review, {
+      onSuccess: () => {
+        setCreatingActivity(false)
+        setOpenSuccessDialog(true)
       },
-    )
+      onError: () => {
+        setCreatingActivity(false)
+      },
+    })
   }
 
   const handleDialogSuccessClick = () => {

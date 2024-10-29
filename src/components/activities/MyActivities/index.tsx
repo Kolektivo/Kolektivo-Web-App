@@ -14,14 +14,16 @@ import { useAuth } from '@/features/auth/hooks/useAuth'
 export default function MyActivitiesCard({
   actions,
   disableRedirect,
+  onlyShowOwnerActivities,
 }: {
   actions?: ReactNode
   disableRedirect?: boolean
+  onlyShowOwnerActivities?: boolean
 }) {
   const { user } = useAuth()
   const { data, isLoading, error, refetch } = useQuery<ActivityType[] | undefined>({
     queryKey: ['getMyActivities'],
-    queryFn: async () => await activitiesService.get(user?.id ?? ''),
+    queryFn: async () => await activitiesService.get(onlyShowOwnerActivities && user ? user : undefined),
   })
 
   if (isLoading)
@@ -55,6 +57,7 @@ export default function MyActivitiesCard({
           <CardContent>
             <ActivityComponent
               id={activity.id as string}
+              user={activity.user_created}
               img={activity.banner_src as string}
               title={activity.title}
               description={activity.description}

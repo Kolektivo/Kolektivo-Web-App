@@ -6,6 +6,7 @@ import DialogSuccess from '@/components/common/modals/DialogSuccess'
 import activitiesService from '@/features/activities/services/activities.service'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import { type ActivityReviewType, type ActivityType } from '@/types/activities'
+import { type User } from '@supabase/supabase-js'
 import { useMutation } from '@tanstack/react-query'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -30,7 +31,7 @@ export default function UpdateActivity() {
   const { mutate: updateMutate } = useMutation({
     mutationFn: async (activityData: { review: ActivityReviewType; id: string }) => {
       setSaving(true)
-      return await activitiesService.update(activityData.review, user?.id ?? '', activityData.id)
+      return await activitiesService.update(activityData.review, user as User, activityData.id)
     },
   })
 
@@ -67,7 +68,7 @@ export default function UpdateActivity() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await activitiesService.get(user?.id ?? '', id as string)
+      const data = await activitiesService.get(user as User, id as string)
       setData(data)
     }
     fetchData()

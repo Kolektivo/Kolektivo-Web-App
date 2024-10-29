@@ -1,4 +1,5 @@
 import { type ActivityReviewType, type ActivityType } from '@/types/activities'
+import { type User } from '@supabase/supabase-js'
 import axios from 'axios'
 
 class ActivitiesService {
@@ -6,18 +7,19 @@ class ActivitiesService {
     baseURL: '/api',
   })
 
-  public async get(hostId: string, id?: string): Promise<ActivityType[] | undefined> {
+  public async get(user?: User, id?: string): Promise<ActivityType[] | undefined> {
     const response = await this.httpInstance.get<ActivityType[]>(
-      `/activities${hostId || id ? '?' : ''}${hostId ? `hostId=${hostId}` : ''}${hostId ? '&' : ''}${id ? `id=${id}` : ''}`,
+      `/activities${user || id ? '?' : ''}${user ? `hostId=${user.id}` : ''}${user ? '&' : ''}${id ? `id=${id}` : ''}`,
     )
 
     return response.data
   }
 
-  public async create(activityReview: ActivityReviewType, hostId: string): Promise<ActivityType | undefined> {
+  public async create(activityReview: ActivityReviewType, user: User): Promise<ActivityType | undefined> {
     const exampleActivity: ActivityType = {
       created_at: new Date().toISOString(),
-      activity_host_id: hostId,
+      activity_host_id: user.id,
+      user_created: user.email ?? '',
       title: activityReview.name,
       description: activityReview.description,
       start_date: activityReview.date,
@@ -34,15 +36,12 @@ class ActivitiesService {
     return response.data
   }
 
-  public async update(
-    activityReview: ActivityReviewType,
-    hostId: string,
-    id: string,
-  ): Promise<ActivityType | undefined> {
+  public async update(activityReview: ActivityReviewType, user: User, id: string): Promise<ActivityType | undefined> {
     const exampleActivity: ActivityType = {
       id,
       created_at: '2024-09-15T14:45:00+00:00',
-      activity_host_id: hostId,
+      activity_host_id: user.id,
+      user_created: user.email ?? '',
       title: activityReview.name,
       description: activityReview.description,
       start_date: activityReview.date,

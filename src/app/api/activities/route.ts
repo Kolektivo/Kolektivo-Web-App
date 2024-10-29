@@ -15,8 +15,12 @@ export async function GET(req: NextRequest) {
   const id = searchParams.get('id')
   const hostId = searchParams.get('hostId')
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
-  if (id) {
-    const { data, error } = await supabaseClient.from(ACTIVITIES).select('*').eq('id', id)
+  if (hostId && id) {
+    const { data, error } = await supabaseClient
+      .from(ACTIVITIES)
+      .select('*')
+      .eq('activity_host_id', hostId)
+      .eq('id', id)
     if (error) return NextResponse.json(error)
     const activitiesWithBanners = await Promise.all(
       data.map(async (activity) => {
@@ -37,8 +41,28 @@ export async function GET(req: NextRequest) {
     )
 
     return NextResponse.json(activitiesWithBanners)
+  } else if (id) {
+    const { data, error } = await supabaseClient.from(ACTIVITIES).select('*').eq('id', id)
+    if (error) return NextResponse.json(error)
+    const activitiesWithBanners = await Promise.all(
+      data.map(async (activity) => {
+        const banner_src = await downloadFile(supabaseBucket, activity.banner_path)
+        return { ...activity, banner_src }
+      }),
+    )
+
+    return NextResponse.json(activitiesWithBanners)
   } else {
-    return NextResponse.json('Bad request: undefined id and hostId')
+    const { data, error } = await supabaseClient.from(ACTIVITIES).select('*')
+    if (error) return NextResponse.json(error)
+    const activitiesWithBanners = await Promise.all(
+      data.map(async (activity) => {
+        const banner_src = await downloadFile(supabaseBucket, activity.banner_path)
+        return { ...activity, banner_src }
+      }),
+    )
+
+    return NextResponse.json(activitiesWithBanners)
   }
 }
 
