@@ -21,7 +21,7 @@ export async function GET() {
         website: vendor.website,
         phone: vendor.phone,
         category: vendor.category,
-        openingHours: vendor.opening_hour,
+        openingHours: vendor.opening_hours,
         wifiAvailability: vendor.wifi,
         logoSrc,
       }
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
         phone: newVendor.phone,
         category: newVendor.category,
         name: newVendor.name,
-        opening_hour: newVendor.openingHours,
+        opening_hours: newVendor.openingHours,
       },
     ])
     .select()

@@ -21,7 +21,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
     website: data.website,
     phone: data.phone,
     category: data.category,
-    openingHours: data.opening_hour,
+    openingHours: data.opening_hours,
     wifiAvailability: data.wifi,
     logoSrc,
   }
@@ -43,7 +43,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       phone: vendor.phone,
       category: vendor.category,
       name: vendor.name,
-      opening_hour: vendor.openingHours,
+      opening_hours: vendor.openingHours,
     })
     .eq('id', id)
     .select()
