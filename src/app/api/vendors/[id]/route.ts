@@ -51,7 +51,12 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 
   if (error) return NextResponse.json(error, { status: 500 })
 
-  await Bucket.uploadFile(`vendors/logo/${vendor.id}`, vendor.logoSrc)
+  try {
+    await Bucket.uploadFile(`vendors/logo/${vendor.id}`, vendor.logoSrc)
+  } catch (error) {
+    return NextResponse.json(error, { status: 500 })
+  }
+
   revalidatePath('/api/vendors')
 
   return NextResponse.json(data)

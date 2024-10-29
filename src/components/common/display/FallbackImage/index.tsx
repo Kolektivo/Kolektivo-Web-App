@@ -26,7 +26,14 @@ const FallbackImage = ({ src, width, height, alt, ...props }: ImgHTMLAttributes<
           style={{ borderRadius: '12px' }}
         />
       ) : (
-        <Typography variant="subtitle2" textTransform="uppercase" color="#A9A9A9">
+        <Typography
+          variant="subtitle2"
+          textTransform="uppercase"
+          textOverflow="ellipsis"
+          overflow="hidden"
+          color="#A9A9A9"
+          width="100%"
+        >
           {alt}
         </Typography>
       )}

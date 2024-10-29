@@ -12,7 +12,7 @@ const Bucket = {
       .upload(filePath, fileBlob, { upsert: true })
 
     if (errorUpload) {
-      console.error('Error uploading file:', errorUpload.message)
+      throw errorUpload
     } else {
       console.log('File uploaded successfully', dataUpload.id)
     }

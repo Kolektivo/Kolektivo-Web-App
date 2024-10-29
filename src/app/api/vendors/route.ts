@@ -56,9 +56,13 @@ export async function POST(req: NextRequest) {
 
   if (error) return NextResponse.json(error, { status: 500 })
 
-  const vendorId = data[0].id
-  const logoPath = `vendors/logo/${vendorId}`
-  await Bucket.uploadFile(logoPath, logoSrc)
+  try {
+    const vendorId = data[0].id
+    const logoPath = `vendors/logo/${vendorId}`
+    await Bucket.uploadFile(logoPath, logoSrc)
+  } catch (error) {
+    return NextResponse.json(error, { status: 500 })
+  }
 
   return NextResponse.json(data[0])
 }
