@@ -33,6 +33,7 @@ const FallbackImage = ({ src, width, height, alt, ...props }: ImgHTMLAttributes<
           overflow="hidden"
           color="#A9A9A9"
           width="100%"
+          textAlign="center"
         >
           {alt}
         </Typography>

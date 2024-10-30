@@ -46,11 +46,16 @@ const CreateOrganization = (): ReactElement => {
   }
 
   const handleCompleteLogo = (logoBase64: string) => {
+    let newFormData
     setFormData((formData) => {
+      newFormData = {
+        ...formData,
+        step2: { logoSrc: logoBase64 },
+      }
       formData.step2 = { logoSrc: logoBase64 }
-      mutation.mutate(createOrganizationFromSteps(formData))
-      return formData
+      return newFormData
     })
+    mutation.mutate(createOrganizationFromSteps(newFormData!))
   }
 
   const handleModalSuccess = () => {
