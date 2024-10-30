@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import Bucket from '@/utils/supabase/bucket'
 import { revalidatePath } from 'next/cache'
 import { createAnonymousClient } from '@/utils/supabase/anonymousClient'
+import { createClient } from '@/utils/supabase/server'
 
 const VENDORS = 'vendors'
 
@@ -9,7 +10,11 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
   const supabaseClient = createAnonymousClient()
   const id = (await params).id
 
-  const { data, error } = await supabaseClient.from(VENDORS).select('*').eq('id', id).single()
+  const supabaseClientAuth = createClient()
+  const user = await supabaseClientAuth.auth.getUser()
+  const idUser = user.data.user?.id
+
+  const { data, error } = await supabaseClient.from(VENDORS).select('*').eq('id', id).eq('created_by', idUser).single()
   if (error) return NextResponse.json(error, { status: 500 })
 
   const logoSrc = await Bucket.downloadFile(data.logo_path)
@@ -34,6 +39,10 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   const id = (await params).id
   const vendor = await req.json()
 
+  const supabaseClientAuth = createClient()
+  const user = await supabaseClientAuth.auth.getUser()
+  const idUser = user.data.user?.id
+
   const { data, error } = await supabaseClient
     .from(VENDORS)
     .update({
@@ -46,6 +55,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       opening_hours: vendor.openingHours,
     })
     .eq('id', id)
+    .eq('created_by', idUser)
     .select()
     .single()
 
@@ -66,7 +76,17 @@ export async function DELETE(_: Request, { params }: { params: Promise<{ id: str
   const supabaseClient = createAnonymousClient()
   const id = (await params).id
 
-  const { data, error } = await supabaseClient.from(VENDORS).delete().eq('id', id).select().single()
+  const supabaseClientAuth = createClient()
+  const user = await supabaseClientAuth.auth.getUser()
+  const idUser = user.data.user?.id
+
+  const { data, error } = await supabaseClient
+    .from(VENDORS)
+    .delete()
+    .eq('id', id)
+    .eq('created_by', idUser)
+    .select()
+    .single()
   if (error) return NextResponse.json(error, { status: 500 })
 
   try {

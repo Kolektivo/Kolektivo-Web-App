@@ -4,12 +4,18 @@ import Bucket from '@/utils/supabase/bucket'
 import { type Vendor } from '@/types/vendors'
 import FileUtils from '@/utils/files/fileUtils'
 import { createAnonymousClient } from '@/utils/supabase/anonymousClient'
+import { createClient } from '@/utils/supabase/server'
 
 const VENDORS = 'vendors'
 
 export async function GET() {
   const supabaseClient = createAnonymousClient()
-  const { data, error } = await supabaseClient.from(VENDORS).select('*')
+
+  const supabaseClientAuth = createClient()
+  const user = await supabaseClientAuth.auth.getUser()
+  const idUser = user.data.user?.id
+
+  const { data, error } = await supabaseClient.from(VENDORS).select('*').eq('created_by', idUser)
   if (error) return NextResponse.json(error, { status: 500 })
 
   const vendorsWithLogos = await Promise.all(
@@ -35,6 +41,10 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   const supabaseClient = createAnonymousClient()
 
+  const supabaseClientAuth = createClient()
+  const user = await supabaseClientAuth.auth.getUser()
+  const idUser = user.data.user?.id
+
   const newVendor = (await req.json()) as Vendor
 
   const logoSrc = newVendor.logoSrc!
@@ -51,6 +61,7 @@ export async function POST(req: NextRequest) {
         category: newVendor.category,
         name: newVendor.name,
         opening_hours: newVendor.openingHours,
+        created_by: idUser,
       },
     ])
     .select()

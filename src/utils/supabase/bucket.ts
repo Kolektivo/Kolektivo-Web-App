@@ -1,4 +1,4 @@
-import { SUPABASE_BUCKET } from '@/config/constants'
+import { SUPABASE_BUCKET, SUPABASE_URL } from '@/config/constants'
 import FileUtils from '../files/fileUtils'
 import { createAnonymousClient } from './anonymousClient'
 
@@ -41,6 +41,9 @@ const Bucket = {
     } else {
       console.log('File deleted successfully')
     }
+  },
+  getFileUrl: (filePath: string) => {
+    return `${SUPABASE_URL}/storage/v1/object/public/${SUPABASE_BUCKET}/${filePath}`
   },
 }
 
