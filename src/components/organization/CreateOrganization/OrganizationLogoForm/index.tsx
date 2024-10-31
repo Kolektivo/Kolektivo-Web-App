@@ -38,7 +38,7 @@ const OrganizationLogo = ({
   }
 
   return (
-    <Stack>
+    <Stack gap={4}>
       <HeaderCard title="Organization Logo" />
       <Card>
         <CardContent>
