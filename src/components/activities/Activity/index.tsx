@@ -8,7 +8,7 @@ type Props = {
   id: string
   organization: string
   startDate: string
-  endDate: string
+  timeLapse: string
   img: string
   title: string
   state: string
@@ -21,14 +21,14 @@ export default function ActivityComponent({
   img,
   title,
   startDate,
-  endDate,
+  timeLapse,
   state,
   disableRedirect,
 }: Props) {
   const formatDate = () => {
     const startDateIso = parseISO(startDate)
     const startFormattedDate = format(startDateIso, 'MMMM d')
-    return `${startFormattedDate}, ${endDate}`
+    return `${startFormattedDate}, ${timeLapse}`
   }
   return (
     <Link
