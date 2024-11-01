@@ -7,8 +7,8 @@ class ActivitiesService {
     baseURL: '/api',
   })
 
-  public async get(user?: User, id?: string): Promise<ActivityType[] | undefined> {
-    const response = await this.httpInstance.get<ActivityType[]>(
+  public async get(user?: User, id?: string): Promise<(ActivityType & { organization: string })[] | undefined> {
+    const response = await this.httpInstance.get<(ActivityType & { organization: string })[]>(
       `/activities${user || id ? '?' : ''}${user ? `hostId=${user.id}` : ''}${user ? '&' : ''}${id ? `id=${id}` : ''}`,
     )
 
@@ -23,7 +23,8 @@ class ActivitiesService {
       title: activityReview.name,
       description: activityReview.description,
       start_date: activityReview.date,
-      end_date: '2024-11-02T15:00:00+00:00',
+      end_date: activityReview.date,
+      time_lapse: `${activityReview.startTime} - ${activityReview.endTime}`,
       full_address: 'Eco Center, 123 Greenway Drive, Austin, TX, USA',
       badge_contract_address: '0x1234abcd5678ef90',
       requirements: activityReview.requirements.toString(),
@@ -39,13 +40,14 @@ class ActivitiesService {
   public async update(activityReview: ActivityReviewType, user: User, id: string): Promise<ActivityType | undefined> {
     const exampleActivity: ActivityType = {
       id,
-      created_at: '2024-09-15T14:45:00+00:00',
+      created_at: new Date().toISOString(),
       activity_host_id: user.id,
       user_created: user.email ?? '',
       title: activityReview.name,
       description: activityReview.description,
       start_date: activityReview.date,
-      end_date: '2024-11-02T15:00:00+00:00',
+      end_date: activityReview.date,
+      time_lapse: `${activityReview.startTime} - ${activityReview.endTime}`,
       full_address: 'Eco Center, 123 Greenway Drive, Austin, TX, USA',
       badge_contract_address: '0x1234abcd5678ef90',
       requirements: activityReview.requirements.toString(),

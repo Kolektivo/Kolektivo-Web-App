@@ -31,6 +31,7 @@ export type ActivityType = {
   location: string | null
   points: string | null
   stamp: string | null
+  time_lapse: string
   banner_src?: string | null
   banner_path?: string | null
 }

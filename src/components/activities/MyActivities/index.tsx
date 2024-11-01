@@ -19,7 +19,7 @@ export default function MyActivitiesCard({
   onlyShowOwnerActivities?: boolean
 }) {
   const { user } = useAuth()
-  const [data, setData] = useState<ActivityType[] | undefined>(undefined)
+  const [data, setData] = useState<(ActivityType & { organization: string })[] | undefined>(undefined)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,10 +54,11 @@ export default function MyActivitiesCard({
           <CardContent>
             <ActivityComponent
               id={activity.id as string}
-              user={activity.user_created}
+              organization={activity.organization ?? ''}
               img={activity.banner_src as string}
               title={activity.title}
-              description={activity.description}
+              startDate={activity.start_date}
+              timeLapse={activity.time_lapse}
               state="Upcoming"
               disableRedirect={disableRedirect}
             />
