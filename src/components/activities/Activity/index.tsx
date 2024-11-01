@@ -1,19 +1,38 @@
 import { Chip, Stack, Typography } from '@mui/material'
+import { format, parseISO } from 'date-fns'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
 type Props = {
   id: string
-  user: string
+  organization: string
+  startDate: string
+  endDate: string
   img: string
   title: string
-  description: string
   state: string
   disableRedirect?: boolean
 }
 
-export default function ActivityComponent({ id, user, img, title, description, state, disableRedirect }: Props) {
+export default function ActivityComponent({
+  id,
+  organization,
+  img,
+  title,
+  startDate,
+  endDate,
+  state,
+  disableRedirect,
+}: Props) {
+  const formatDate = () => {
+    const startDateIso = parseISO(startDate)
+    const startFormattedDate = format(startDateIso, 'MMMM d, ha')
+
+    const endDateIso = parseISO(endDate)
+    const endDateFormatted = format(endDateIso, 'MMMM d, ha')
+    return `${startFormattedDate} - ${endDateFormatted}`
+  }
   return (
     <Link
       href={`${disableRedirect ? '' : `/activities/update/${id}`}`}
@@ -41,7 +60,7 @@ export default function ActivityComponent({ id, user, img, title, description, s
             <Chip label={state} color="upcomingChip" />
           </Stack>
           <Typography variant="body1" color="text.secondary">
-            {user} • {description}
+            {organization} • {formatDate()}
           </Typography>
         </Stack>
       </Stack>

@@ -7,8 +7,8 @@ class ActivitiesService {
     baseURL: '/api',
   })
 
-  public async get(user?: User, id?: string): Promise<ActivityType[] | undefined> {
-    const response = await this.httpInstance.get<ActivityType[]>(
+  public async get(user?: User, id?: string): Promise<(ActivityType & { organization: string })[] | undefined> {
+    const response = await this.httpInstance.get<(ActivityType & { organization: string })[]>(
       `/activities${user || id ? '?' : ''}${user ? `hostId=${user.id}` : ''}${user ? '&' : ''}${id ? `id=${id}` : ''}`,
     )
 

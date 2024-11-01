@@ -9,6 +9,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 const bannerBasePath = process.env.NEXT_PUBLIC_ACTIVITIES_BANNER_PATH || ''
 
 const ACTIVITIES = 'activities'
+const ORGANIZATIONS = 'organizations'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
@@ -57,8 +58,16 @@ export async function GET(req: NextRequest) {
     if (error) return NextResponse.json(error)
     const activitiesWithBanners = await Promise.all(
       data.map(async (activity) => {
+        console.log(activity)
+        const { data: organizationData, error: organizationError } = await supabaseClient
+          .from(ORGANIZATIONS)
+          .select('*')
+          .eq('created_by', activity.activity_host_id)
+        if (organizationError) return NextResponse.json(organizationError)
+        const organizationName =
+          organizationData && organizationData[0] && organizationData[0].name ? organizationData[0].name : ''
         const banner_src = await downloadFile(supabaseBucket, activity.banner_path)
-        return { ...activity, banner_src }
+        return { ...activity, organization: organizationName, banner_src }
       }),
     )
 
