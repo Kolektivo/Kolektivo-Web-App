@@ -25,8 +25,15 @@ export async function GET(req: NextRequest) {
     if (error) return NextResponse.json(error)
     const activitiesWithBanners = await Promise.all(
       data.map(async (activity) => {
+        const { data: organizationData, error: organizationError } = await supabaseClient
+          .from(ORGANIZATIONS)
+          .select('*')
+          .eq('created_by', activity.activity_host_id)
+        if (organizationError) return NextResponse.json(organizationError)
+        const organizationName =
+          organizationData && organizationData[0] && organizationData[0].name ? organizationData[0].name : ''
         const banner_src = await downloadFile(supabaseBucket, activity.banner_path)
-        return { ...activity, banner_src }
+        return { ...activity, organization: organizationName, banner_src }
       }),
     )
 
@@ -36,8 +43,15 @@ export async function GET(req: NextRequest) {
     if (error) return NextResponse.json(error)
     const activitiesWithBanners = await Promise.all(
       data.map(async (activity) => {
+        const { data: organizationData, error: organizationError } = await supabaseClient
+          .from(ORGANIZATIONS)
+          .select('*')
+          .eq('created_by', activity.activity_host_id)
+        if (organizationError) return NextResponse.json(organizationError)
+        const organizationName =
+          organizationData && organizationData[0] && organizationData[0].name ? organizationData[0].name : ''
         const banner_src = await downloadFile(supabaseBucket, activity.banner_path)
-        return { ...activity, banner_src }
+        return { ...activity, organization: organizationName, banner_src }
       }),
     )
 
@@ -47,8 +61,15 @@ export async function GET(req: NextRequest) {
     if (error) return NextResponse.json(error)
     const activitiesWithBanners = await Promise.all(
       data.map(async (activity) => {
+        const { data: organizationData, error: organizationError } = await supabaseClient
+          .from(ORGANIZATIONS)
+          .select('*')
+          .eq('created_by', activity.activity_host_id)
+        if (organizationError) return NextResponse.json(organizationError)
+        const organizationName =
+          organizationData && organizationData[0] && organizationData[0].name ? organizationData[0].name : ''
         const banner_src = await downloadFile(supabaseBucket, activity.banner_path)
-        return { ...activity, banner_src }
+        return { ...activity, organization: organizationName, banner_src }
       }),
     )
 
@@ -58,7 +79,6 @@ export async function GET(req: NextRequest) {
     if (error) return NextResponse.json(error)
     const activitiesWithBanners = await Promise.all(
       data.map(async (activity) => {
-        console.log(activity)
         const { data: organizationData, error: organizationError } = await supabaseClient
           .from(ORGANIZATIONS)
           .select('*')

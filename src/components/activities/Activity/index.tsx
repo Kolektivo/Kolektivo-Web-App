@@ -27,11 +27,8 @@ export default function ActivityComponent({
 }: Props) {
   const formatDate = () => {
     const startDateIso = parseISO(startDate)
-    const startFormattedDate = format(startDateIso, 'MMMM d, ha')
-
-    const endDateIso = parseISO(endDate)
-    const endDateFormatted = format(endDateIso, 'MMMM d, ha')
-    return `${startFormattedDate} - ${endDateFormatted}`
+    const startFormattedDate = format(startDateIso, 'MMMM d')
+    return `${startFormattedDate}, ${endDate}`
   }
   return (
     <Link

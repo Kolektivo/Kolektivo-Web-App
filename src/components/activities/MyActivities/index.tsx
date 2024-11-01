@@ -58,7 +58,7 @@ export default function MyActivitiesCard({
               img={activity.banner_src as string}
               title={activity.title}
               startDate={activity.start_date}
-              endDate={activity.end_date}
+              endDate={activity.user_created}
               state="Upcoming"
               disableRedirect={disableRedirect}
             />
