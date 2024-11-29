@@ -62,6 +62,18 @@ const lightPalette = {
     light: '#C4C4C4',
     contrastText: '#454545',
   },
+  actionRequiredChip: {
+    dark: '#FBCC8E',
+    main: '#FBCC8E',
+    light: '#FBCC8E',
+    contrastText: '#683C04',
+  },
+  completedChip: {
+    dark: '#92DEBA',
+    main: '#92DEBA',
+    light: '#92DEBA',
+    contrastText: '#0A653A',
+  },
   warningButton: {
     dark: '#FEECEB',
     main: '#FEECEB',

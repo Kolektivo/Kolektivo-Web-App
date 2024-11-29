@@ -35,3 +35,10 @@ export type ActivityType = {
   banner_src?: string | null
   banner_path?: string | null
 }
+
+export type AttendanceRequest = {
+  checkIn: string
+  checkOut: string
+  Poc: string
+  PocImage: string
+}

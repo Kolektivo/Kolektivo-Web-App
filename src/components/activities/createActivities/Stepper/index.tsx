@@ -26,9 +26,9 @@ import { type User } from '@supabase/supabase-js'
 
 const steps = ['', '', '', '']
 
-export default function CreateActivityStepper() {
+export default function StepperActivitiesCreate() {
   const { user } = useAuth()
-  const [activeStep, setActiveStep] = React.useState(0)
+  const [step, setStep] = React.useState(0)
   const [openSuccessDialog, setOpenSuccessDialog] = React.useState<boolean>(false)
 
   const [detailFormValues, setDetailFormValues] = React.useState<CreateActivityDetailFormValues | null>(null)
@@ -56,11 +56,11 @@ export default function CreateActivityStepper() {
   const router = useRouter()
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1)
+    setStep((prevActiveStep) => prevActiveStep - 1)
   }
 
   const goToNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1)
+    setStep((prevActiveStep) => prevActiveStep + 1)
   }
 
   const handleDetailFormSubmit = (data: CreateActivityDetailFormValues) => {
@@ -101,7 +101,7 @@ export default function CreateActivityStepper() {
 
   return (
     <Stack gap="24px" sx={{ width: '100%' }}>
-      <Stepper activeStep={activeStep}>
+      <Stepper activeStep={step}>
         {steps.map((label, index) => {
           const stepProps: { completed?: boolean } = {}
           const labelProps: {
@@ -120,13 +120,13 @@ export default function CreateActivityStepper() {
         open={openSuccessDialog}
         onClickButton={handleDialogSuccessClick}
       />
-      {activeStep == 0 && (
+      {step == 0 && (
         <Stack gap="24px">
           <HeaderCard title="Activity Details" />
           <CreateActivityDetailForm submitHandler={handleDetailFormSubmit} review={review} />
         </Stack>
       )}
-      {activeStep == 1 && (
+      {step == 1 && (
         <Stack gap="24px">
           <HeaderCard title="Activity Image" />
           <CreateActivityBannerForm
@@ -136,7 +136,7 @@ export default function CreateActivityStepper() {
           />
         </Stack>
       )}
-      {activeStep == 2 && (
+      {step == 2 && (
         <Stack gap="24px">
           <HeaderCard title="Requirements & Rewards" />
           <CreateActivityRequirementsRewards
@@ -146,7 +146,7 @@ export default function CreateActivityStepper() {
           />
         </Stack>
       )}
-      {activeStep == 3 && (
+      {step == 3 && (
         <Stack gap="24px">
           <HeaderCard title="Review" />
           <ActivityReview review={review}>

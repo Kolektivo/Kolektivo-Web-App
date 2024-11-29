@@ -14,6 +14,7 @@ export default function UpdateActivities() {
             <Button>Go back</Button>
           </Link>
         }
+        disablePayoutRedirect
         onlyShowOwnerActivities
       />
     </Stack>

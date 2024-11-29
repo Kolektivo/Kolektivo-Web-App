@@ -30,6 +30,8 @@ declare module '@mui/material/Icon' {
 declare module '@mui/material/Chip' {
   interface ChipPropsColorOverrides {
     upcomingChip: true
+    actionRequiredChip: true
+    completedChip: true
   }
 }
 
