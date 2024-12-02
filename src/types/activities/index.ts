@@ -37,6 +37,7 @@ export type ActivityType = {
 }
 
 export type AttendanceRequest = {
+  user: string
   checkIn: string
   checkOut: string
   Poc: string

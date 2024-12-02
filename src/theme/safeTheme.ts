@@ -24,6 +24,7 @@ declare module '@mui/material/styles' {
 declare module '@mui/material/Icon' {
   interface IconPropsColorOverrides {
     strongOrange: true
+    black: true
   }
 }
 

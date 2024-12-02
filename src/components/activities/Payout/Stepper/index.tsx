@@ -6,7 +6,7 @@ import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
 import { Stack } from '@mui/material'
 import HeaderCard from '@/components/common/cards/HeaderCard'
-import AttendanceRequestsSelectionCard from '../AttendanceRequests/SelectionCard'
+import AttendanceRequestsSelectionCard from '@/components/activities/Payout/AttendanceRequests/SelectionCard'
 
 const steps = Array.from({ length: 4 }, () => '')
 

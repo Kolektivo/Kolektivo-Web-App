@@ -50,6 +50,12 @@ const lightPalette = {
     light: '#E96E3A',
     contrastText: '#E96E3A',
   },
+  black: {
+    dark: '#000000',
+    main: '#000000',
+    light: '#000000',
+    contrastText: '#000000',
+  },
   bannerLightGray: {
     dark: '#F2F2F2',
     main: '#F2F2F2',
