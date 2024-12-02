@@ -12,7 +12,7 @@ export default function AttendanceRequestsSelectionCard() {
       checkIn: '10:01AM',
       checkOut: '12:01AM',
       Poc: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using. Helped Yolanda with the trash bag transportation to the nearest desp',
-      PocImage: 'imagen',
+      PocImage: '',
     },
     {
       user: 'Jhonny Bobs',
@@ -26,7 +26,7 @@ export default function AttendanceRequestsSelectionCard() {
       checkIn: '10:01AM',
       checkOut: '12:01AM',
       Poc: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using. Helped Yolanda with the trash bag transportation to the nearest desp',
-      PocImage: 'imagen',
+      PocImage: '',
     },
   ]
   if (!attendanceRequests)
