@@ -42,4 +42,5 @@ export type AttendanceRequest = {
   checkOut: string
   Poc: string
   PocImage: string
+  forManagePayout: boolean
 }

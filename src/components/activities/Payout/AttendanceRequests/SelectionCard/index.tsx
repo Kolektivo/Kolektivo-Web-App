@@ -1,35 +1,20 @@
 'use client'
 
-import { Box, CardContent, Divider } from '@mui/material'
+import { Box, Button, CardContent, Divider } from '@mui/material'
 import ItemsCard from '@/components/common/cards/ItemsCard'
 import { type AttendanceRequest } from '@/types/activities'
 import AttendanceRequestCard from '@/components/activities/Payout/AttendanceRequests/Card'
+import Link from 'next/link'
+import { type ReactNode } from 'react'
 
-export default function AttendanceRequestsSelectionCard() {
-  const attendanceRequests: AttendanceRequest[] = [
-    {
-      user: 'Luuk Weber',
-      checkIn: '10:01AM',
-      checkOut: '12:01AM',
-      Poc: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using. Helped Yolanda with the trash bag transportation to the nearest desp',
-      PocImage: '',
-    },
-    {
-      user: 'Jhonny Bobs',
-      checkIn: '10:01AM',
-      checkOut: '12:01AM',
-      Poc: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using. Helped Yolanda with the trash bag transportation to the nearest desp',
-      PocImage: 'imagen',
-    },
-    {
-      user: 'Yolanda Wiel',
-      checkIn: '10:01AM',
-      checkOut: '12:01AM',
-      Poc: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using. Helped Yolanda with the trash bag transportation to the nearest desp',
-      PocImage: '',
-    },
-  ]
-  if (!attendanceRequests)
+type Props = {
+  requests: AttendanceRequest[]
+  setRequests: React.Dispatch<React.SetStateAction<AttendanceRequest[]>>
+  children: ReactNode
+}
+
+export default function AttendanceRequestsSelectionCard({ requests, setRequests, children }: Props) {
+  if (!requests)
     return (
       <ItemsCard title="My Activities">
         {Array.from({ length: 3 }).map((_, index) => (
@@ -41,12 +26,22 @@ export default function AttendanceRequestsSelectionCard() {
       </ItemsCard>
     )
   return (
-    <ItemsCard title="Attendee">
-      {attendanceRequests?.map((attendanceRequest, index) => (
+    <ItemsCard
+      title="Attendee"
+      actions={
+        <>
+          <Link href="/activities">
+            <Button>Go Back</Button>
+          </Link>
+          {children}
+        </>
+      }
+    >
+      {requests?.map((_, index) => (
         <Box key={index}>
           <Divider />
           <CardContent>
-            <AttendanceRequestCard request={attendanceRequest} />
+            <AttendanceRequestCard index={index} requests={requests} setRequests={setRequests} />
           </CardContent>
         </Box>
       ))}
