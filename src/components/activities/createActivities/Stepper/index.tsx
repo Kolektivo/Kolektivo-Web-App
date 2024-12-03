@@ -59,18 +59,18 @@ export default function StepperActivitiesCreate() {
     setStep((prevActiveStep) => prevActiveStep - 1)
   }
 
-  const goToNext = () => {
+  const handleNext = () => {
     setStep((prevActiveStep) => prevActiveStep + 1)
   }
 
   const handleDetailFormSubmit = (data: CreateActivityDetailFormValues) => {
     setDetailFormValues(data)
-    goToNext()
+    handleNext()
   }
 
   const handleBannerSubmit = (img: string) => {
     setBanner(img)
-    goToNext()
+    handleNext()
   }
 
   const handleRequirementsRewardsFormSubmit = (data: CreateActivityRequirementsRewardsFormValues) => {
@@ -79,7 +79,7 @@ export default function StepperActivitiesCreate() {
       .filter((requirement) => requirement != '0')
       .join(',')
     setRequirementsRewardsFormValues(data)
-    goToNext()
+    handleNext()
   }
 
   const handleComplete = () => {

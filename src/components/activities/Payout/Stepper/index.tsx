@@ -48,9 +48,13 @@ export default function StepperActivitiesPayout() {
     setStep((prevActiveStep) => prevActiveStep - 1)
   }
 
-  const goToNext = () => {
+  const handleNext = () => {
     setStep((prevActiveStep) => prevActiveStep + 1)
   }
+
+  React.useEffect(() => {
+    console.log(step)
+  }, [step])
 
   return (
     <Stack gap="24px" sx={{ width: '100%' }}>
@@ -78,6 +82,7 @@ export default function StepperActivitiesPayout() {
               color="primary"
               variant="contained"
               className="stepperButton"
+              onClick={handleNext}
               disabled={!(attendenceRequestsForManagePayout.length > 0)}
             >
               Aprove
