@@ -40,6 +40,7 @@ export type AttendanceRequest = {
   user: string
   checkIn: string
   checkOut: string
+  address: string
   Poc: string
   PocImage: string
   forManagePayout: boolean
