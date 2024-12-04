@@ -44,4 +44,5 @@ export type AttendanceRequest = {
   Poc: string
   PocImage: string
   forManagePayout: boolean
+  payoutTransactionLink: string
 }

@@ -1,15 +1,13 @@
 import { type AttendanceRequest } from '@/types/activities'
 import { Icon, Stack, Typography } from '@mui/material'
-import React, { useMemo } from 'react'
+import React, { type ReactNode } from 'react'
 
 type Props = {
-  index: number
-  requests: AttendanceRequest[]
-  setRequests: React.Dispatch<React.SetStateAction<AttendanceRequest[]>>
+  request: AttendanceRequest
+  children: ReactNode
 }
 
-export default function ManagePayoutRequestCard({ index, requests, setRequests }: Props) {
-  const request = useMemo(() => requests[index], [requests, index])
+export default function ManagePayoutRequestCard({ request, children }: Props) {
   const handleCopyAddress = () => {
     if (navigator.clipboard && request.address) {
       navigator.clipboard
@@ -37,6 +35,7 @@ export default function ManagePayoutRequestCard({ index, requests, setRequests }
           content_copy
         </Icon>
       </Stack>
+      {children}
     </Stack>
   )
 }

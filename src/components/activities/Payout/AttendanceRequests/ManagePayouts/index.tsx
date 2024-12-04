@@ -1,19 +1,29 @@
 'use client'
 
-import { Box, Button, CardContent, Divider } from '@mui/material'
+import { Box, Button, CardContent, Divider, TextField } from '@mui/material'
 import ItemsCard from '@/components/common/cards/ItemsCard'
 import { type AttendanceRequest } from '@/types/activities'
-import Link from 'next/link'
-import { type ReactNode } from 'react'
 import ManagePayoutRequestCard from '@/components/activities/Payout/AttendanceRequests/ManagePayouts/RequestCard'
+import { useForm } from 'react-hook-form'
 
 type Props = {
   requests: AttendanceRequest[]
   setRequests: React.Dispatch<React.SetStateAction<AttendanceRequest[]>>
-  children: ReactNode
+  handleBack: () => void
+  handleNext: () => void
 }
 
-export default function ManagePayoutsCard({ requests, setRequests, children }: Props) {
+export default function ManagePayoutsCard({ requests, setRequests, handleBack, handleNext }: Props) {
+  const { register, handleSubmit } = useForm<string[]>()
+  const submitHandler = (event: { [key: number]: string }) => {
+    const updatedRequests = requests
+    Object.keys(event).forEach((key) => {
+      const numberKey = Number(key)
+      updatedRequests[numberKey].payoutTransactionLink = event[numberKey]
+    })
+    setRequests(updatedRequests)
+    handleNext
+  }
   if (!requests)
     return (
       <ItemsCard title="My Activities">
@@ -26,15 +36,39 @@ export default function ManagePayoutsCard({ requests, setRequests, children }: P
       </ItemsCard>
     )
   return (
-    <ItemsCard title="Attendee" actions={children}>
-      {requests?.map((_, index) => (
-        <Box key={index}>
-          <Divider />
-          <CardContent>
-            <ManagePayoutRequestCard requests={requests} setRequests={setRequests} index={index} />
-          </CardContent>
-        </Box>
-      ))}
-    </ItemsCard>
+    <form onSubmit={handleSubmit(submitHandler)}>
+      <ItemsCard
+        title="Attendee"
+        actions={
+          <>
+            <Button onClick={handleBack}>Go Back</Button>
+            <Button type="submit" color="primary" variant="contained" className="stepperButton">
+              Confirm
+            </Button>
+          </>
+        }
+      >
+        {requests
+          .filter((request) => request.forManagePayout)
+          ?.map((request, index) => (
+            <Box key={index}>
+              <Divider />
+              <CardContent>
+                <ManagePayoutRequestCard request={request}>
+                  <TextField
+                    id="activityName"
+                    variant="outlined"
+                    placeholder="Transaction link"
+                    slotProps={{
+                      htmlInput: { ...register(`${index}`) },
+                    }}
+                    sx={{ width: '60%' }}
+                  />
+                </ManagePayoutRequestCard>
+              </CardContent>
+            </Box>
+          ))}
+      </ItemsCard>
+    </form>
   )
 }

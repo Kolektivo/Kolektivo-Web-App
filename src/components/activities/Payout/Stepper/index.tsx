@@ -13,7 +13,7 @@ import ManagePayoutsCard from '@/components/activities/Payout/AttendanceRequests
 const steps = Array.from({ length: 4 }, () => '')
 
 export default function StepperActivitiesPayout() {
-  const [step, setStep] = React.useState(0)
+  const [step, setStep] = React.useState<number>(0)
   const [attendanceRequests, setAttendanceRequests] = React.useState<AttendanceRequest[]>([
     {
       user: 'Luuk Weber',
@@ -23,6 +23,7 @@ export default function StepperActivitiesPayout() {
       Poc: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using. Helped Yolanda with the trash bag transportation to the nearest desp',
       PocImage: '',
       forManagePayout: false,
+      payoutTransactionLink: '',
     },
     {
       user: 'Jhonny Bobs',
@@ -32,6 +33,7 @@ export default function StepperActivitiesPayout() {
       Poc: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using. Helped Yolanda with the trash bag transportation to the nearest desp',
       PocImage: 'imagen',
       forManagePayout: false,
+      payoutTransactionLink: '',
     },
     {
       user: 'Yolanda Wiel',
@@ -41,9 +43,11 @@ export default function StepperActivitiesPayout() {
       Poc: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using. Helped Yolanda with the trash bag transportation to the nearest desp',
       PocImage: '',
       forManagePayout: false,
+      payoutTransactionLink: '',
     },
   ])
-  const attendenceRequestsForManagePayout = React.useMemo<AttendanceRequest[]>(
+
+  const attendanceRequestsForManagePayouts = React.useMemo(
     () => attendanceRequests.filter((request) => request.forManagePayout),
     [attendanceRequests],
   )
@@ -55,10 +59,6 @@ export default function StepperActivitiesPayout() {
   const handleNext = () => {
     setStep((prevActiveStep) => prevActiveStep + 1)
   }
-
-  React.useEffect(() => {
-    console.log(step)
-  }, [step])
 
   return (
     <Stack gap="24px" sx={{ width: '100%' }}>
@@ -87,7 +87,7 @@ export default function StepperActivitiesPayout() {
               variant="contained"
               className="stepperButton"
               onClick={handleNext}
-              disabled={!(attendenceRequestsForManagePayout.length > 0)}
+              disabled={!(attendanceRequestsForManagePayouts.length > 0)}
             >
               Aprove
             </Button>
@@ -109,20 +109,12 @@ export default function StepperActivitiesPayout() {
               </Stack>
             }
           />
-          <ManagePayoutsCard requests={attendenceRequestsForManagePayout} setRequests={setAttendanceRequests}>
-            <>
-              <Button onClick={handleBack}>Go Back</Button>
-              <Button
-                color="primary"
-                variant="contained"
-                className="stepperButton"
-                onClick={handleNext}
-                disabled={!(attendenceRequestsForManagePayout.length > 0)}
-              >
-                Aprove
-              </Button>
-            </>
-          </ManagePayoutsCard>
+          <ManagePayoutsCard
+            requests={attendanceRequests}
+            setRequests={setAttendanceRequests}
+            handleBack={handleBack}
+            handleNext={handleNext}
+          />
         </Stack>
       )}
     </Stack>
