@@ -16,13 +16,13 @@ type Props = {
 export default function ManagePayoutsCard({ requests, setRequests, handleBack, handleNext }: Props) {
   const { register, handleSubmit } = useForm<string[]>()
   const submitHandler = (event: { [key: number]: string }) => {
-    const updatedRequests = requests
+    const updatedRequests = [...requests]
     Object.keys(event).forEach((key) => {
       const numberKey = Number(key)
       updatedRequests[numberKey].payoutTransactionLink = event[numberKey]
     })
     setRequests(updatedRequests)
-    handleNext
+    handleNext()
   }
   if (!requests)
     return (

@@ -59,6 +59,9 @@ export default function StepperActivitiesPayout() {
   const handleNext = () => {
     setStep((prevActiveStep) => prevActiveStep + 1)
   }
+  React.useEffect(() => {
+    console.log(attendanceRequests)
+  }, [attendanceRequests])
 
   return (
     <Stack gap="24px" sx={{ width: '100%' }}>
@@ -114,6 +117,14 @@ export default function StepperActivitiesPayout() {
             setRequests={setAttendanceRequests}
             handleBack={handleBack}
             handleNext={handleNext}
+          />
+        </Stack>
+      )}
+      {step == 2 && (
+        <Stack gap="24px">
+          <HeaderCard
+            title="Denied Users"
+            subtitle="Select a reason for denying users' rewards. You can also skip and address these at a later time."
           />
         </Stack>
       )}
