@@ -4,11 +4,13 @@ import * as React from 'react'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
-import { Button, Stack, Typography } from '@mui/material'
+import { Button, Icon, Stack, Typography } from '@mui/material'
 import HeaderCard from '@/components/common/cards/HeaderCard'
 import AttendanceRequestsSelectionCard from '@/components/activities/Payout/AttendanceRequests/SelectionCard'
 import { type AttendanceRequest } from '@/types/activities'
 import ManagePayoutsCard from '@/components/activities/Payout/AttendanceRequests/ManagePayouts'
+import DeniedRequestsCard from '@/components/activities/Payout/AttendanceRequests/ManageDeniedRequests/Card'
+import HeaderSubtitle from '../AttendanceRequests/UploadReport/HeaderSubtitle'
 
 const steps = Array.from({ length: 4 }, () => '')
 
@@ -24,6 +26,7 @@ export default function StepperActivitiesPayout() {
       PocImage: '',
       forManagePayout: false,
       payoutTransactionLink: '',
+      denialReason: '',
     },
     {
       user: 'Jhonny Bobs',
@@ -34,6 +37,7 @@ export default function StepperActivitiesPayout() {
       PocImage: 'imagen',
       forManagePayout: false,
       payoutTransactionLink: '',
+      denialReason: '',
     },
     {
       user: 'Yolanda Wiel',
@@ -44,6 +48,7 @@ export default function StepperActivitiesPayout() {
       PocImage: '',
       forManagePayout: false,
       payoutTransactionLink: '',
+      denialReason: '',
     },
   ])
 
@@ -126,6 +131,16 @@ export default function StepperActivitiesPayout() {
             title="Denied Users"
             subtitle="Select a reason for denying users' rewards. You can also skip and address these at a later time."
           />
+          <DeniedRequestsCard
+            requests={attendanceRequests}
+            setRequests={setAttendanceRequests}
+            handleNext={handleNext}
+          />
+        </Stack>
+      )}
+      {step == 3 && (
+        <Stack gap="24px">
+          <HeaderCard title="Upload Report" subtitleComponent={<HeaderSubtitle />} />
         </Stack>
       )}
     </Stack>

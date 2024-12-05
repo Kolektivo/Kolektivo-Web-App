@@ -50,6 +50,18 @@ const lightPalette = {
     light: '#E96E3A',
     contrastText: '#E96E3A',
   },
+  strongSuccess: {
+    dark: '#12B76A',
+    main: '#12B76A',
+    light: '#12B76A',
+    contrastText: '#12B76A',
+  },
+  lightGray: {
+    dark: '#7E7E7E',
+    main: '#7E7E7E',
+    light: '#7E7E7E',
+    contrastText: '#E96E3A',
+  },
   black: {
     dark: '#000000',
     main: '#000000',

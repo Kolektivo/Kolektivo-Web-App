@@ -48,26 +48,27 @@ export default function ManagePayoutsCard({ requests, setRequests, handleBack, h
           </>
         }
       >
-        {requests
-          .filter((request) => request.forManagePayout)
-          ?.map((request, index) => (
-            <Box key={index}>
-              <Divider />
-              <CardContent>
-                <ManagePayoutRequestCard request={request}>
-                  <TextField
-                    id="activityName"
-                    variant="outlined"
-                    placeholder="Transaction link"
-                    slotProps={{
-                      htmlInput: { ...register(`${index}`) },
-                    }}
-                    sx={{ width: '60%' }}
-                  />
-                </ManagePayoutRequestCard>
-              </CardContent>
-            </Box>
-          ))}
+        {requests?.map((request, index) => {
+          if (request.forManagePayout)
+            return (
+              <Box key={index}>
+                <Divider />
+                <CardContent>
+                  <ManagePayoutRequestCard request={request}>
+                    <TextField
+                      id="activityName"
+                      variant="outlined"
+                      placeholder="Transaction link"
+                      slotProps={{
+                        htmlInput: { ...register(`${index}`) },
+                      }}
+                      sx={{ width: '60%' }}
+                    />
+                  </ManagePayoutRequestCard>
+                </CardContent>
+              </Box>
+            )
+        })}
       </ItemsCard>
     </form>
   )
