@@ -28,7 +28,7 @@ export default function AttendanceRequestCard({ index, requests, setRequests, se
     const updatedRequests = [...requests]
     updatedRequests[index] = {
       ...requests[index],
-      forManagePayout: !requests[index].forManagePayout,
+      state: !requests[index].state,
     }
     setRequests(updatedRequests)
   }
@@ -60,8 +60,8 @@ export default function AttendanceRequestCard({ index, requests, setRequests, se
               />
             ) : (
               <Chip
-                label={requests[index].forManagePayout ? 'Completed' : 'Denied'}
-                color={requests[index].forManagePayout ? 'success' : 'deniedChip'}
+                label={requests[index].state ? 'Completed' : 'Denied'}
+                color={requests[index].state ? 'success' : 'deniedChip'}
               />
             )}
           </Stack>

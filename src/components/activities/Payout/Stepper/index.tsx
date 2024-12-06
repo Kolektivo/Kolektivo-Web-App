@@ -12,49 +12,18 @@ import ManagePayoutsCard from '@/components/activities/Payout/AttendanceRequests
 import DeniedRequestsCard from '@/components/activities/Payout/AttendanceRequests/ManageDeniedRequests/Card'
 import HeaderSubtitle from '@/components/activities/Payout/AttendanceRequests/UploadReport/HeaderSubtitle'
 import AttendanceRequestsStateCard from '@/components/activities/Payout/AttendanceRequests/StateCard'
+import activitiesService from '@/features/activities/services/activities.service'
+import { useParams } from 'next/navigation'
 
 const steps = Array.from({ length: 4 }, () => '')
 
 export default function StepperActivitiesPayout() {
   const [step, setStep] = React.useState<number>(0)
-  const [attendanceRequests, setAttendanceRequests] = React.useState<AttendanceRequest[]>([
-    {
-      user: 'Luuk Weber',
-      checkIn: '10:01AM',
-      checkOut: '12:01AM',
-      address: '0x23523535d3Dd121865956F7845g3523f33f17394',
-      Poc: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using. Helped Yolanda with the trash bag transportation to the nearest desp',
-      PocImage: '',
-      forManagePayout: false,
-      payoutTransactionLink: '',
-      denialReason: '0',
-    },
-    {
-      user: 'Jhonny Bobs',
-      checkIn: '10:01AM',
-      checkOut: '12:01AM',
-      address: '0x23523535d3Dd121865956F7845g3523f33f17394',
-      Poc: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using. Helped Yolanda with the trash bag transportation to the nearest desp',
-      PocImage: 'imagen',
-      forManagePayout: false,
-      payoutTransactionLink: '',
-      denialReason: '0',
-    },
-    {
-      user: 'Yolanda Wiel',
-      checkIn: '10:01AM',
-      checkOut: '12:01AM',
-      address: '0x23523535d3Dd121865956F7845g3523f33f17394',
-      Poc: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using. Helped Yolanda with the trash bag transportation to the nearest desp',
-      PocImage: '',
-      forManagePayout: false,
-      payoutTransactionLink: '',
-      denialReason: '0',
-    },
-  ])
+  const { id } = useParams()
+  const [attendanceRequests, setAttendanceRequests] = React.useState<AttendanceRequest[]>([])
 
   const attendanceRequestsForManagePayouts = React.useMemo(
-    () => attendanceRequests.filter((request) => request.forManagePayout),
+    () => attendanceRequests.filter((request) => request.state),
     [attendanceRequests],
   )
 
@@ -67,7 +36,12 @@ export default function StepperActivitiesPayout() {
   }
   React.useEffect(() => {
     console.log(attendanceRequests)
-  }, [attendanceRequests])
+    const fetchData = async () => {
+      const data = await activitiesService.getAttendanceRequests(String(id))
+      setAttendanceRequests(data)
+    }
+    fetchData()
+  }, [attendanceRequests, id])
 
   return (
     <Stack gap="24px" sx={{ width: '100%' }}>

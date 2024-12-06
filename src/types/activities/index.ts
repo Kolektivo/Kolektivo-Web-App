@@ -36,6 +36,21 @@ export type ActivityType = {
   banner_path?: string | null
 }
 
+export type AttendanceRequestResponse = {
+  activity_id: string
+  check_in: string
+  check_out: string
+  created_at: string
+  denyReason: string
+  id: number
+  notes: string
+  picturePath: string
+  state: 'denied' | 'forManagePayout' | 'completed'
+  transactionLink: string
+  user_name: string
+  wallet_address: string
+}
+
 export type AttendanceRequest = {
   user: string
   checkIn: string
@@ -43,7 +58,7 @@ export type AttendanceRequest = {
   address: string
   Poc: string
   PocImage: string
-  forManagePayout: boolean
+  state: 'denied' | 'forManagePayout' | 'completed'
   payoutTransactionLink: string
   denialReason: string
 }

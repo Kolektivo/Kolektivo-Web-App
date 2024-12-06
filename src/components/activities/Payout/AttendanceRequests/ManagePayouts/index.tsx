@@ -49,7 +49,7 @@ export default function ManagePayoutsCard({ requests, setRequests, handleBack, h
         }
       >
         {requests?.map((request, index) => {
-          if (request.forManagePayout)
+          if (request.state)
             return (
               <Box key={index}>
                 <Divider />

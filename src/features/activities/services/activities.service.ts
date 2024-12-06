@@ -1,4 +1,9 @@
-import { type ActivityReviewType, type ActivityType } from '@/types/activities'
+import {
+  type AttendanceRequest,
+  type AttendanceRequestResponse,
+  type ActivityReviewType,
+  type ActivityType,
+} from '@/types/activities'
 import { type User } from '@supabase/supabase-js'
 import axios from 'axios'
 
@@ -13,6 +18,24 @@ class ActivitiesService {
     )
 
     return response.data
+  }
+
+  public async getAttendanceRequests(activityId?: string): Promise<AttendanceRequest[]> {
+    const response = await this.httpInstance.get<AttendanceRequestResponse[]>(
+      `/activities/attendanceRequests?activity_id=${activityId}`,
+    )
+
+    return response.data.map<AttendanceRequest>((requestResponse) => ({
+      user: requestResponse.user_name,
+      checkIn: requestResponse.check_in,
+      checkOut: requestResponse.check_out,
+      address: requestResponse.wallet_address,
+      Poc: requestResponse.notes,
+      PocImage: requestResponse.picturePath,
+      state: requestResponse.state,
+      payoutTransactionLink: requestResponse.transactionLink,
+      denialReason: requestResponse.denyReason,
+    }))
   }
 
   public async create(activityReview: ActivityReviewType, user: User): Promise<ActivityType | undefined> {
