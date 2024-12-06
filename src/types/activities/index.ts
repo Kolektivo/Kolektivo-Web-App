@@ -37,12 +37,12 @@ export type ActivityType = {
 }
 
 export type AttendanceRequestResponse = {
+  id: string
   activity_id: string
   check_in: string
   check_out: string
   created_at: string
   denyReason: string
-  id: number
   notes: string
   picturePath: string
   state: 'denied' | 'forManagePayout' | 'completed'
@@ -52,9 +52,12 @@ export type AttendanceRequestResponse = {
 }
 
 export type AttendanceRequest = {
+  id: string
+  activityId: string
   user: string
   checkIn: string
   checkOut: string
+  createdAt: string
   address: string
   Poc: string
   PocImage: string

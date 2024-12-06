@@ -32,6 +32,7 @@ export default function StepperActivitiesPayout() {
   }
 
   const handleNext = () => {
+    if (step != 0) localStorage.setItem('activitiesPayoutStep', String(step + 1))
     setStep((prevActiveStep) => prevActiveStep + 1)
   }
   React.useEffect(() => {

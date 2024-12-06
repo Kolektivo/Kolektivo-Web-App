@@ -5,6 +5,7 @@ import ItemsCard from '@/components/common/cards/ItemsCard'
 import { type AttendanceRequest } from '@/types/activities'
 import ManagePayoutRequestCard from '@/components/activities/Payout/AttendanceRequests/ManagePayouts/RequestCard'
 import { useForm } from 'react-hook-form'
+import activitiesService from '@/features/activities/services/activities.service'
 
 type Props = {
   requests: AttendanceRequest[]
@@ -22,6 +23,7 @@ export default function ManagePayoutsCard({ requests, setRequests, handleBack, h
       updatedRequests[numberKey].payoutTransactionLink = event[numberKey]
     })
     setRequests(updatedRequests)
+    activitiesService.setAttendanceRequest(updatedRequests)
     handleNext()
   }
   if (!requests)
@@ -49,7 +51,7 @@ export default function ManagePayoutsCard({ requests, setRequests, handleBack, h
         }
       >
         {requests?.map((request, index) => {
-          if (request.state)
+          if (request.state == 'forManagePayout')
             return (
               <Box key={index}>
                 <Divider />

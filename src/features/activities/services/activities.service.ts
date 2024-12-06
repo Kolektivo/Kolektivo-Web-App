@@ -26,6 +26,9 @@ class ActivitiesService {
     )
 
     return response.data.map<AttendanceRequest>((requestResponse) => ({
+      id: requestResponse.id,
+      activityId: requestResponse.activity_id,
+      createdAt: requestResponse.created_at,
       user: requestResponse.user_name,
       checkIn: requestResponse.check_in,
       checkOut: requestResponse.check_out,
@@ -36,6 +39,16 @@ class ActivitiesService {
       payoutTransactionLink: requestResponse.transactionLink,
       denialReason: requestResponse.denyReason,
     }))
+  }
+
+  public async setAttendanceRequest(
+    attendanceRequests: AttendanceRequest[],
+  ): Promise<AttendanceRequestResponse[] | undefined> {
+    const response = await this.httpInstance.put<AttendanceRequestResponse[]>(
+      `/activities/attendanceRequests`,
+      attendanceRequests,
+    )
+    return response.data
   }
 
   public async create(activityReview: ActivityReviewType, user: User): Promise<ActivityType | undefined> {
