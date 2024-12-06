@@ -51,7 +51,7 @@ export default function DeniedRequestsCard({ requests, setRequests, handleNext }
                   <DeniedRequestCard request={request}>
                     <TextField
                       select
-                      value={request.denialReason}
+                      value={request.denialReason ?? '0'}
                       onChange={(event) => handleRequirementsChange(event, index)}
                       sx={{ width: '60%' }}
                       slotProps={{

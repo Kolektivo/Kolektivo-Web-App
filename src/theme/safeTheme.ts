@@ -35,6 +35,7 @@ declare module '@mui/material/Chip' {
     upcomingChip: true
     actionRequiredChip: true
     completedChip: true
+    deniedChip: true
   }
 }
 

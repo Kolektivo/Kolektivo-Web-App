@@ -1,5 +1,15 @@
 import { type AttendanceRequest } from '@/types/activities'
-import { Accordion, AccordionDetails, AccordionSummary, Box, Checkbox, Icon, Stack, Typography } from '@mui/material'
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Checkbox,
+  Chip,
+  Icon,
+  Stack,
+  Typography,
+} from '@mui/material'
 import Image from 'next/image'
 import DownIcon from '@/public/images/icons/down.svg?url'
 import React, { useMemo } from 'react'
@@ -8,9 +18,10 @@ type Props = {
   index: number
   requests: AttendanceRequest[]
   setRequests: React.Dispatch<React.SetStateAction<AttendanceRequest[]>>
+  selectable?: boolean
 }
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
-export default function AttendanceRequestCard({ index, requests, setRequests }: Props) {
+export default function AttendanceRequestCard({ index, requests, setRequests, selectable }: Props) {
   const request = useMemo<AttendanceRequest>(() => requests[index], [index, requests])
   const handleSelect = (event: React.MouseEvent) => {
     event.stopPropagation()
@@ -40,12 +51,19 @@ export default function AttendanceRequestCard({ index, requests, setRequests }: 
                 <Typography color="#353535">{request.checkOut}</Typography>
               </div>
             </Stack>
-            <Checkbox
-              onClick={handleSelect}
-              {...label}
-              icon={<Icon sx={{ fontSize: '32px' }}>radio_button_unchecked</Icon>}
-              checkedIcon={<Icon sx={{ fontSize: '32px' }}>radio_button_checked</Icon>}
-            />
+            {selectable ? (
+              <Checkbox
+                onClick={handleSelect}
+                {...label}
+                icon={<Icon sx={{ fontSize: '32px' }}>radio_button_unchecked</Icon>}
+                checkedIcon={<Icon sx={{ fontSize: '32px' }}>radio_button_checked</Icon>}
+              />
+            ) : (
+              <Chip
+                label={requests[index].forManagePayout ? 'Completed' : 'Denied'}
+                color={requests[index].forManagePayout ? 'success' : 'deniedChip'}
+              />
+            )}
           </Stack>
         </AccordionSummary>
         <AccordionDetails sx={{ marginLeft: '32px' }}>

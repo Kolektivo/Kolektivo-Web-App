@@ -4,13 +4,14 @@ import * as React from 'react'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
-import { Button, Icon, Stack, Typography } from '@mui/material'
+import { Button, Stack, Typography } from '@mui/material'
 import HeaderCard from '@/components/common/cards/HeaderCard'
 import AttendanceRequestsSelectionCard from '@/components/activities/Payout/AttendanceRequests/SelectionCard'
 import { type AttendanceRequest } from '@/types/activities'
 import ManagePayoutsCard from '@/components/activities/Payout/AttendanceRequests/ManagePayouts'
 import DeniedRequestsCard from '@/components/activities/Payout/AttendanceRequests/ManageDeniedRequests/Card'
-import HeaderSubtitle from '../AttendanceRequests/UploadReport/HeaderSubtitle'
+import HeaderSubtitle from '@/components/activities/Payout/AttendanceRequests/UploadReport/HeaderSubtitle'
+import AttendanceRequestsStateCard from '@/components/activities/Payout/AttendanceRequests/StateCard'
 
 const steps = Array.from({ length: 4 }, () => '')
 
@@ -26,7 +27,7 @@ export default function StepperActivitiesPayout() {
       PocImage: '',
       forManagePayout: false,
       payoutTransactionLink: '',
-      denialReason: '',
+      denialReason: '0',
     },
     {
       user: 'Jhonny Bobs',
@@ -37,7 +38,7 @@ export default function StepperActivitiesPayout() {
       PocImage: 'imagen',
       forManagePayout: false,
       payoutTransactionLink: '',
-      denialReason: '',
+      denialReason: '0',
     },
     {
       user: 'Yolanda Wiel',
@@ -48,7 +49,7 @@ export default function StepperActivitiesPayout() {
       PocImage: '',
       forManagePayout: false,
       payoutTransactionLink: '',
-      denialReason: '',
+      denialReason: '0',
     },
   ])
 
@@ -141,6 +142,7 @@ export default function StepperActivitiesPayout() {
       {step == 3 && (
         <Stack gap="24px">
           <HeaderCard title="Upload Report" subtitleComponent={<HeaderSubtitle />} />
+          <AttendanceRequestsStateCard requests={attendanceRequests} setRequests={setAttendanceRequests} />
         </Stack>
       )}
     </Stack>

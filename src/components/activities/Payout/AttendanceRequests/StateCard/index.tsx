@@ -1,19 +1,16 @@
 'use client'
 
-import { Box, Button, CardContent, Divider } from '@mui/material'
+import { Box, CardContent, Divider } from '@mui/material'
 import ItemsCard from '@/components/common/cards/ItemsCard'
 import { type AttendanceRequest } from '@/types/activities'
 import AttendanceRequestCard from '@/components/activities/Payout/AttendanceRequests/Card'
-import Link from 'next/link'
-import { type ReactNode } from 'react'
 
 type Props = {
   requests: AttendanceRequest[]
   setRequests: React.Dispatch<React.SetStateAction<AttendanceRequest[]>>
-  children: ReactNode
 }
 
-export default function AttendanceRequestsSelectionCard({ requests, setRequests, children }: Props) {
+export default function AttendanceRequestsStateCard({ requests, setRequests }: Props) {
   if (!requests)
     return (
       <ItemsCard title="My Activities">
@@ -26,22 +23,12 @@ export default function AttendanceRequestsSelectionCard({ requests, setRequests,
       </ItemsCard>
     )
   return (
-    <ItemsCard
-      title="Attendee"
-      actions={
-        <>
-          <Link href="/activities">
-            <Button>Go Back</Button>
-          </Link>
-          {children}
-        </>
-      }
-    >
+    <ItemsCard title="Attendees">
       {requests?.map((_, index) => (
         <Box key={index}>
           <Divider />
           <CardContent>
-            <AttendanceRequestCard index={index} requests={requests} setRequests={setRequests} selectable />
+            <AttendanceRequestCard index={index} requests={requests} setRequests={setRequests} />
           </CardContent>
         </Box>
       ))}

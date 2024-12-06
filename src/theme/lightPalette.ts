@@ -92,6 +92,12 @@ const lightPalette = {
     light: '#92DEBA',
     contrastText: '#0A653A',
   },
+  deniedChip: {
+    dark: '#F8A9A3',
+    main: '#F8A9A3',
+    light: '#F8A9A3',
+    contrastText: '#84251F',
+  },
   warningButton: {
     dark: '#FEECEB',
     main: '#FEECEB',

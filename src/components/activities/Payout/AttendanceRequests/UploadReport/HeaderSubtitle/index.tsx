@@ -1,3 +1,4 @@
+import DialogSuccess from '@/components/common/modals/DialogSuccess'
 import { Button, Icon, Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import React, { useRef, useState } from 'react'
@@ -5,6 +6,7 @@ import React, { useRef, useState } from 'react'
 export default function HeaderSubtitle() {
   const router = useRouter()
   const [report, setReport] = useState<File | null>()
+  const [openSuccessDialog, setOpenSuccessDialog] = useState<boolean>(false)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const handleSkip = () => {
     router.push('/activities')
@@ -22,6 +24,11 @@ export default function HeaderSubtitle() {
       setReport(file)
     }
   }
+
+  const handleComplete = () => {
+    setOpenSuccessDialog(true)
+  }
+
   return (
     <Stack direction="row" justifyContent="space-between">
       <Stack gap="4px" marginTop={4}>
@@ -56,10 +63,22 @@ export default function HeaderSubtitle() {
       </Stack>
       <Stack direction="row" alignItems="center" justifyContent="center" gap="16px">
         <Button onClick={handleSkip}>Skip for now</Button>
-        <Button type="submit" color="primary" variant="contained" className="stepperButton">
+        <Button
+          onClick={handleComplete}
+          color="primary"
+          variant="contained"
+          className="stepperButton"
+          disabled={!report}
+        >
           Complete
         </Button>
       </Stack>
+      <DialogSuccess
+        open={openSuccessDialog}
+        title="Activity Completed"
+        description="Your activity has been successfully completed"
+        onClickButton={() => router.push('/activities')}
+      />
     </Stack>
   )
 }
