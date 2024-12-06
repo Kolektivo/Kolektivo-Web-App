@@ -35,13 +35,16 @@ export default function StepperActivitiesPayout() {
     setStep((prevActiveStep) => prevActiveStep + 1)
   }
   React.useEffect(() => {
-    console.log(attendanceRequests)
     const fetchData = async () => {
       const data = await activitiesService.getAttendanceRequests(String(id))
       setAttendanceRequests(data)
     }
     fetchData()
-  }, [attendanceRequests, id])
+  }, [id])
+
+  React.useEffect(() => {
+    console.log(attendanceRequests)
+  }, [attendanceRequests])
 
   return (
     <Stack gap="24px" sx={{ width: '100%' }}>

@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import Image from 'next/image'
 import DownIcon from '@/public/images/icons/down.svg?url'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 
 type Props = {
   index: number
@@ -23,14 +23,18 @@ type Props = {
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 export default function AttendanceRequestCard({ index, requests, setRequests, selectable }: Props) {
   const request = useMemo<AttendanceRequest>(() => requests[index], [index, requests])
+  const [checkState, setCheckState] = useState<boolean>(
+    request.state == 'completed' || request.state == 'forManagePayout',
+  )
   const handleSelect = (event: React.MouseEvent) => {
     event.stopPropagation()
     const updatedRequests = [...requests]
     updatedRequests[index] = {
       ...requests[index],
-      state: !requests[index].state,
+      state: !checkState ? 'forManagePayout' : 'denied',
     }
     setRequests(updatedRequests)
+    setCheckState(!checkState)
   }
   return (
     <Stack>
