@@ -5,7 +5,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
 const supabaseBucket = process.env.NEXT_PUBLIC_SUPABASE_BUCKET || ''
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-// const bannerBasePath = process.env.NEXT_PUBLIC_ACTIVITIES_ATTENDANCE_PROOFS_PATH || ''
+const reportBasePath = process.env.NEXT_PUBLIC_ACTIVITIES_REPORTS_PATH || ''
 const ATTENDANCEREQUESTS = 'attendance_requests'
 
 export async function GET(req: NextRequest) {
@@ -26,10 +26,19 @@ export async function GET(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   const updatedAttendanceRequests = (await req.json()) as AttendanceRequest[]
   updatedAttendanceRequests.forEach((attendanceRequest) => {
+    const report = attendanceRequest.report
     const update = async () => {
       const { data, error } = await updateAttendanceRequest(attendanceRequest)
       if (error) return NextResponse.json(error)
-      if (data) return NextResponse.json(data)
+      if (data) {
+        const requestId = data[0].id
+        const mimeType = report?.split(';')[0].split(':')[1]
+        const extension = mimeType === 'image/png' ? 'png' : 'jpg'
+        const reportPath = `${reportBasePath}/${requestId}.${extension}`
+        data[0].report_path = reportPath
+        await uploadFile(supabaseBucket, reportPath, report as string)
+        updateAttendanceRequest(data[0])
+      }
     }
     update()
   })
@@ -61,6 +70,31 @@ async function updateAttendanceRequest(attendanceRequest: AttendanceRequest) {
     .eq('id', attendanceRequest.id)
     .select()
   return { data, error }
+}
+
+async function uploadFile(bucketName: string, filePath: string, base64File: string) {
+  const fileBlob = await base64ImageSourceToBlob(base64File)
+  const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
+  const { data: dataDelete, error: errorDelete } = await supabaseClient.storage.from(bucketName).remove([filePath])
+  if (errorDelete) {
+    console.error('Error uploading file:', errorDelete.message)
+  } else {
+    console.log('File deleted successfully', dataDelete.length)
+  }
+  const { data: dataUpload, error: errorUpload } = await supabaseClient.storage
+    .from(bucketName)
+    .upload(filePath, fileBlob)
+
+  if (errorUpload) {
+    console.error('Error uploading file:', errorUpload.message)
+  } else {
+    console.log('File uploaded successfully', dataUpload.id)
+  }
+}
+
+async function base64ImageSourceToBlob(base64imageSource: string): Promise<Blob> {
+  const response = await fetch(base64imageSource)
+  return await response.blob()
 }
 
 async function downloadFile(bucketName: string, filePath: string) {

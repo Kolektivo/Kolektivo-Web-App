@@ -46,6 +46,7 @@ export type AttendanceRequestResponse = {
   notes: string
   proof_image_path: string
   report_path: string
+  report: string
   proof_image: string
   state: 'denied' | 'forManagePayout' | 'completed'
   transaction_link: string
@@ -65,6 +66,7 @@ export type AttendanceRequest = {
   PocImage: string
   PocImagePath: string
   reportPath: string
+  report: string
   state: 'denied' | 'forManagePayout' | 'completed' | ''
   payoutTransactionLink: string
   denialReason: string

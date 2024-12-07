@@ -37,6 +37,7 @@ class ActivitiesService {
       PocImage: requestResponse.proof_image,
       PocImagePath: requestResponse.proof_image_path,
       reportPath: requestResponse.report_path,
+      report: requestResponse.report,
       state: requestResponse.state,
       payoutTransactionLink: requestResponse.transaction_link,
       denialReason: requestResponse.deny_reason,
