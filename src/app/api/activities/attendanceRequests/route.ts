@@ -24,29 +24,27 @@ export async function GET(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   const updatedAttendanceRequests = (await req.json()) as AttendanceRequestResponse[]
-  updatedAttendanceRequests.forEach((attendanceRequest) => {
+  const response = updatedAttendanceRequests.map((attendanceRequest) => {
     const update = async () => {
-      const { data, error } = await updateAttendanceRequest(attendanceRequest)
-      if (error) return NextResponse.json(error)
-      return NextResponse.json(data)
+      return await updateAttendanceRequest(attendanceRequest)
     }
-    update()
+    return update()
   })
-  return NextResponse.json({ Ok: true })
+  return NextResponse.json(response)
 }
 
 async function updateAttendanceRequest(attendanceRequest: AttendanceRequestResponse) {
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
-  const { proof_image: banner_src, ...attendanceRequestWhitoutProofImage } = attendanceRequest
-  console.log('Removed ', banner_src?.substring(0, 10))
+  const { proof_image, ...attendanceRequestWhitoutProofImage } = attendanceRequest
+  console.log('Removed ', proof_image?.substring(0, 10))
+  console.log('AttendanceRequest: ', attendanceRequestWhitoutProofImage)
 
   const { data, error } = await supabaseClient
     .from(ATTENDANCEREQUESTS)
-    .update({
-      attendanceRequestWhitoutProofImage,
-    })
+    .update(attendanceRequestWhitoutProofImage)
     .eq('id', attendanceRequestWhitoutProofImage.id)
     .select()
+  console.log('Data: ', data, 'Error: ', error)
   return { data, error }
 }
 

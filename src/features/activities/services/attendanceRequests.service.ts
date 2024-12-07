@@ -38,7 +38,6 @@ class AttendanceRequestsService {
       notes: attendanceRequest.Poc,
       proof_image_path: attendanceRequest.PocImagePath,
       state: attendanceRequest.state,
-      transactionLink: attendanceRequest.payoutTransactionLink,
       user_name: attendanceRequest.user,
       wallet_address: attendanceRequest.address,
       transaction_link: attendanceRequest.payoutTransactionLink,

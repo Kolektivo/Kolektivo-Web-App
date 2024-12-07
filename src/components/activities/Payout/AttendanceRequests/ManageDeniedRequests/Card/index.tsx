@@ -6,7 +6,7 @@ import { type AttendanceRequest } from '@/types/activities'
 import { useForm } from 'react-hook-form'
 import { denialReasons } from '@/constants/activities/payout/deniedRequests'
 import { useRouter } from 'next/navigation'
-import activitiesService from '@/features/activities/services/activities.service'
+import attendanceRequestsService from '@/features/activities/services/attendanceRequests.service'
 
 type Props = {
   requests: AttendanceRequest[]
@@ -24,11 +24,12 @@ export default function DeniedRequestsCard({ requests, setRequests, handleNext }
     } = event
     const updatedRequests = [...requests]
     updatedRequests[index].denialReason = value
+    updatedRequests[index].state = 'denied'
     setRequests(updatedRequests)
   }
 
   const handleConfirm = () => {
-    activitiesService.setAttendanceRequest(requests)
+    attendanceRequestsService.setAttendanceRequest(requests)
     handleNext()
   }
 

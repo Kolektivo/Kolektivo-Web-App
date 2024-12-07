@@ -5,13 +5,14 @@ import ItemsCard from '@/components/common/cards/ItemsCard'
 import { type AttendanceRequest } from '@/types/activities'
 import ManagePayoutRequestCard from '@/components/activities/Payout/AttendanceRequests/ManagePayouts/RequestCard'
 import { useForm } from 'react-hook-form'
-import activitiesService from '@/features/activities/services/activities.service'
+import attendanceRequestsService from '@/features/activities/services/attendanceRequests.service'
+import { useEffect } from 'react'
 
 type Props = {
   requests: AttendanceRequest[]
   setRequests: React.Dispatch<React.SetStateAction<AttendanceRequest[]>>
   handleBack: () => void
-  handleNext: () => void
+  handleNext: (nextStep?: number) => void
 }
 
 export default function ManagePayoutsCard({ requests, setRequests, handleBack, handleNext }: Props) {
@@ -27,20 +28,12 @@ export default function ManagePayoutsCard({ requests, setRequests, handleBack, h
       }
     })
     setRequests(updatedRequests)
-    activitiesService.setAttendanceRequest(updatedRequests)
+    attendanceRequestsService.setAttendanceRequest(updatedRequests)
     handleNext()
   }
-  if (!requests)
-    return (
-      <ItemsCard title="My Activities">
-        {Array.from({ length: 3 }).map((_, index) => (
-          <Box key={index}>
-            <Divider />
-            <Box paddingLeft={4}></Box>
-          </Box>
-        ))}
-      </ItemsCard>
-    )
+  useEffect(() => {
+    if (requests.filter((request) => request.state == 'forManagePayout').length == 0) handleNext(2)
+  }, [requests, handleNext])
   return (
     <form onSubmit={handleSubmit(submitHandler)}>
       <ItemsCard

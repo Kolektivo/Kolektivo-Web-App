@@ -12,8 +12,8 @@ import ManagePayoutsCard from '@/components/activities/Payout/AttendanceRequests
 import DeniedRequestsCard from '@/components/activities/Payout/AttendanceRequests/ManageDeniedRequests/Card'
 import HeaderSubtitle from '@/components/activities/Payout/AttendanceRequests/UploadReport/HeaderSubtitle'
 import AttendanceRequestsStateCard from '@/components/activities/Payout/AttendanceRequests/StateCard'
-import activitiesService from '@/features/activities/services/activities.service'
 import { useParams } from 'next/navigation'
+import attendanceRequestsService from '@/features/activities/services/attendanceRequests.service'
 
 const steps = Array.from({ length: 4 }, () => '')
 
@@ -31,13 +31,13 @@ export default function StepperActivitiesPayout() {
     setStep((prevActiveStep) => prevActiveStep - 1)
   }
 
-  const handleNext = () => {
+  const handleNext = (nextStep?: number) => {
     if (step != 0) localStorage.setItem('activitiesPayoutStep', String(step + 1))
-    setStep((prevActiveStep) => prevActiveStep + 1)
+    setStep((prevActiveStep) => (nextStep ? nextStep : prevActiveStep + 1))
   }
   React.useEffect(() => {
     const fetchData = async () => {
-      const data = await activitiesService.getAttendanceRequests(String(id))
+      const data = await attendanceRequestsService.getAttendanceRequests(String(id))
       setAttendanceRequests(data)
     }
     fetchData()
@@ -73,7 +73,7 @@ export default function StepperActivitiesPayout() {
               color="primary"
               variant="contained"
               className="stepperButton"
-              onClick={handleNext}
+              onClick={() => handleNext()}
               disabled={!(attendanceRequestsForManagePayouts.length > 0)}
             >
               Aprove
