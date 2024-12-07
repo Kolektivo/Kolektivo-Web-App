@@ -170,7 +170,6 @@ async function uploadFile(bucketName: string, filePath: string, base64File: stri
 
 async function downloadFile(bucketName: string, filePath: string) {
   if (filePath == '' || !filePath) return ''
-  console.log('BuecktName: ', bucketName, 'FilePath:', filePath)
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
   const { data, error } = await supabaseClient.storage.from(bucketName).download(filePath)
 

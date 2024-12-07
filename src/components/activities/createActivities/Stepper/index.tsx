@@ -42,6 +42,8 @@ export default function StepperActivitiesCreate() {
       ...(detailFormValues as CreateActivityDetailFormValues),
       banner: banner as string,
       ...(requirementsRewardsFormValues as CreateActivityRequirementsRewardsFormValues),
+      report: '',
+      completed: false,
     }),
     [detailFormValues, banner, requirementsRewardsFormValues],
   )

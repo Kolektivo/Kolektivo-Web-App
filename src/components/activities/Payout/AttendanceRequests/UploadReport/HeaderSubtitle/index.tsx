@@ -1,7 +1,9 @@
 import DialogSuccess from '@/components/common/modals/DialogSuccess'
 import activitiesService from '@/features/activities/services/activities.service'
 import { useAuth } from '@/features/auth/hooks/useAuth'
+import { type ActivityReviewType } from '@/types/activities'
 import { Button, Icon, Stack, Typography } from '@mui/material'
+import { type User } from '@supabase/supabase-js'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useRef, useState } from 'react'
 
@@ -36,16 +38,32 @@ export default function HeaderSubtitle() {
     const reader = new FileReader()
     const updateActivityReport = async () => {
       const activity = await activitiesService.get(user ?? undefined, id as string)
+      console.log(activity)
       reader.onload = () => {
         if (reader.result) {
-          const base64String = reader.result.toString().split(',')[1] // Remove the data: prefix
+          const base64String = reader.result.toString().split(',')[1]
           if (!activity) return
           activity[0].report_src = base64String
-          activitiesService.update(activity[0], user, id)
+          const activityReview: ActivityReviewType = {
+            banner: activity[0].banner_src ?? '',
+            name: activity[0].title,
+            description: activity[0].description,
+            date: activity[0].start_date,
+            endTime: activity[0].time_lapse.split('-')[1],
+            startTime: activity[0].time_lapse.split('-')[0],
+            kolectivoPoints: Number(activity[0].points) ?? 0,
+            location: activity[0].location ?? '',
+            requirements: activity[0].requirements,
+            stamps: activity[0].stamp ?? '',
+            report: activity[0].report_src,
+            completed: true,
+          }
+          activitiesService.update(activityReview, user as User, id as string)
         }
       }
     }
     updateActivityReport()
+    setOpenSuccessDialog(true)
 
     reader.onerror = (error) => {
       console.error('Error converting file to Base64:', error)

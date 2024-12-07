@@ -52,7 +52,8 @@ async function downloadFile(bucketName: string, filePath: string) {
   if (filePath == '' || !filePath) return ''
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
   const { data, error } = await supabaseClient.storage.from(bucketName).download(filePath)
-  console.log('ImageResponse: ', data)
+
+  console.log('Data: ', data, 'Error: ', error)
 
   if (error) {
     console.error('Error downloading file:', error.message)

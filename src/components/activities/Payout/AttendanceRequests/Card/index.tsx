@@ -87,9 +87,19 @@ export default function AttendanceRequestCard({ index, requests, setRequests, se
                 alignItems="center"
                 display="flex"
               >
-                <Typography variant="subtitle2" textTransform="uppercase" color="#A9A9A9">
-                  PoC Image
-                </Typography>
+                {request.PocImage ? (
+                  <Image
+                    src={request.PocImage}
+                    alt="Selected"
+                    width={135}
+                    height={84}
+                    style={{ borderRadius: '12px' }}
+                  />
+                ) : (
+                  <Typography variant="subtitle2" textTransform="uppercase" color="#A9A9A9">
+                    PoC Image
+                  </Typography>
+                )}
               </Box>
               <Typography color="#353535">{}</Typography>
             </div>
