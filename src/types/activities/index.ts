@@ -61,7 +61,7 @@ export type AttendanceRequest = {
   address: string
   Poc: string
   PocImage: string
-  state: 'denied' | 'forManagePayout' | 'completed'
+  state: 'denied' | 'forManagePayout' | 'completed' | ''
   payoutTransactionLink: string
   denialReason: string
 }

@@ -1,4 +1,4 @@
-import StepperActivitiesPayout from '@/components/activities/payout/Stepper'
+import StepperActivitiesPayout from '@/components/activities/Payout/Stepper'
 import React from 'react'
 
 export default function ActivitiesPayoutPage() {

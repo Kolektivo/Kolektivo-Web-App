@@ -6,6 +6,7 @@ import { type AttendanceRequest } from '@/types/activities'
 import { useForm } from 'react-hook-form'
 import { denialReasons } from '@/constants/activities/payout/deniedRequests'
 import { useRouter } from 'next/navigation'
+import activitiesService from '@/features/activities/services/activities.service'
 
 type Props = {
   requests: AttendanceRequest[]
@@ -26,11 +27,16 @@ export default function DeniedRequestsCard({ requests, setRequests, handleNext }
     setRequests(updatedRequests)
   }
 
+  const handleConfirm = () => {
+    activitiesService.setAttendanceRequest(requests)
+    handleNext()
+  }
+
   const handleSkip = () => {
     router.push('/activities')
   }
   return (
-    <form onSubmit={handleSubmit(handleNext)}>
+    <form onSubmit={handleSubmit(handleConfirm)}>
       <ItemsCard
         title="Attendee"
         actions={
@@ -43,7 +49,7 @@ export default function DeniedRequestsCard({ requests, setRequests, handleNext }
         }
       >
         {requests?.map((request, index) => {
-          if (request.state == 'denied')
+          if (request.state == 'denied' || request.state == '')
             return (
               <Box key={index}>
                 <Divider />
@@ -51,7 +57,7 @@ export default function DeniedRequestsCard({ requests, setRequests, handleNext }
                   <DeniedRequestCard request={request}>
                     <TextField
                       select
-                      value={request.denialReason ?? '0'}
+                      value={request.denialReason != '' ? request.denialReason : '0'}
                       onChange={(event) => handleRequirementsChange(event, index)}
                       sx={{ width: '60%' }}
                       slotProps={{

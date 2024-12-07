@@ -20,7 +20,11 @@ export default function ManagePayoutsCard({ requests, setRequests, handleBack, h
     const updatedRequests = [...requests]
     Object.keys(event).forEach((key) => {
       const numberKey = Number(key)
-      updatedRequests[numberKey].payoutTransactionLink = event[numberKey]
+      if (event[numberKey] != '') {
+        updatedRequests[numberKey].payoutTransactionLink = event[numberKey]
+        updatedRequests[numberKey].state = 'completed'
+        updatedRequests[numberKey].denialReason = ''
+      }
     })
     setRequests(updatedRequests)
     activitiesService.setAttendanceRequest(updatedRequests)
