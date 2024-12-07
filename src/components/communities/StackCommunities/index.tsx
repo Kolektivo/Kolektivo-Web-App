@@ -42,6 +42,14 @@ const StackCommunities = (): ReactElement => {
       </Stack>
     )
   }
+  return (
+    <Stack gap={4}>
+      <Card>
+        <CardHeader title="Kolektivo Communities" />
+        <CardContent></CardContent>
+      </Card>
+    </Stack>
+  )
 }
 
 export default StackCommunities
