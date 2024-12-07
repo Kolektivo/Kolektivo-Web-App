@@ -13,7 +13,7 @@ const CardCommunity = ({ id, name, members, tokenSupply }: CardCommunityProps): 
   return (
     <Paper
       style={{
-        backgroundImage: `url(${id == 'Trinidad' ? trinidadFlag : CuracaoFlag})`,
+        backgroundImage: `url(${id == 'Trinidad' ? trinidadFlag.src : CuracaoFlag.src})`,
         width: '100%',
         height: '100%',
         backgroundSize: 'cover',
