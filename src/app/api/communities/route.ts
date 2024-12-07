@@ -31,7 +31,9 @@ export async function GET() {
             id: community.id,
             name: community.name,
             members: community.members,
-            tokenSupply: community.tokens
+            tokenSupply: community.tokens,
+            srcImage: community.srcImage,
+            
         }))
     }
     return NextResponse.json(response)
