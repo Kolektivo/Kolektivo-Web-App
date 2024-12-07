@@ -5,7 +5,7 @@ import { type ReactElement } from 'react'
 
 export interface CardCommunityProps extends Community {}
 
-const CardCommunity = ({ srcImage, name, members, ktts }: CardCommunityProps): ReactElement => {
+const CardCommunity = ({ srcImage, name, members, tokenSupply }: CardCommunityProps): ReactElement => {
   const textColor = '#FFF'
 
   return (
@@ -32,7 +32,7 @@ const CardCommunity = ({ srcImage, name, members, ktts }: CardCommunityProps): R
           <Stack direction="row" alignItems="center" gap={2}>
             <IconKtt />
             <Typography variant="subtitle1" color={textColor} sx={{ height: '18px' }}>
-              {ktts}
+              {tokenSupply}
             </Typography>
           </Stack>
         </Stack>

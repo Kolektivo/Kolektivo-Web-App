@@ -1,21 +1,22 @@
 import ValueCard from '@/components/common/cards/ValueCard'
+import { Communities } from '@/types/communities'
 import Grid from '@mui/material/Grid2'
 import { type ReactElement } from 'react'
 
-const StatsCommunities = (): ReactElement => {
+const StatsCommunities = ({ communities }: { communities: Communities }): ReactElement => {  
   return (
     <Grid container spacing={4} columns={{ xs: 2, md: 4 }}>
       <Grid size={1}>
-        <ValueCard icon="ktt" title="Tokens in Circulation" value="3925" />
+        <ValueCard icon="ktt" title="Tokens in Circulation" value={communities.tokensInCirculation.toString()} />
       </Grid>
       <Grid size={1}>
-        <ValueCard icon="sync_alt" title="Token Transfers" value="5325" />
+        <ValueCard icon="sync_alt" title="Token Transfers" value={communities.tokenTransfers.toString()}  />
       </Grid>
       <Grid size={1}>
-        <ValueCard icon="groups" title="Members" value="195" />
+        <ValueCard icon="groups" title="Members" value={communities.members.toString()} />
       </Grid>
       <Grid size={1}>
-        <ValueCard icon="storefront" title="Active Vendors" value="12" />
+        <ValueCard icon="storefront" title="Active Vendors" value={communities.activeVendors.toString()} />
       </Grid>
     </Grid>
   )
