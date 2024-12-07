@@ -19,7 +19,7 @@ export async function PUT() {
 
 export async function GET() {
     const supabaseClient = createAnonymousClient()
-
+    await updateCommunities()
     const { data, error } = await supabaseClient.from(COMMUNITIES).select('*', { head: false }).not('id', 'is', null)
     if (error) return NextResponse.json(error, { status: 500 })
     const response = {
