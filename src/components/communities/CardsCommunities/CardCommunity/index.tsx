@@ -2,16 +2,18 @@ import IconKtt from '@/components/common/display/IconKtt'
 import { type Community } from '@/types/communities'
 import { Paper, Stack, Typography, Icon } from '@mui/material'
 import { type ReactElement } from 'react'
+import CuracaoFlag from '@/public/images/communities/curacao_flag.png'
+import trinidadFlag from '@/public/images/communities/trinidad_flag.png'
 
 export interface CardCommunityProps extends Community {}
 
-const CardCommunity = ({ srcImage, name, members, tokenSupply }: CardCommunityProps): ReactElement => {
+const CardCommunity = ({ id, name, members, tokenSupply }: CardCommunityProps): ReactElement => {
   const textColor = '#FFF'
 
   return (
     <Paper
       style={{
-        backgroundImage: `url(${srcImage})`,
+        backgroundImage: `url(${id == 'Trinidad' ? trinidadFlag : CuracaoFlag})`,
         width: '100%',
         height: '100%',
         backgroundSize: 'cover',
