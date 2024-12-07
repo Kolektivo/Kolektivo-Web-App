@@ -42,11 +42,13 @@ export type AttendanceRequestResponse = {
   check_in: string
   check_out: string
   created_at: string
-  denyReason: string
+  deny_reason: string
   notes: string
-  picturePath: string
+  proof_image_path: string
+  report_path: string
+  proof_image: string
   state: 'denied' | 'forManagePayout' | 'completed'
-  transactionLink: string
+  transaction_link: string
   user_name: string
   wallet_address: string
 }
@@ -61,6 +63,8 @@ export type AttendanceRequest = {
   address: string
   Poc: string
   PocImage: string
+  PocImagePath: string
+  reportPath: string
   state: 'denied' | 'forManagePayout' | 'completed' | ''
   payoutTransactionLink: string
   denialReason: string

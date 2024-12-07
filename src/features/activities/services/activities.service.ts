@@ -34,10 +34,12 @@ class ActivitiesService {
       checkOut: requestResponse.check_out,
       address: requestResponse.wallet_address,
       Poc: requestResponse.notes,
-      PocImage: requestResponse.picturePath,
+      PocImage: requestResponse.proof_image,
+      PocImagePath: requestResponse.proof_image_path,
+      reportPath: requestResponse.report_path,
       state: requestResponse.state,
-      payoutTransactionLink: requestResponse.transactionLink,
-      denialReason: requestResponse.denyReason,
+      payoutTransactionLink: requestResponse.transaction_link,
+      denialReason: requestResponse.deny_reason,
     }))
   }
 
