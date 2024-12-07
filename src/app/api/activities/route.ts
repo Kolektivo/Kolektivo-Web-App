@@ -120,6 +120,8 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   const updatedActivity = (await req.json()) as ActivityType
   const bannerSrc = updatedActivity.banner_src
+  const reportSrc = updatedActivity.report_src
+  console.log(reportSrc)
   delete updatedActivity.banner_src
 
   const { data, error } = await updateActivity(updatedActivity)

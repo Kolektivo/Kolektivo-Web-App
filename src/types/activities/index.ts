@@ -34,6 +34,8 @@ export type ActivityType = {
   time_lapse: string
   banner_src?: string | null
   banner_path?: string | null
+  report_src?: string | null
+  report_path?: string | null
 }
 
 export type AttendanceRequestResponse = {
@@ -45,10 +47,8 @@ export type AttendanceRequestResponse = {
   deny_reason: string
   notes: string
   proof_image_path: string
-  report_path: string
-  report: string
-  proof_image: string
-  state: 'denied' | 'forManagePayout' | 'completed'
+  proof_image?: string
+  state: 'denied' | 'forManagePayout' | 'completed' | ''
   transaction_link: string
   user_name: string
   wallet_address: string
@@ -65,8 +65,6 @@ export type AttendanceRequest = {
   Poc: string
   PocImage: string
   PocImagePath: string
-  reportPath: string
-  report: string
   state: 'denied' | 'forManagePayout' | 'completed' | ''
   payoutTransactionLink: string
   denialReason: string

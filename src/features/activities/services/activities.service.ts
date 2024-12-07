@@ -1,9 +1,4 @@
-import {
-  type AttendanceRequest,
-  type AttendanceRequestResponse,
-  type ActivityReviewType,
-  type ActivityType,
-} from '@/types/activities'
+import { type ActivityReviewType, type ActivityType } from '@/types/activities'
 import { type User } from '@supabase/supabase-js'
 import axios from 'axios'
 
@@ -17,40 +12,6 @@ class ActivitiesService {
       `/activities${user || id ? '?' : ''}${user ? `hostId=${user.id}` : ''}${user ? '&' : ''}${id ? `id=${id}` : ''}`,
     )
 
-    return response.data
-  }
-
-  public async getAttendanceRequests(activityId?: string): Promise<AttendanceRequest[]> {
-    const response = await this.httpInstance.get<AttendanceRequestResponse[]>(
-      `/activities/attendanceRequests?activity_id=${activityId}`,
-    )
-
-    return response.data.map<AttendanceRequest>((requestResponse) => ({
-      id: requestResponse.id,
-      activityId: requestResponse.activity_id,
-      createdAt: requestResponse.created_at,
-      user: requestResponse.user_name,
-      checkIn: requestResponse.check_in,
-      checkOut: requestResponse.check_out,
-      address: requestResponse.wallet_address,
-      Poc: requestResponse.notes,
-      PocImage: requestResponse.proof_image,
-      PocImagePath: requestResponse.proof_image_path,
-      reportPath: requestResponse.report_path,
-      report: requestResponse.report,
-      state: requestResponse.state,
-      payoutTransactionLink: requestResponse.transaction_link,
-      denialReason: requestResponse.deny_reason,
-    }))
-  }
-
-  public async setAttendanceRequest(
-    attendanceRequests: AttendanceRequest[],
-  ): Promise<AttendanceRequestResponse[] | undefined> {
-    const response = await this.httpInstance.put<AttendanceRequestResponse[]>(
-      `/activities/attendanceRequests`,
-      attendanceRequests,
-    )
     return response.data
   }
 
