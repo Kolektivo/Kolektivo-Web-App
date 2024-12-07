@@ -29,7 +29,7 @@ const StackCommunities = (): ReactElement => {
   //     return <MyOrganizationSkeleton />
   //   }
 
-  if (data && data.communities.length > 0) {
+  if (data && data.communities && data.communities.length > 0) {
     return (
       <Stack gap={4}>
         <StatsCommunities communities={data!} />

@@ -22,7 +22,6 @@ export async function GET() {
 
     const { data, error } = await supabaseClient.from(COMMUNITIES).select('*', { head: false })
     if (error) return NextResponse.json(error, { status: 500 })
-    console.log('aca-communities')
     const response = {
         tokensInCirculation: data.reduce((sum, item) => sum + item.tokens, 0),
         tokenTransfers: data.reduce((sum, item) => sum + item.transfers, 0),
