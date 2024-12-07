@@ -20,7 +20,7 @@ export async function PUT() {
 export async function GET() {
     const supabaseClient = createAnonymousClient()
 
-    const { data, error } = await supabaseClient.from(COMMUNITIES).select('*', { head: false })
+    const { data, error } = await supabaseClient.from(COMMUNITIES).select('*', { head: false }).not('id', 'is', null)
     if (error) return NextResponse.json(error, { status: 500 })
     const response = {
         tokensInCirculation: data.reduce((sum, item) => sum + item.tokens, 0),
