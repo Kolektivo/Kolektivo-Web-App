@@ -34,6 +34,7 @@ export default function DeniedRequestsCard({ requests, setRequests, handleNext }
   }
 
   const handleSkip = () => {
+    attendanceRequestsService.setAttendanceRequest(requests)
     router.push('/activities')
   }
   return (
