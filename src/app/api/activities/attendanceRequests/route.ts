@@ -37,7 +37,6 @@ async function updateAttendanceRequest(attendanceRequest: AttendanceRequestRespo
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
   const { proof_image, ...attendanceRequestWhitoutProofImage } = attendanceRequest
   console.log('Removed ', proof_image?.substring(0, 10))
-  console.log('AttendanceRequest: ', attendanceRequestWhitoutProofImage)
 
   const { data, error } = await supabaseClient
     .from(ATTENDANCEREQUESTS)
@@ -52,8 +51,6 @@ async function downloadFile(bucketName: string, filePath: string) {
   if (filePath == '' || !filePath) return ''
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
   const { data, error } = await supabaseClient.storage.from(bucketName).download(filePath)
-
-  console.log('Data: ', data, 'Error: ', error)
 
   if (error) {
     console.error('Error downloading file:', error.message)

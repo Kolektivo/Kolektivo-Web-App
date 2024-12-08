@@ -10,6 +10,9 @@ import ActivitySkeleton from '../Activity/Skeleton'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 
 const getState = (activity: ActivityType & { organization: string }) => {
+  if (activity.state == 'completed') {
+    return 'Completed'
+  }
   if (new Date(activity.start_date).getTime() >= Date.now()) {
     return 'Upcoming'
   }
@@ -19,6 +22,9 @@ const getState = (activity: ActivityType & { organization: string }) => {
 }
 
 const getStateColor = (activity: ActivityType & { organization: string }) => {
+  if (activity.state == 'completed') {
+    return 'completedChip'
+  }
   if (new Date(activity.start_date).getTime() >= Date.now()) {
     return 'upcomingChip'
   }

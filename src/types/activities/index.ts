@@ -14,7 +14,9 @@ export type CreateActivityRequirementsRewardsFormValues = {
 }
 
 export type ActivityReviewType = CreateActivityDetailFormValues &
-  CreateActivityRequirementsRewardsFormValues & { banner: string } & { report: string } & { completed: boolean }
+  CreateActivityRequirementsRewardsFormValues & { banner: string } & { report: string } & {
+    state: 'completed' | 'upcoming' | 'actionRequired'
+  }
 
 export type ActivityType = {
   id?: string
@@ -32,6 +34,7 @@ export type ActivityType = {
   points: string | null
   stamp: string | null
   time_lapse: string
+  state?: 'completed' | 'upcoming' | 'actionRequired'
   banner_src?: string | null
   banner_path?: string | null
   report_src?: string | null

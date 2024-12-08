@@ -32,37 +32,32 @@ export default function HeaderSubtitle() {
     }
   }
 
-  const handleComplete = () => {
-    console.log(report)
+  const handleComplete = async () => {
     if (!report) return
     const reader = new FileReader()
-    const updateActivityReport = async () => {
-      const activity = await activitiesService.get(user ?? undefined, id as string)
-      console.log(activity)
-      reader.onload = () => {
-        if (reader.result) {
-          const base64String = reader.result.toString().split(',')[1]
-          if (!activity) return
-          activity[0].report_src = base64String
-          const activityReview: ActivityReviewType = {
-            banner: activity[0].banner_src ?? '',
-            name: activity[0].title,
-            description: activity[0].description,
-            date: activity[0].start_date,
-            endTime: activity[0].time_lapse.split('-')[1],
-            startTime: activity[0].time_lapse.split('-')[0],
-            kolectivoPoints: Number(activity[0].points) ?? 0,
-            location: activity[0].location ?? '',
-            requirements: activity[0].requirements,
-            stamps: activity[0].stamp ?? '',
-            report: activity[0].report_src,
-            completed: true,
-          }
-          activitiesService.update(activityReview, user as User, id as string)
+    const activity = await activitiesService.get(user ?? undefined, id as string)
+    reader.onload = () => {
+      if (reader.result) {
+        const base64String = reader.result.toString().split(',')[1]
+        if (!activity) return
+        activity[0].report_src = base64String
+        const activityReview: ActivityReviewType = {
+          banner: activity[0].banner_src ?? '',
+          name: activity[0].title,
+          description: activity[0].description,
+          date: activity[0].start_date,
+          endTime: activity[0].time_lapse.split('-')[1],
+          startTime: activity[0].time_lapse.split('-')[0],
+          kolectivoPoints: Number(activity[0].points) ?? 0,
+          location: activity[0].location ?? '',
+          requirements: activity[0].requirements,
+          stamps: activity[0].stamp ?? '',
+          state: 'completed',
+          report: activity[0].report_src,
         }
+        activitiesService.update(activityReview, user as User, id as string)
       }
     }
-    updateActivityReport()
     setOpenSuccessDialog(true)
 
     reader.onerror = (error) => {

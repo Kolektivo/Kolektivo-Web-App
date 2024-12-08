@@ -119,12 +119,14 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   const updatedActivity = (await req.json()) as ActivityType
+  console.log('State: ', updatedActivity.state)
   const bannerSrc = updatedActivity.banner_src
-  const reportSrc = updatedActivity.report_src
-  console.log(reportSrc)
+  // const reportSrc = updatedActivity.report_src
   delete updatedActivity.banner_src
+  delete updatedActivity.report_src
 
   const { data, error } = await updateActivity(updatedActivity)
+  console.log('Data: ', data, 'Error: ', error)
 
   if (error) return NextResponse.json(error)
 
@@ -135,6 +137,11 @@ export async function PUT(req: NextRequest) {
     const bannerPath = `${bannerBasePath}/${activityId}.${extension}`
     data[0].banner_path = bannerPath
     await uploadFile(supabaseBucket, bannerPath, bannerSrc as string)
+    // if (reportSrc) {
+    //   const report_path = `${bannerBasePath}/${activityId}.pdf`
+    //   data[0].report_path = bannerPath
+    //   await uploadFile(supabaseBucket, report_path, reportSrc as string)
+    // }
     updateActivity(data[0])
   }
   return NextResponse.json(data)

@@ -36,11 +36,11 @@ export default function ActivityComponent({
   }
   return (
     <Link
-      href={`${disableRedirect ? '' : `/activities/update/${id}`}${redirectionPath ?? ''}`}
+      href={`${disableRedirect || state == 'Completed' ? '' : `/activities/update/${id}`}${redirectionPath && state != 'Completed' ? redirectionPath : ''}`}
       style={{
         textDecoration: 'none',
         color: '#0F0F0F',
-        cursor: `${disableRedirect && !redirectionPath ? 'default' : 'pointer'}`,
+        cursor: `${(disableRedirect && !redirectionPath) || state == 'Completed' ? 'default' : 'pointer'}`,
       }}
     >
       <Stack direction="row" alignItems="center" gap="16px">
