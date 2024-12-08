@@ -18,7 +18,7 @@ import attendanceRequestsService from '@/features/activities/services/attendance
 const steps = Array.from({ length: 4 }, () => '')
 
 export default function StepperActivitiesPayout() {
-  const [step, setStep] = React.useState<number>(Number(localStorage.getItem('activitiesPayoutStep')) ?? 0)
+  const [step, setStep] = React.useState<number>(Number(localStorage?.getItem('activitiesPayoutStep')) ?? 0)
   const { id } = useParams()
   const [attendanceRequests, setAttendanceRequests] = React.useState<AttendanceRequest[]>([])
 
