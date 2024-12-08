@@ -140,9 +140,9 @@ export async function PUT(req: NextRequest) {
     if (reportSrc) {
       const report_path = `${bannerBasePath}/${activityId}.pdf`
       data[0].report_path = report_path
+      updateActivity(data[0])
       await uploadFile(supabaseBucket, report_path, reportSrc as string)
     }
-    updateActivity(data[0])
   }
   return NextResponse.json(data)
 }
