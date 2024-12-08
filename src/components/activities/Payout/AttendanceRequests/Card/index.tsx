@@ -66,7 +66,7 @@ export default function AttendanceRequestCard({ index, requests, setRequests, se
               />
             ) : (
               <Chip
-                label={requests[index].state == 'completed' ? 'completed' : 'denied'}
+                label={requests[index].state == 'completed' ? 'Completed' : 'Denied'}
                 color={requests[index].state == 'completed' ? 'success' : 'deniedChip'}
               />
             )}

@@ -95,6 +95,8 @@ export default function UpdateActivity() {
             kolectivoPoints: Number(data[0].points),
             requirements: data[0].requirements,
             stamps: data[0].stamp as string,
+            report: '',
+            state: 'upcoming',
           }}
           submitHandler={handleSave}
           deleteHandler={handleDelete}

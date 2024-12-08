@@ -58,7 +58,7 @@ export default function HeaderSubtitle() {
         activitiesService.update(activityReview, user as User, id as string)
       }
     }
-    // setOpenSuccessDialog(true)
+    setOpenSuccessDialog(true)
 
     reader.onerror = (error) => {
       console.error('Error converting file to Base64:', error)
