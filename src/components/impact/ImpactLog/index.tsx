@@ -10,7 +10,7 @@ import { type ReactElement } from 'react'
 const ImpactLog = (): ReactElement => {
   const { data, error, isLoading, refetch } = useQuery<ImpactDto[] | undefined>({
     queryKey: ['getCompletedActivities'],
-    queryFn: async () => await activitiesService.getCompleted(0),
+    queryFn: async () => await activitiesService.getCompleted(1),
   })
 
   if (error) {
