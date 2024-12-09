@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
         .from(ACTIVITIES)
         .select('start_date,title')
         .eq('state', 'completed')
-        .range(from, to)
+        .range(0, to)
         .order('start_date', { ascending: false })
 
     if (error) return NextResponse.json(error)
