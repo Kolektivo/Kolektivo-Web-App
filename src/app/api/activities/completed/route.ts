@@ -24,14 +24,17 @@ export async function GET(req: NextRequest) {
 
     let lastDate: any = null;
     if (error) return NextResponse.json(error)
-    const impactDto = data?.map((activity) => {
-        if (lastDate == activity.start_date)
-            return { text: activity.title, isPrincipal: false }
-        else {
-            lastDate = activity.start_date
-            return { text: activity.start_date, isPrincipal: true }
+    const impactDto = data?.flatMap((activity) => {
+        if (lastDate === activity.start_date) {
+            return { text: activity.title, isPrincipal: false }; // Solo un elemento
+        } else {
+            lastDate = activity.start_date;
+            return [
+                { text: activity.start_date, isPrincipal: true }, // Primer elemento
+                { text: activity.title, isPrincipal: false }      // Segundo elemento
+            ];
         }
-    })
+    });
     return NextResponse.json(impactDto)
 
 }
