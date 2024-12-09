@@ -24,7 +24,7 @@ const StackCommunities = (): ReactElement => {
       />
     )
   }
-
+  //TODO Skeleton
   //   if (isLoading) {
   //     return <MyOrganizationSkeleton />
   //   }

@@ -1,3 +1,5 @@
+'use client'
+import ErrorDisplay from '@/components/common/display/ErrorDisplay'
 import LogsViewer from '@/components/common/display/LogsViewer'
 import activitiesService from '@/features/activities/services/activities.service'
 import { ImpactDto } from '@/types/activities'
@@ -10,15 +12,37 @@ const ImpactLog = (): ReactElement => {
     queryKey: ['getCompletedActivities'],
     queryFn: async () => await activitiesService.getCompleted(0),
   })
+
+  if (error) {
+    return (
+      <ErrorDisplay
+        onClickButton={() => {
+          refetch()
+        }}
+      />
+    )
+  }
+
+  if (isLoading) {
+    return <Card />
+  }
+
+  if (data) {
+    return (
+      <Card>
+        <CardHeader title="Impact Log" />
+        <CardContent>
+          <LogsViewer logs={data} />
+        </CardContent>
+        <CardActions sx={{ justifyContent: 'center' }}>
+          <Button size="small">Load more</Button>
+        </CardActions>
+      </Card>
+    )
+  }
   return (
     <Card>
       <CardHeader title="Impact Log" />
-      <CardContent>
-        <LogsViewer logs={data!} />
-      </CardContent>
-      <CardActions sx={{ justifyContent: 'center' }}>
-        <Button size="small">Load more</Button>
-      </CardActions>
     </Card>
   )
 }
