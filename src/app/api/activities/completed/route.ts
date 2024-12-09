@@ -3,14 +3,13 @@ import { NextResponse } from 'next/server'
 import { createAnonymousClient } from '@/utils/supabase/anonymousClient'
 import { ImpactDto } from '@/types/activities'
 
-
+const pageSize = parseInt(process.env.PAGE_SIZE || '1')
 const ACTIVITIES = 'activities'
 
 export async function GET(req: NextRequest) {
 
     const { searchParams } = new URL(req.url)
     const page = parseInt(searchParams.get('page') ?? '1')
-    const pageSize = 10;
     const supabaseClient = createAnonymousClient()
 
     const from = (page - 1) * pageSize;
@@ -34,8 +33,8 @@ export async function GET(req: NextRequest) {
         } else {
             lastDate = activity.start_date;
             impactDto.push(
-                { text: formatDateToReadable(activity.start_date), isPrincipal: true }, 
-                { text: activity.title, isPrincipal: false } 
+                { text: formatDateToReadable(activity.start_date), isPrincipal: true },
+                { text: activity.title, isPrincipal: false }
             );
         }
     });
@@ -44,10 +43,10 @@ export async function GET(req: NextRequest) {
 }
 function formatDateToReadable(dateString: Date) {
     const date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = { 
-        day: '2-digit', 
-        month: 'short', 
-        year: 'numeric' 
+    const options: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
     };
     return date.toLocaleDateString('en-US', options).replace(',', '');
 }
