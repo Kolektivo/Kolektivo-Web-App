@@ -1,9 +1,8 @@
 import { type ReactElement } from 'react'
 import { Box, Stack, Typography, Icon } from '@mui/material'
+import { ImpactDto } from '@/types/activities'
 
-type ItemLog = {
-  isPrincipal?: boolean
-  text: string
+type ItemLog = ImpactDto & {
   icon?: string
 }
 

@@ -72,3 +72,10 @@ export type AttendanceRequest = {
   payoutTransactionLink: string
   denialReason: string
 }
+
+export type ImpactDto = {
+  text: string
+  isPrincipal: string
+
+}
+
