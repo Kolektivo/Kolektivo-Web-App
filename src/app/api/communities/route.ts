@@ -19,7 +19,12 @@ export async function PUT() {
 
 export async function GET() {
     const supabaseClient = createAnonymousClient()
-    //await updateCommunities()
+    try {
+        await updateCommunities()
+    } catch (error) {
+        console.log(error)
+    }
+    
     const { data, error } = await supabaseClient.from(COMMUNITIES).select('*', { head: false }).not('id', 'is', null)
     if (error) return NextResponse.json(error, { status: 500 })
     const response = {
@@ -33,7 +38,7 @@ export async function GET() {
             members: community.members,
             tokenSupply: community.tokens,
             srcImage: community.srcImage,
-            
+
         }))
     }
     return NextResponse.json(response)
@@ -44,7 +49,8 @@ async function updateCommunities() {
 
     const supabaseClient = createAnonymousClient()
 
-    const { data, error } = await supabaseClient.from(COMMUNITIES).select('*').not('id', 'is', null)
+    const { data, error } = await supabaseClient.from(COMMUNITIES).select('*')
+        .lte('last_update', new Date(Date.now() - 3600 * 1000).toISOString());
     if (error) throw new Error(`Error gathering communities: ${error}`)
     console.log("Communities " + data.length)
 
