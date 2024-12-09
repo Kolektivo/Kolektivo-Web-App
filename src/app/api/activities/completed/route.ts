@@ -23,8 +23,10 @@ export async function GET(req: NextRequest) {
         .range(from, to)
         .order('start_date', { ascending: false })
 
-    let lastDate: any = null;
     if (error) return NextResponse.json(error)
+
+
+    let lastDate: any = null;
     const impactDto: ImpactDto[] = [];
     data?.forEach((activity) => {
         if (lastDate === activity.start_date) {
@@ -32,12 +34,21 @@ export async function GET(req: NextRequest) {
         } else {
             lastDate = activity.start_date;
             impactDto.push(
-                { text: activity.start_date, isPrincipal: true }, // Primer elemento
-                { text: activity.title, isPrincipal: false }      // Segundo elemento
+                { text: formatDateToReadable(activity.start_date), isPrincipal: true }, 
+                { text: activity.title, isPrincipal: false } 
             );
         }
     });
     return NextResponse.json(impactDto)
 
+}
+function formatDateToReadable(dateString: Date) {
+    const date = new Date(dateString);
+
+    // Opciones para el formateo
+    const options = { day: '2-digit', month: 'short', year: 'numeric' };
+
+    // Convertir la fecha al formato deseado
+    return date.toLocaleDateString('en-US', options).replace(',', '');
 }
 
