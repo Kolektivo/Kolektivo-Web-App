@@ -12,6 +12,8 @@ type Props = {
   img: string
   title: string
   state: string
+  stateColor: 'upcomingChip' | 'actionRequiredChip' | 'completedChip'
+  redirectionPath?: string
   disableRedirect?: boolean
 }
 
@@ -23,6 +25,8 @@ export default function ActivityComponent({
   startDate,
   timeLapse,
   state,
+  stateColor,
+  redirectionPath,
   disableRedirect,
 }: Props) {
   const formatDate = () => {
@@ -32,8 +36,12 @@ export default function ActivityComponent({
   }
   return (
     <Link
-      href={`${disableRedirect ? '' : `/activities/update/${id}`}`}
-      style={{ textDecoration: 'none', color: '#0F0F0F', cursor: `${disableRedirect ? 'default' : 'pointer'}` }}
+      href={`${disableRedirect || state == 'Completed' ? '' : `/activities/update/${id}`}${redirectionPath && state != 'Completed' ? redirectionPath : ''}`}
+      style={{
+        textDecoration: 'none',
+        color: '#0F0F0F',
+        cursor: `${(disableRedirect && !redirectionPath) || state == 'Completed' ? 'default' : 'pointer'}`,
+      }}
     >
       <Stack direction="row" alignItems="center" gap="16px">
         {img ? (
@@ -54,7 +62,7 @@ export default function ActivityComponent({
         <Stack gap="5px">
           <Stack alignItems="center" direction="row" gap="8px">
             <Typography variant="h3">{title}</Typography>
-            <Chip label={state} color="upcomingChip" />
+            <Chip label={state} color={stateColor} />
           </Stack>
           <Typography variant="body1" color="text.secondary">
             {organization} • {formatDate()}

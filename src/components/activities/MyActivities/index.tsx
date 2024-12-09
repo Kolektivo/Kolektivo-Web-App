@@ -9,15 +9,52 @@ import activitiesService from '@/features/activities/services/activities.service
 import ActivitySkeleton from '../Activity/Skeleton'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 
+const getState = (activity: ActivityType & { organization: string }) => {
+  if (activity.state == 'completed') {
+    return 'Completed'
+  }
+  if (new Date(activity.start_date).getTime() >= Date.now()) {
+    return 'Upcoming'
+  }
+  if (new Date(activity.start_date).getTime() <= Date.now()) {
+    return 'Action required'
+  }
+}
+
+const getStateColor = (activity: ActivityType & { organization: string }) => {
+  if (activity.state == 'completed') {
+    return 'completedChip'
+  }
+  if (new Date(activity.start_date).getTime() >= Date.now()) {
+    return 'upcomingChip'
+  }
+  if (new Date(activity.start_date).getTime() <= Date.now()) {
+    return 'actionRequiredChip'
+  }
+}
+
+const getRedirectionPath = (activity: ActivityType & { organization: string }) => {
+  if (new Date(activity.start_date).getTime() >= Date.now()) {
+    return ''
+  }
+  if (new Date(activity.start_date).getTime() <= Date.now()) {
+    return `/activities/payout/${activity.id}`
+  }
+}
+
+type Props = {
+  actions?: ReactNode
+  disablePayoutRedirect?: boolean
+  disableRedirect?: boolean
+  onlyShowOwnerActivities?: boolean
+}
+
 export default function MyActivitiesCard({
   actions,
   disableRedirect,
+  disablePayoutRedirect,
   onlyShowOwnerActivities,
-}: {
-  actions?: ReactNode
-  disableRedirect?: boolean
-  onlyShowOwnerActivities?: boolean
-}) {
+}: Props) {
   const { user } = useAuth()
   const [data, setData] = useState<(ActivityType & { organization: string })[] | undefined>(undefined)
 
@@ -59,7 +96,9 @@ export default function MyActivitiesCard({
               title={activity.title}
               startDate={activity.start_date}
               timeLapse={activity.time_lapse}
-              state="Upcoming"
+              stateColor={getStateColor(activity) ?? 'completedChip'}
+              state={getState(activity) ?? 'Upcoming'}
+              redirectionPath={disablePayoutRedirect ? '' : getRedirectionPath(activity)}
               disableRedirect={disableRedirect}
             />
           </CardContent>

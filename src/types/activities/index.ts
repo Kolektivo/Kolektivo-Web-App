@@ -14,7 +14,9 @@ export type CreateActivityRequirementsRewardsFormValues = {
 }
 
 export type ActivityReviewType = CreateActivityDetailFormValues &
-  CreateActivityRequirementsRewardsFormValues & { banner: string }
+  CreateActivityRequirementsRewardsFormValues & { banner: string } & { report: string } & {
+    state: 'completed' | 'upcoming' | 'actionRequired'
+  }
 
 export type ActivityType = {
   id?: string
@@ -32,6 +34,41 @@ export type ActivityType = {
   points: string | null
   stamp: string | null
   time_lapse: string
+  state?: 'completed' | 'upcoming' | 'actionRequired'
   banner_src?: string | null
   banner_path?: string | null
+  report_src?: string | null
+  report_path?: string | null
+}
+
+export type AttendanceRequestResponse = {
+  id: string
+  activity_id: string
+  check_in: string
+  check_out: string
+  created_at: string
+  deny_reason: string
+  notes: string
+  proof_image_path: string
+  proof_image?: string
+  state: 'denied' | 'forManagePayout' | 'completed' | ''
+  transaction_link: string
+  user_name: string
+  wallet_address: string
+}
+
+export type AttendanceRequest = {
+  id: string
+  activityId: string
+  user: string
+  checkIn: string
+  checkOut: string
+  createdAt: string
+  address: string
+  Poc: string
+  PocImage: string
+  PocImagePath: string
+  state: 'denied' | 'forManagePayout' | 'completed' | ''
+  payoutTransactionLink: string
+  denialReason: string
 }

@@ -50,6 +50,24 @@ const lightPalette = {
     light: '#E96E3A',
     contrastText: '#E96E3A',
   },
+  strongSuccess: {
+    dark: '#12B76A',
+    main: '#12B76A',
+    light: '#12B76A',
+    contrastText: '#12B76A',
+  },
+  lightGray: {
+    dark: '#7E7E7E',
+    main: '#7E7E7E',
+    light: '#7E7E7E',
+    contrastText: '#E96E3A',
+  },
+  black: {
+    dark: '#000000',
+    main: '#000000',
+    light: '#000000',
+    contrastText: '#000000',
+  },
   bannerLightGray: {
     dark: '#F2F2F2',
     main: '#F2F2F2',
@@ -61,6 +79,24 @@ const lightPalette = {
     main: '#C4C4C4',
     light: '#C4C4C4',
     contrastText: '#454545',
+  },
+  actionRequiredChip: {
+    dark: '#FBCC8E',
+    main: '#FBCC8E',
+    light: '#FBCC8E',
+    contrastText: '#683C04',
+  },
+  completedChip: {
+    dark: '#92DEBA',
+    main: '#92DEBA',
+    light: '#92DEBA',
+    contrastText: '#0A653A',
+  },
+  deniedChip: {
+    dark: '#F8A9A3',
+    main: '#F8A9A3',
+    light: '#F8A9A3',
+    contrastText: '#84251F',
   },
   warningButton: {
     dark: '#FEECEB',

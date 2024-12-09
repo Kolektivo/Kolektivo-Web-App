@@ -120,10 +120,14 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   const updatedActivity = (await req.json()) as ActivityType
+  console.log('State: ', updatedActivity.state)
   const bannerSrc = updatedActivity.banner_src
+  const reportSrc = updatedActivity.report_src
   delete updatedActivity.banner_src
+  delete updatedActivity.report_src
 
   const { data, error } = await updateActivity(updatedActivity)
+  console.log('Data: ', data, 'Error: ', error)
 
   if (error) return NextResponse.json(error)
 
@@ -134,7 +138,12 @@ export async function PUT(req: NextRequest) {
     const bannerPath = `${bannerBasePath}/${activityId}.${extension}`
     data[0].banner_path = bannerPath
     await uploadFile(supabaseBucket, bannerPath, bannerSrc as string)
-    updateActivity(data[0])
+    if (reportSrc) {
+      const report_path = `${bannerBasePath}/${activityId}.pdf`
+      data[0].report_path = report_path
+      updateActivity(data[0])
+      await uploadFile(supabaseBucket, report_path, reportSrc as string)
+    }
   }
   return NextResponse.json(data)
 }
@@ -148,6 +157,7 @@ export async function DELETE(req: NextRequest) {
 }
 
 async function uploadFile(bucketName: string, filePath: string, base64File: string) {
+  console.log('FilePath: ', filePath)
   const fileBlob = await base64ImageSourceToBlob(base64File)
   const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
   const { data: dataDelete, error: errorDelete } = await supabaseClient.storage.from(bucketName).remove([filePath])

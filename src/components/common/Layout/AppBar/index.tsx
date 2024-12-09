@@ -11,8 +11,8 @@ const routesNames: { [key: string]: string }[] = [
   { '/my-organization/update': 'Update Organization' },
   { '/my-vendor/update': 'Update Vendor' },
   { '/my-vendor/create': 'Create Vendor' },
-  { '/activities/update/20b7dc94-d801-4c85-b46a-9c53b1925a51': 'Update Activity' },
   { '/activities/update': 'Update Activity' },
+  { '/activities/payout': 'Verify Activity' },
   { '/activities/create': 'Create Activity' },
 ]
 

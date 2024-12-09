@@ -1,6 +1,6 @@
-import CreateActivityStepper from '@/components/activities/createActivities/Stepper'
+import StepperActivitiesCreate from '@/components/activities/createActivities/Stepper'
 import React from 'react'
 
 export default function CreateActivity() {
-  return <CreateActivityStepper />
+  return <StepperActivitiesCreate />
 }

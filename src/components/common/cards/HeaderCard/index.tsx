@@ -1,13 +1,15 @@
-import { type ReactElement } from 'react'
+import { type ReactNode, type ReactElement } from 'react'
 import { Card, CardContent, Typography } from '@mui/material'
 
 const HeaderCard = ({
   title,
   subtitle,
+  subtitleComponent,
   align,
 }: {
   title: string
   subtitle?: string
+  subtitleComponent?: ReactNode
   align?: 'center'
 }): ReactElement => {
   return (
@@ -21,6 +23,7 @@ const HeaderCard = ({
             {subtitle}
           </Typography>
         )}
+        {subtitleComponent}
       </CardContent>
     </Card>
   )
