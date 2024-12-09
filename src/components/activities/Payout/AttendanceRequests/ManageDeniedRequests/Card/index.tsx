@@ -25,6 +25,7 @@ export default function DeniedRequestsCard({ requests, setRequests, handleNext }
     const updatedRequests = [...requests]
     updatedRequests[index].denialReason = value
     updatedRequests[index].state = 'denied'
+    updatedRequests[index].payoutTransactionLink = ''
     setRequests(updatedRequests)
   }
 
