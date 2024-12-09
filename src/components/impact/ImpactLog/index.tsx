@@ -23,3 +23,4 @@ const ImpactLog = (): ReactElement => {
   )
 }
 
+export default ImpactLog
