@@ -8,20 +8,21 @@ const scannerApi = process.env.SCANNER_API_URL || ''
 const COMMUNITIES = 'communities'
 
 
-export async function PUT() {
-    try {
-        await updateCommunities();
-        return NextResponse.json({ success: true }, { status: 200 });
-    } catch (error) {
-        return NextResponse.json(error, { status: 500 })
-    }
-}
+// export async function PUT() {
+//     try {
+//         await updateCommunities();
+//         return NextResponse.json({ success: true }, { status: 200 });
+//     } catch (error) {
+//         return NextResponse.json(error, { status: 500 })
+//     }
+// }
 
 export async function GET() {
     const supabaseClient = createAnonymousClient()
     try {
         await updateCommunities()
     } catch (error) {
+        console.log('ERROR UPDATING COMMUNITIES:')
         console.log(error)
     }
 
@@ -57,6 +58,8 @@ async function updateCommunities() {
 
 
     data.forEach(async community => {
+        if (community.id != 'Trinidad')
+            return
         console.log("Updating " + community.name)
         const communityData = await gatherContractInfo(community.contract_address, community.last_block)
         const vendorsData = await supabaseClient.from('vendors').select('*', { count: 'exact', head: true }).eq('community', community.id);
