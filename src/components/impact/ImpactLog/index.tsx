@@ -12,12 +12,12 @@ const ImpactLog = (): ReactElement => {
 
   const { data, error, isLoading, refetch } = useQuery<ImpactDto[] | undefined>({
     queryKey: ['getCompletedActivities', page],
-    queryFn: async () => await activitiesService.getCompleted(1),
+    queryFn: async () => await activitiesService.getCompleted(page),
   })
 
   const handleLoadMore = async () => {
-    setPage((prevPage) => prevPage + 1) // Incrementar la página
-    await refetch() // Solicitar la nueva página de datos
+    setPage((prevPage) => prevPage + 1)
+    await refetch()
   }
 
   if (error) {
