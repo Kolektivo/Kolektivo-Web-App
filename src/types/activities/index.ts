@@ -75,7 +75,7 @@ export type AttendanceRequest = {
 
 export type ImpactDto = {
   text: string
-  isPrincipal: string
+  isPrincipal: bool
 
 }
 
