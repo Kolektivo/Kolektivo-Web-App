@@ -22,9 +22,16 @@ export default function ManagePayoutsCard({ requests, setRequests, handleBack, h
   )
   const handleChangeTransactionLinks = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
     const value = event.target.value
-    const updatedTransactionLinks = [...transactionLinks]
-    updatedTransactionLinks[index] = value
-    setTransactionLinks(updatedTransactionLinks)
+    try {
+      const url = new URL(value)
+      const updatedTransactionLinks = [...transactionLinks]
+      updatedTransactionLinks[index] = String(url)
+      setTransactionLinks(updatedTransactionLinks)
+    } catch {
+      const updatedTransactionLinks = [...transactionLinks]
+      updatedTransactionLinks[index] = ''
+      setTransactionLinks(updatedTransactionLinks)
+    }
   }
   const submitHandler = (event: { [key: number]: string }) => {
     const unmodifiedRequests = [...requests.filter((request) => request.state != 'forManagePayout')]
@@ -75,6 +82,7 @@ export default function ManagePayoutsCard({ requests, setRequests, handleBack, h
                 <CardContent>
                   <ManagePayoutRequestCard request={request}>
                     <TextField
+                      type="url"
                       id="payoutTransactionLink"
                       variant="outlined"
                       placeholder="Transaction link"
