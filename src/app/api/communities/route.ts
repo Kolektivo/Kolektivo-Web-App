@@ -24,7 +24,7 @@ export async function GET() {
     } catch (error) {
         console.log(error)
     }
-    
+
     const { data, error } = await supabaseClient.from(COMMUNITIES).select('*', { head: false }).not('id', 'is', null)
     if (error) return NextResponse.json(error, { status: 500 })
     const response = {
@@ -67,12 +67,18 @@ async function updateCommunities() {
         community.last_block = communityData.last_block
         community.vendors = vendorsData.count
         console.log("Before saving ", community)
-        const updateResult = await supabaseClient
+        let updateResult = await supabaseClient
             .from(COMMUNITIES)
             .update(community)
             .eq('id', community.id)
             .select()
             .single()
+        if (updateResult.error != null)
+            throw new Error(`Error updating communities: ${error}`)
+        updateResult = await supabaseClient
+            .from('communities')
+            .update({ last_update: new Date().toISOString() })
+            .eq('id', community.id);
         if (updateResult.error != null)
             throw new Error(`Error updating communities: ${error}`)
     });
