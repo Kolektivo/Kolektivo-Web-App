@@ -44,11 +44,11 @@ export async function GET(req: NextRequest) {
 }
 function formatDateToReadable(dateString: Date) {
     const date = new Date(dateString);
-
-    // Opciones para el formateo
-    const options = { day: '2-digit', month: 'short', year: 'numeric' };
-
-    // Convertir la fecha al formato deseado
+    const options: Intl.DateTimeFormatOptions = { 
+        day: '2-digit', 
+        month: 'short', 
+        year: 'numeric' 
+    };
     return date.toLocaleDateString('en-US', options).replace(',', '');
 }
 
