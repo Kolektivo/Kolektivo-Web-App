@@ -2,9 +2,7 @@
 
 import { IconButton, Avatar, Menu, MenuItem, ListItemIcon, Icon, ListItemText, Button, Link } from '@mui/material'
 import { useState, type ReactElement } from 'react'
-import FlagIcon from '@/public/images/icons/flag.svg?url'
 import { useAuth } from '@/features/auth/hooks/useAuth'
-import Image from 'next/image'
 
 const AccountMenu = (): ReactElement => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -52,7 +50,6 @@ const AccountMenu = (): ReactElement => {
           {user?.email?.charAt(0).toUpperCase()}
         </Avatar>
       </IconButton>
-      <Image src={FlagIcon} alt="flagIcon" style={{ borderRadius: 'full' }} />
       <Menu
         id="account-menu"
         anchorEl={anchorEl}
