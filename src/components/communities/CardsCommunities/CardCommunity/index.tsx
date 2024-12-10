@@ -5,6 +5,7 @@ import { type ReactElement } from 'react'
 import CuracaoFlag from '@/public/images/communities/curacao_flag.png'
 import trinidadFlag from '@/public/images/communities/trinidad_flag.png'
 import KttdCurrencyIcon from '@/components/common/display/KttdCurrencyIcon'
+import KcwCurrencyIcon from '@/components/common/display/KcwCurrencyIcon'
 
 export interface CardCommunityProps extends Community {}
 
@@ -28,9 +29,10 @@ const CardCommunity = ({ id, name, members, tokenSupply }: CardCommunityProps): 
         <Stack
           style={{
             backgroundColor: 'rgba(255, 255, 255, 0.5)',
-            borderRadius: '16px',
-            padding: '16px',
+            borderRadius: '5px',
             boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+            padding: '2px 5px',
+            width: 'fit-content',
           }}
         >
           <Stack direction="row" alignItems="center" gap={2}>
@@ -40,7 +42,7 @@ const CardCommunity = ({ id, name, members, tokenSupply }: CardCommunityProps): 
             </Typography>
           </Stack>
           <Stack direction="row" alignItems="center" gap={2}>
-            {id === 'Trinidad' ? <KttdCurrencyIcon /> : <KttdCurrencyIcon />}
+            {id === 'Trinidad' ? <KttdCurrencyIcon /> : <KcwCurrencyIcon />}
             <Typography variant="subtitle1" color={textColor} sx={{ height: '18px' }}>
               {tokenSupply}
             </Typography>

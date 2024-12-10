@@ -3,19 +3,9 @@ import axios from 'axios'
 import { createAnonymousClient } from '@/utils/supabase/anonymousClient'
 import { formatUnits } from 'viem'
 
-const scannerApiKey = process.env.SCANNER_API_KEY || ''
 const scannerApi = process.env.SCANNER_API_URL || ''
 const COMMUNITIES = 'communities'
 
-
-// export async function PUT() {
-//     try {
-//         await updateCommunities();
-//         return NextResponse.json({ success: true }, { status: 200 });
-//     } catch (error) {
-//         return NextResponse.json(error, { status: 500 })
-//     }
-// }
 
 export async function GET() {
     const supabaseClient = createAnonymousClient()
@@ -29,7 +19,7 @@ export async function GET() {
     const { data, error } = await supabaseClient.from(COMMUNITIES).select('*', { head: false }).not('id', 'is', null)
     if (error) return NextResponse.json(error, { status: 500 })
     const response = {
-        tokensInCirculation: data.reduce((sum, item) => sum + item.tokens, 0),
+        tokensInCirculation: formatCurrency(data.reduce((sum, item) => sum + item.tokens, 0) * 0.15, 'Dollard'),
         tokenTransfers: data.reduce((sum, item) => sum + item.transfers, 0),
         members: data.reduce((sum, item) => sum + item.members, 0),
         activeVendors: data.reduce((sum, item) => sum + item.vendors, 0),
@@ -37,7 +27,7 @@ export async function GET() {
             id: community.id,
             name: community.name,
             members: community.members,
-            tokenSupply: community.tokens,
+            tokenSupply: formatCurrency(community.tokens, community.id),
             srcImage: community.srcImage,
 
         }))
@@ -45,6 +35,14 @@ export async function GET() {
     return NextResponse.json(response)
 }
 
+function formatCurrency(value: number, id: string, locale = 'en-US') {
+    let formatedValue = new Intl.NumberFormat(locale).format(value);
+    if (id == 'Dollard')
+        return '$' + formatedValue
+    if (id == 'Trinidad')
+        return formatedValue + ' KTT'
+    return formatedValue + ' KCW'
+}
 
 async function updateCommunities() {
 

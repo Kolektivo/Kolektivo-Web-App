@@ -1,7 +1,7 @@
 'use client'
 
 import { Communities } from '@/types/communities'
-import { Stack, Card, CardHeader, CardContent } from '@mui/material'
+import { Stack, Card, CardHeader, CardContent, Skeleton } from '@mui/material'
 import { type ReactElement } from 'react'
 import CardsCommunities from '../CardsCommunities'
 import StatsCommunities from '../StatsCommunities'
@@ -24,10 +24,20 @@ const StackCommunities = (): ReactElement => {
       />
     )
   }
-  //TODO Skeleton
-  //   if (isLoading) {
-  //     return <MyOrganizationSkeleton />
-  //   }
+
+  if (isLoading) {
+    return (
+      <Stack gap={4}>
+        <StatsCommunities communities={undefined} />
+        <Card>
+          <CardHeader title="Kolektivo Communities" />
+          <CardContent>
+            <Skeleton width={800} height={180}></Skeleton>
+          </CardContent>
+        </Card>
+      </Stack>
+    )
+  }
 
   if (data && data.communities && data.communities.length > 0) {
     return (
