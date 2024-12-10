@@ -1,9 +1,10 @@
 'use client'
 
-import { IconButton, Avatar, Menu, MenuItem, ListItemIcon, Icon, ListItemText, Button, Link } from '@mui/material'
+import { IconButton, Avatar, Menu, MenuItem, ListItemIcon, Icon, ListItemText, Button, Link, Box } from '@mui/material'
 import { useState, type ReactElement } from 'react'
 import FlagIcon from '@/public/images/icons/flag.svg?url'
 import { useAuth } from '@/features/auth/hooks/useAuth'
+import KTFlag from '@/public/images/kttflag.svg?url'
 import Image from 'next/image'
 
 const AccountMenu = (): ReactElement => {
@@ -44,6 +45,14 @@ const AccountMenu = (): ReactElement => {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
       >
+        <Box
+          sx={{
+            position: 'relative', // Necesario para posicionar la imagen superpuesta
+            display: 'inline-block', // Asegura que ocupe solo el espacio del contenido
+            width: 48,
+            height: 48,
+          }}
+        ></Box>
         <Avatar
           alt="user-avatar"
           src={user?.user_metadata.avatar_url}
@@ -51,6 +60,21 @@ const AccountMenu = (): ReactElement => {
         >
           {user?.email?.charAt(0).toUpperCase()}
         </Avatar>
+        <Box
+          component="img"
+          src={KTFlag.src}
+          alt="superposed-icon"
+          sx={{            
+            objectFit: "cover",
+            position: 'absolute', 
+            bottom: 0, 
+            right: 0, 
+            width: 20, 
+            height: 20,
+            borderRadius: '50%', 
+            border: '2px solid white', 
+          }}
+        />
       </IconButton>
       <Image src={FlagIcon} alt="flagIcon" style={{ borderRadius: 'full' }} />
       <Menu

@@ -1,19 +1,26 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import Bucket from '@/utils/supabase/bucket'
-import { createClient } from '@/utils/supabase/server'
 import { type Vendor } from '@/types/vendors'
+import FileUtils from '@/utils/files/fileUtils'
+import { createAnonymousClient } from '@/utils/supabase/anonymousClient'
+import { createClient } from '@/utils/supabase/server'
 
 const VENDORS = 'vendors'
 
 export async function GET() {
-  const supabaseClient = createClient()
-  const { data, error } = await supabaseClient.from(VENDORS).select('*')
+  const supabaseClient = createAnonymousClient()
+
+  const supabaseClientAuth = createClient()
+  const user = await supabaseClientAuth.auth.getUser()
+  const idUser = user.data.user?.id
+
+  const { data, error } = await supabaseClient.from(VENDORS).select('*').eq('created_by', idUser)
   if (error) return NextResponse.json(error, { status: 500 })
 
   const vendorsWithLogos = await Promise.all(
     data.map(async (vendor) => {
-      const logoSrc = await Bucket.downloadFile(`vendors/logo/${vendor.id}`)
+      const logoSrc = await Bucket.downloadFile(vendor.logo_path)
       return {
         id: vendor.id,
         name: vendor.name,
@@ -21,7 +28,7 @@ export async function GET() {
         website: vendor.website,
         phone: vendor.phone,
         category: vendor.category,
-        openingHours: vendor.opening_hour,
+        openingHours: vendor.opening_hours,
         wifiAvailability: vendor.wifi,
         logoSrc,
       }
@@ -32,7 +39,11 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const supabaseClient = createClient()
+  const supabaseClient = createAnonymousClient()
+
+  const supabaseClientAuth = createClient()
+  const user = await supabaseClientAuth.auth.getUser()
+  const idUser = user.data.user?.id
 
   const newVendor = (await req.json()) as Vendor
 
@@ -49,7 +60,8 @@ export async function POST(req: NextRequest) {
         phone: newVendor.phone,
         category: newVendor.category,
         name: newVendor.name,
-        opening_hour: newVendor.openingHours,
+        opening_hours: newVendor.openingHours,
+        created_by: idUser,
       },
     ])
     .select()
@@ -57,8 +69,15 @@ export async function POST(req: NextRequest) {
   if (error) return NextResponse.json(error, { status: 500 })
 
   const vendorId = data[0].id
-  const logoPath = `vendors/logo/${vendorId}`
-  await Bucket.uploadFile(logoPath, logoSrc)
+  try {
+    const extension = FileUtils.getFileExtensionFromBase64(logoSrc)
+    const logoPath = `vendors/logos/${vendorId}.${extension}`
+    await Bucket.uploadFile(logoPath, logoSrc)
+    await supabaseClient.from(VENDORS).update({ logo_path: logoPath }).eq('id', vendorId)
+  } catch (error) {
+    await supabaseClient.from(VENDORS).delete().eq('id', vendorId)
+    return NextResponse.json(error, { status: 500 })
+  }
 
   return NextResponse.json(data[0])
 }

@@ -9,8 +9,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <Stack gap={4}>
-      <StatsImpact />
+    <Stack gap={4}>     
       <ImpactLog />
     </Stack>
   )

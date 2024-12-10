@@ -33,6 +33,7 @@ export async function updateSession(request: NextRequest) {
     !user &&
     !request.nextUrl.pathname.startsWith('/sign') &&
     !request.nextUrl.pathname.startsWith('/communities') &&
+    !request.nextUrl.pathname.startsWith('/api/communities') &&
     !(request.nextUrl.pathname === '/')
   ) {
     const url = request.nextUrl.clone()

@@ -19,7 +19,7 @@ class OrginizationsService {
   }
 
   public async update(organization: Organization): Promise<Organization> {
-    const response = await this.httpInstance.put<Organization>('/organizations', organization)
+    const response = await this.httpInstance.put<Organization>(`/organizations/${organization.id}`, organization)
 
     return response.data
   }

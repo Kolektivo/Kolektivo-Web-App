@@ -36,7 +36,7 @@ const RowOpeningHour = ({ value, onChange, onBlur }: RowOpeningHourProps): React
         isClosed: state.isClosed,
       })
     }
-  }, [state]) // eslint-disable-line
+  }, [state])
 
   return (
     <tr>

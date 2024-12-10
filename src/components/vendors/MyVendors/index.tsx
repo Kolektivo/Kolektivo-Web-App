@@ -16,7 +16,7 @@ export default function MyVendorsCard({ actions, isUpdate = false }: { actions?:
   })
 
   return (
-    <ItemsCard title="My Verdor(s)" actions={actions}>
+    <ItemsCard title="My Vendor(s)" actions={actions}>
       {isLoading && (
         <CardContent>
           <VendorItemSkeleton />

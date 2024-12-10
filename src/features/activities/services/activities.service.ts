@@ -1,4 +1,4 @@
-import { type ActivityReviewType, type ActivityType } from '@/types/activities'
+import { ImpactDto, type ActivityReviewType, type ActivityType } from '@/types/activities'
 import { type User } from '@supabase/supabase-js'
 import axios from 'axios'
 
@@ -12,6 +12,11 @@ class ActivitiesService {
       `/activities${user || id ? '?' : ''}${user ? `hostId=${user.id}` : ''}${user ? '&' : ''}${id ? `id=${id}` : ''}`,
     )
 
+    return response.data
+  }
+
+  public async getCompleted(page: number): Promise<ImpactDto[] | undefined> {
+    const response = await this.httpInstance.get<ImpactDto[]>(`/activities/completed?page=${page}`)
     return response.data
   }
 

@@ -41,7 +41,11 @@ const UpdateVendor = ({ id }: { id: string }): ReactElement => {
 
   useEffect(() => {
     setSaving(false)
-  }, [mutation.isSuccess, mutation.isError])
+
+    if (mutation.isSuccess) {
+      router.prefetch('/my-vendor')
+    }
+  }, [mutation.isSuccess, mutation.isError, router])
 
   if (error) {
     return (
@@ -59,7 +63,7 @@ const UpdateVendor = ({ id }: { id: string }): ReactElement => {
 
   return (
     <>
-      <UpdateVendorForm defaultValues={data} onSave={handleSave} onDelete={() => {}} saving={saving} />
+      <UpdateVendorForm defaultValues={data} onSave={handleSave} saving={saving} />
       <DialogSuccess
         open={mutation.isSuccess}
         title="Vendor Updated"

@@ -5,12 +5,19 @@ import { Card, CardContent, Stack, Button, Box } from '@mui/material'
 import { type ReactElement } from 'react'
 import OptionCommunity from './OptionCommunity'
 import { useState } from 'react'
-import { communities } from '@/constants/communities/main'
-import { type Community } from '@/types/communities'
+import { Communities, type Community } from '@/types/communities'
 import CardCommunity from '@/components/communities/CardsCommunities/CardCommunity'
 import Link from 'next/link'
+import { useQuery } from '@tanstack/react-query'
+import communitiesService from '@/features/communities/services/communities.service'
 
 const ChooseCommunity = (): ReactElement => {
+
+  const { data, isLoading, error, refetch } = useQuery<Communities | undefined>({
+    queryKey: ['getCommunities'],
+    queryFn: async () => await communitiesService.get(),
+  })
+
   const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(null)
   const [step, setStep] = useState<number>(1)
 
@@ -65,7 +72,7 @@ const ChooseCommunity = (): ReactElement => {
       <Card>
         <CardContent>
           <Stack gap={4}>
-            {communities.map((community) => (
+            {data?.communities.map((community) => (
               <OptionCommunity
                 key={community.id}
                 isOpacity={selectedCommunity !== null}

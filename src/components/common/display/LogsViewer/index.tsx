@@ -1,9 +1,10 @@
 import { type ReactElement } from 'react'
 import { Box, Stack, Typography, Icon } from '@mui/material'
+import { ImpactDto } from '@/types/activities'
+import Image from 'next/image';
+import KTFlag from '@/public/images/kttflag.svg?url'
 
-type ItemLog = {
-  isPrincipal?: boolean
-  text: string
+type ItemLog = ImpactDto & {
   icon?: string
 }
 
@@ -35,10 +36,9 @@ const LogsViewer = ({ logs }: LogsViewerProps): ReactElement => {
               </Box>
             )
           }
-
           return (
             <Stack key={index} gap={2} direction="row" alignItems="center">
-              <Icon color="strongOrange">{log.icon ?? 'target'}</Icon>
+              <Image src={KTFlag} alt={`KTFlag`} width={30} height={20} />
               <Typography variant="body1">{log.text}</Typography>
             </Stack>
           )

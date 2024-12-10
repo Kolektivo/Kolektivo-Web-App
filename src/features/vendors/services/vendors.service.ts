@@ -28,6 +28,12 @@ class VendorsService {
 
     return response.data
   }
+
+  public async delete(id: string): Promise<Vendor> {
+    const response = await this.httpInstance.delete(`/vendors/${id}`)
+
+    return response.data
+  }
 }
 
 const vendorsService = new VendorsService()

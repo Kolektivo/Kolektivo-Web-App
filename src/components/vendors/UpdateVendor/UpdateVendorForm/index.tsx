@@ -5,21 +5,24 @@ import { vendorsCategories, wifiAvailability } from '@/constants/vendors/create'
 import { vendorInfoSchema } from '@/features/vendors/validations'
 import { type Vendor } from '@/types/vendors'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Card, CardActions, CardContent, MenuItem, Stack, TextField } from '@mui/material'
-import { type MouseEventHandler, type ReactElement, useState } from 'react'
+import { Card, CardActions, CardContent, MenuItem, Stack, TextField } from '@mui/material'
+import { type ReactElement, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import TableOpeningHours from '../../TableOpeningHours'
 import UploadImage from '@/components/common/inputs/image/UploadImage'
 import LoadingButton from '@/components/common/buttons/LoadingButton'
+import { useMutation } from '@tanstack/react-query'
+import vendorsService from '@/features/vendors/services/vendors.service'
+import DialogSuccess from '@/components/common/modals/DialogSuccess'
+import { useRouter } from 'next/navigation'
 
 type UpdateVendorFormProps = {
   defaultValues?: Vendor
-  onDelete?: MouseEventHandler<HTMLButtonElement>
   onSave: (data: Vendor) => void
   saving: boolean
 }
 
-const UpdateVendorForm = ({ defaultValues, onDelete, onSave, saving }: UpdateVendorFormProps): ReactElement => {
+const UpdateVendorForm = ({ defaultValues, onSave, saving }: UpdateVendorFormProps): ReactElement => {
   const {
     control,
     register,
@@ -31,6 +34,14 @@ const UpdateVendorForm = ({ defaultValues, onDelete, onSave, saving }: UpdateVen
     mode: 'onBlur',
   })
   const [logoBase64, setLogoBase64] = useState<string | null>(defaultValues?.logoSrc || null)
+
+  const router = useRouter()
+
+  const mutation = useMutation({
+    mutationFn: async (id: string) => {
+      await vendorsService.delete(id)
+    },
+  })
 
   const handleChangeLogo = (image: File) => {
     const reader = new FileReader()
@@ -44,6 +55,16 @@ const UpdateVendorForm = ({ defaultValues, onDelete, onSave, saving }: UpdateVen
     data.logoSrc = logoBase64!
     data.id = defaultValues?.id
     onSave(data)
+  }
+
+  const handleDelete = () => {
+    if (defaultValues?.id) {
+      mutation.mutate(defaultValues?.id)
+    }
+  }
+
+  const handleModalSuccess = () => {
+    router.push('/my-vendor')
   }
 
   return (
@@ -156,17 +177,21 @@ const UpdateVendorForm = ({ defaultValues, onDelete, onSave, saving }: UpdateVen
             </Stack>
           </CardContent>
           <CardActions>
-            {onDelete && (
-              <Button onClick={onDelete} variant="contained" color="error">
-                Delete
-              </Button>
-            )}
-            <LoadingButton loading={saving} type="submit" variant="contained" disabled={!isValid}>
+            <LoadingButton loading={mutation.isPending} onClick={handleDelete} variant="contained" color="error">
+              Delete
+            </LoadingButton>
+            <LoadingButton loading={saving} type="submit" variant="contained" disabled={!isValid || mutation.isPending}>
               Save
             </LoadingButton>
           </CardActions>
         </Card>
       </form>
+      <DialogSuccess
+        open={mutation.isSuccess}
+        title="Vendor Deleted"
+        description="Your vendor has been successfully deleted"
+        onClickButton={handleModalSuccess}
+      />
     </Stack>
   )
 }

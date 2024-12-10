@@ -12,6 +12,7 @@ const ACTIVITIES = 'activities'
 const ORGANIZATIONS = 'organizations'
 
 export async function GET(req: NextRequest) {
+  console.log('aca-organ')
   const { searchParams } = new URL(req.url)
   const id = searchParams.get('id')
   const hostId = searchParams.get('hostId')
