@@ -2,7 +2,7 @@ import { type ReactElement } from 'react'
 import { Box, Stack, Typography, Icon } from '@mui/material'
 import { ImpactDto } from '@/types/activities'
 import Image from 'next/image';
-import KTFlag from '@/public/images/ktflag.svg'
+import KTFlag from '/public/images/ktflag.svg'
 
 type ItemLog = ImpactDto & {
   icon?: string
