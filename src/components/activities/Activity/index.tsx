@@ -13,6 +13,7 @@ type Props = {
   title: string
   state: string
   stateColor: 'upcomingChip' | 'actionRequiredChip' | 'completedChip'
+  hostId?: number
   redirectionPath?: string
   disableRedirect?: boolean
 }

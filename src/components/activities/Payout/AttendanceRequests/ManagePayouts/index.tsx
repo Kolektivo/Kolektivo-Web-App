@@ -21,24 +21,31 @@ export default function ManagePayoutsCard({ requests, setRequests, handleBack, h
     requests.filter((request) => request.state == 'forManagePayout').map((request) => request.payoutTransactionLink),
   )
   const handleChangeTransactionLinks = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
-    console.log(event)
     const value = event.target.value
-    const updatedTransactionLinks = [...transactionLinks]
-    updatedTransactionLinks[index] = value
-    setTransactionLinks(updatedTransactionLinks)
+    try {
+      const url = new URL(value)
+      const updatedTransactionLinks = [...transactionLinks]
+      updatedTransactionLinks[index] = String(url)
+      setTransactionLinks(updatedTransactionLinks)
+    } catch {
+      const updatedTransactionLinks = [...transactionLinks]
+      updatedTransactionLinks[index] = ''
+      setTransactionLinks(updatedTransactionLinks)
+    }
   }
   const submitHandler = (event: { [key: number]: string }) => {
-    const updatedRequests = [...requests]
+    const unmodifiedRequests = [...requests.filter((request) => request.state != 'forManagePayout')]
+    const modifiedRequests = [...requests.filter((request) => request.state == 'forManagePayout')]
     Object.keys(event).forEach((key) => {
       const numberKey = Number(key)
       if (event[numberKey] != '') {
-        updatedRequests[numberKey].payoutTransactionLink = event[numberKey]
-        updatedRequests[numberKey].state = 'completed'
-        updatedRequests[numberKey].denialReason = ''
+        modifiedRequests[numberKey].payoutTransactionLink = event[numberKey]
+        modifiedRequests[numberKey].state = 'completed'
+        modifiedRequests[numberKey].denialReason = ''
       }
     })
-    setRequests(updatedRequests)
-    attendanceRequestsService.setAttendanceRequest(updatedRequests)
+    setRequests([...modifiedRequests, ...unmodifiedRequests])
+    attendanceRequestsService.setAttendanceRequest(modifiedRequests)
     handleNext()
   }
   useEffect(() => {
@@ -66,14 +73,16 @@ export default function ManagePayoutsCard({ requests, setRequests, handleBack, h
           </>
         }
       >
-        {requests?.map((request, index) => {
-          if (request.state == 'forManagePayout')
+        {requests
+          .filter((request) => request.state == 'forManagePayout')
+          ?.map((request, index) => {
             return (
               <Box key={index}>
                 <Divider />
                 <CardContent>
                   <ManagePayoutRequestCard request={request}>
                     <TextField
+                      type="url"
                       id="payoutTransactionLink"
                       variant="outlined"
                       placeholder="Transaction link"
@@ -87,7 +96,7 @@ export default function ManagePayoutsCard({ requests, setRequests, handleBack, h
                 </CardContent>
               </Box>
             )
-        })}
+          })}
       </ItemsCard>
     </form>
   )
