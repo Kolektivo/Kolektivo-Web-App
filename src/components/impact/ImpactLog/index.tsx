@@ -6,6 +6,8 @@ import { ImpactDto } from '@/types/activities'
 import { Card, CardHeader, CardContent, CardActions, Button } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { useState, type ReactElement } from 'react'
+import { Skeleton, Stack } from '@mui/material'
+import React from 'react'
 
 const ImpactLog = (): ReactElement => {
   const [page, setPage] = useState(1)
@@ -31,7 +33,19 @@ const ImpactLog = (): ReactElement => {
   }
 
   if (isLoading) {
-    return <Card />
+    return (
+      <Card>
+        <CardHeader title="Impact Log" />
+        <CardContent>
+          <Skeleton width={140} height={132} />
+        </CardContent>
+        <CardActions sx={{ justifyContent: 'center' }}>
+          <Button size="small" onClick={handleLoadMore} disabled={isLoading}>
+            {isLoading ? 'Loading...' : 'Load more'}
+          </Button>
+        </CardActions>
+      </Card>
+    )
   }
 
   if (data) {
