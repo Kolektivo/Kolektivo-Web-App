@@ -36,7 +36,6 @@ const LogsViewer = ({ logs }: LogsViewerProps): ReactElement => {
               </Box>
             )
           }
-
           return (
             <Stack key={index} gap={2} direction="row" alignItems="center">
               <Image src={KTFlag} alt={`KTFlag`} width={30} height={20} />
