@@ -37,7 +37,7 @@ const ImpactLog = (): ReactElement => {
       <Card>
         <CardHeader title="Impact Log" />
         <CardContent>
-          <Skeleton width={140} height={132} />
+          <Skeleton width={250} height={132} />
         </CardContent>
         <CardActions sx={{ justifyContent: 'center' }}>
           <Button size="small" onClick={handleLoadMore} disabled={isLoading}>
