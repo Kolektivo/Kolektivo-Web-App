@@ -1,9 +1,10 @@
-import IconKtt from '@/components/common/display/IconKtt'
+import KttdCurrency from '@/components/common/display/IconKtt'
 import { type Community } from '@/types/communities'
 import { Paper, Stack, Typography, Icon } from '@mui/material'
 import { type ReactElement } from 'react'
 import CuracaoFlag from '@/public/images/communities/curacao_flag.png'
 import trinidadFlag from '@/public/images/communities/trinidad_flag.png'
+import KttdCurrencyIcon from '@/components/common/display/KttdCurrencyIcon'
 
 export interface CardCommunityProps extends Community {}
 
@@ -24,7 +25,14 @@ const CardCommunity = ({ id, name, members, tokenSupply }: CardCommunityProps): 
         <Typography variant="subtitle1" color={textColor}>
           {name}
         </Typography>
-        <Stack>
+        <Stack
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.5)',
+            borderRadius: '16px',
+            padding: '16px',
+            boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+          }}
+        >
           <Stack direction="row" alignItems="center" gap={2}>
             <Icon sx={{ fontSize: '32px', lineHeight: '32px', color: textColor }}>groups</Icon>
             <Typography variant="subtitle1" color={textColor} sx={{ height: '18px' }}>
@@ -32,7 +40,7 @@ const CardCommunity = ({ id, name, members, tokenSupply }: CardCommunityProps): 
             </Typography>
           </Stack>
           <Stack direction="row" alignItems="center" gap={2}>
-            <IconKtt />
+            {id === 'Trinidad' ? <KttdCurrencyIcon /> : <KttdCurrencyIcon />}
             <Typography variant="subtitle1" color={textColor} sx={{ height: '18px' }}>
               {tokenSupply}
             </Typography>
