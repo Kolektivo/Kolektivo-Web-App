@@ -48,7 +48,7 @@ async function updateCommunities() {
 
     const supabaseClient = createAnonymousClient()
 
-    const { data, error } = await supabaseClient.from(COMMUNITIES).select('*'));
+    const { data, error } = await supabaseClient.from(COMMUNITIES).select('*');
     if (error) throw new Error(`Error gathering communities: ${error}`)
     console.log("Communities " + data.length)
 
