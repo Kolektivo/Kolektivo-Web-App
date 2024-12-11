@@ -18,11 +18,13 @@ export async function GET() {
 
     const { data, error } = await supabaseClient.from(COMMUNITIES).select('*', { head: false }).not('id', 'is', null)
     if (error) return NextResponse.json(error, { status: 500 })
+
+    const vendorsData = await supabaseClient.from('vendors').select('*', { count: 'exact' }).not('id', 'is', null);
     const response = {
         tokensInCirculation: formatCurrency(data.reduce((sum, item) => sum + item.tokens, 0) * 0.15, 'Dollard'),
         tokenTransfers: data.reduce((sum, item) => sum + item.transfers, 0),
         members: data.reduce((sum, item) => sum + item.members, 0),
-        activeVendors: data.reduce((sum, item) => sum + item.vendors, 0),
+        activeVendors: vendorsData.count,
         communities: data.map(community => ({
             id: community.id,
             name: community.name,
@@ -54,18 +56,6 @@ async function updateCommunities() {
 
 
     data.forEach(async community => {
-        const vendorsData = await supabaseClient.from('vendors').select('*', { count: 'exact' }).eq('community', community.id);
-        console.log("Vendors  for " + community.id + ': ' + vendorsData.count)
-        let updateResult = await supabaseClient
-            .from(COMMUNITIES)
-            .update({ vendors: vendorsData.count })
-            .eq('id', community.id)
-            .select()
-            .single()
-        if (updateResult.error != null)
-            throw new Error(`Error updating communities: ${error}`)
-
-
         if (community.id != 'Trinidad' || community.last_update >= new Date(Date.now() - 3600 * 1000).toISOString())
             return
 
@@ -78,9 +68,8 @@ async function updateCommunities() {
         community.members = communityData.members
         community.tokens = communityData.tokens
         community.last_block = communityData.last_block
-        community.vendors = vendorsData.count
         console.log("Before saving ", community)
-        updateResult = await supabaseClient
+        let updateResult = await supabaseClient
             .from(COMMUNITIES)
             .update(community)
             .eq('id', community.id)
