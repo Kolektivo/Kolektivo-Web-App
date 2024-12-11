@@ -48,19 +48,27 @@ async function updateCommunities() {
 
     const supabaseClient = createAnonymousClient()
 
-    const { data, error } = await supabaseClient.from(COMMUNITIES).select('*')
-        .lte('last_update', new Date(Date.now() - 3600 * 1000).toISOString());
+    const { data, error } = await supabaseClient.from(COMMUNITIES).select('*'));
     if (error) throw new Error(`Error gathering communities: ${error}`)
     console.log("Communities " + data.length)
 
 
-
     data.forEach(async community => {
-        if (community.id != 'Trinidad')
+        const vendorsData = await supabaseClient.from('vendors').select('*', { count: 'exact' }).eq('community', community.id);
+        let updateResult = await supabaseClient
+            .from(COMMUNITIES)
+            .update({ vendors: vendorsData.count })
+            .eq('id', community.id)
+            .select()
+            .single()
+
+        if (community.id != 'Trinidad' || community.last_update >= new Date(Date.now() - 3600 * 1000).toISOString())
             return
+
+
         console.log("Updating " + community.name)
         const communityData = await gatherContractInfo(community.contract_address, community.last_block)
-        const vendorsData = await supabaseClient.from('vendors').select('*', { count: 'exact'})//.eq('community', community.id);
+
         console.log("Current comunity ", community)
         community.transfers = communityData.transfers
         community.members = communityData.members
@@ -68,7 +76,7 @@ async function updateCommunities() {
         community.last_block = communityData.last_block
         community.vendors = vendorsData.count
         console.log("Before saving ", community)
-        let updateResult = await supabaseClient
+        updateResult = await supabaseClient
             .from(COMMUNITIES)
             .update(community)
             .eq('id', community.id)
@@ -83,6 +91,9 @@ async function updateCommunities() {
         if (updateResult.error != null)
             throw new Error(`Error updating communities: ${error}`)
     });
+
+
+
     return true;
 }
 
