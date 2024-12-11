@@ -44,14 +44,7 @@ const AccountMenu = (): ReactElement => {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
       >
-        <Box
-          sx={{
-            position: 'relative', // Necesario para posicionar la imagen superpuesta
-            display: 'inline-block', // Asegura que ocupe solo el espacio del contenido
-            width: 48,
-            height: 48,
-          }}
-        ></Box>
+        
         <Avatar
           alt="user-avatar"
           src={user?.user_metadata.avatar_url}
