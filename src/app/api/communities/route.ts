@@ -55,12 +55,16 @@ async function updateCommunities() {
 
     data.forEach(async community => {
         const vendorsData = await supabaseClient.from('vendors').select('*', { count: 'exact' }).eq('community', community.id);
+        console.log("Vendors  for " + community.id + ': ' + vendorsData.count)
         let updateResult = await supabaseClient
             .from(COMMUNITIES)
             .update({ vendors: vendorsData.count })
             .eq('id', community.id)
             .select()
             .single()
+        if (updateResult.error != null)
+            throw new Error(`Error updating communities: ${error}`)
+
 
         if (community.id != 'Trinidad' || community.last_update >= new Date(Date.now() - 3600 * 1000).toISOString())
             return
