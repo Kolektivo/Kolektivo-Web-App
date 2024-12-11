@@ -4,6 +4,7 @@ import { IconButton, Avatar, Menu, MenuItem, ListItemIcon, Icon, ListItemText, B
 import { useState, type ReactElement } from 'react'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import KTFlag from '@/public/images/kttflag.svg?url'
+import Image from 'next/image'
 
 const AccountMenu = (): ReactElement => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
