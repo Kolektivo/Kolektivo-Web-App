@@ -7,7 +7,7 @@ import Image from 'next/image'
 import LoadingButton from '@/components/common/buttons/LoadingButton'
 import { Stack, Typography } from '@mui/material'
 
-const ButtonSignInGoogle = (): ReactElement => {
+const ButtonSignInGoogle = ({ up }: { up: boolean }): ReactElement => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -35,7 +35,7 @@ const ButtonSignInGoogle = (): ReactElement => {
         fullWidth
         disabledMargin
       >
-        Continue with Google
+        {up ? '' : 'Continue with Google'}
       </LoadingButton>
       {error && (
         <Typography variant="body2" color="error" textAlign="center">
