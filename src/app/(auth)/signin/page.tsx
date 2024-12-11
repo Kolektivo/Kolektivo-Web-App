@@ -36,7 +36,7 @@ export default function Page() {
                 Or
               </Typography>
               <Stack gap={2}>
-                <ButtonSignInGoogle />               
+                <ButtonSignInGoogle up={false} />               
               </Stack>
             </Stack>
           </CardContent>
