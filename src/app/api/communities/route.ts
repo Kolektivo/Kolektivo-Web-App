@@ -60,7 +60,7 @@ async function updateCommunities() {
             return
         console.log("Updating " + community.name)
         const communityData = await gatherContractInfo(community.contract_address, community.last_block)
-        const vendorsData = await supabaseClient.from('vendors').select('*', { count: 'exact', head: true }).eq('community', community.id);
+        const vendorsData = await supabaseClient.from('vendors').select('*', { count: 'exact'})//.eq('community', community.id);
         console.log("Current comunity ", community)
         community.transfers = communityData.transfers
         community.members = communityData.members

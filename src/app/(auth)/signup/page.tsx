@@ -36,17 +36,7 @@ export default function Page() {
                   <Button fullWidth variant="outlinedGray">
                     <Image src={IconGoogle} alt="icon-google" width={24} height={24} />
                   </Button>
-                </Box>
-                <Box flex={1}>
-                  <Button fullWidth variant="outlinedGray">
-                    <Image src={IconFacebook} alt="icon-facebook" width={24} height={24} />
-                  </Button>
-                </Box>
-                <Box flex={1}>
-                  <Button fullWidth variant="outlinedGray">
-                    <Image src={IconApple} alt="icon-apple" width={24} height={24} />
-                  </Button>
-                </Box>
+                </Box>               
               </Stack>
             </Stack>
           </CardContent>
