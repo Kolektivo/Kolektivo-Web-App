@@ -6,6 +6,7 @@ const ATTENDANCEREQUESTS = 'attendance_requests'
 const supabaseBucket = process.env.NEXT_PUBLIC_SUPABASE_BUCKET || ''
 
 export async function getAttendanceRequests(activityId: string) {
+  console.log('Getting attendance requests')
   const supabaseClient = createAnonymousClient()
   const { data, error } = await supabaseClient.from(ATTENDANCEREQUESTS).select('*').eq('activity_id', activityId)
   if (error) return NextResponse.json(error)
@@ -19,6 +20,7 @@ export async function getAttendanceRequests(activityId: string) {
 }
 
 export async function putAttendanceRequest(updatedAttendanceRequests: AttendanceRequestResponse[]) {
+  console.log('Updating attendance requests')
   const response = updatedAttendanceRequests.map((attendanceRequest) => {
     const update = async () => {
       return await updateAttendanceRequest(attendanceRequest)
@@ -29,6 +31,7 @@ export async function putAttendanceRequest(updatedAttendanceRequests: Attendance
 }
 
 async function updateAttendanceRequest(attendanceRequest: AttendanceRequestResponse) {
+  console.log('Updating attendance request')
   const supabaseClient = createAnonymousClient()
   const { proof_image, ...attendanceRequestWhitoutProofImage } = attendanceRequest
   console.log('Removed ', proof_image?.substring(0, 10))
@@ -43,6 +46,7 @@ async function updateAttendanceRequest(attendanceRequest: AttendanceRequestRespo
 }
 
 async function downloadFile(bucketName: string, filePath: string) {
+  console.log('Dowloading file')
   if (filePath == '' || !filePath) return ''
   const supabaseClient = createAnonymousClient()
   const { data, error } = await supabaseClient.storage.from(bucketName).download(filePath)
@@ -57,6 +61,7 @@ async function downloadFile(bucketName: string, filePath: string) {
   }
 }
 async function blobToImageSrc(blob: Blob): Promise<string> {
+  console.log('Converting blob to image')
   const arrayBuffer = await blob.arrayBuffer()
   const buffer = Buffer.from(arrayBuffer)
   return buffer.toString('base64')
