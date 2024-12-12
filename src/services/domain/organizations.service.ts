@@ -63,12 +63,15 @@ export async function postOrganization(newOrganization: any) {
 }
 
 export async function putOrganization(id: string, organization: any) {
+  console.log('Updating organization')
   const supabaseClient = createAnonymousClient()
 
   const supabaseClientAuth = createClient()
   const user = await supabaseClientAuth.auth.getUser()
   const idUser = user.data.user?.id
 
+
+  console.log('Updating organization logos')
   const logoSrc = organization.logoSrc
   delete organization.logoSrc
 
