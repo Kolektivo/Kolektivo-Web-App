@@ -8,6 +8,7 @@ import { NextResponse } from 'next/server'
 const ORGANIZATIONS = 'organizations'
 
 export async function getOrganizations() {
+  console.log('Getting organizations')
   const supabaseClient = createAnonymousClient()
   const supabaseClientAuth = createClient()
   const user = await supabaseClientAuth.auth.getUser()
@@ -16,6 +17,7 @@ export async function getOrganizations() {
   const { data, error } = await supabaseClient.from(ORGANIZATIONS).select().eq('created_by', idUser)
   if (error) return NextResponse.json(error, { status: 500 })
 
+  console.log('Getting organization logos')
   const organizationsWithLogos = await Promise.all(
     data.map(async (organization) => {
       const logoSrc = await Bucket.downloadFile(organization.logoPath)
@@ -27,6 +29,7 @@ export async function getOrganizations() {
 }
 
 export async function postOrganization(newOrganization: any) {
+  console.log('Creating organization')
   const supabaseClient = createAnonymousClient()
   const supabaseClientAuth = createClient()
   const user = await supabaseClientAuth.auth.getUser()
@@ -44,6 +47,7 @@ export async function postOrganization(newOrganization: any) {
   const organizationId = data[0].id
 
   try {
+    console.log('Uploading organization logos')
     const extension = FileUtils.getFileExtensionFromBase64(logoSrc)
     const logoPath = `organizations/logos/${organizationId}.${extension}`
     await Bucket.uploadFile(logoPath, logoSrc)
