@@ -61,3 +61,34 @@ export async function postOrganization(newOrganization: any) {
 
   return NextResponse.json(data[0])
 }
+
+export async function putOrganization(id: string, organization: any) {
+  const supabaseClient = createAnonymousClient()
+
+  const supabaseClientAuth = createClient()
+  const user = await supabaseClientAuth.auth.getUser()
+  const idUser = user.data.user?.id
+
+  const logoSrc = organization.logoSrc
+  delete organization.logoSrc
+
+  const { data, error } = await supabaseClient
+    .from(ORGANIZATIONS)
+    .update(organization)
+    .eq('id', id)
+    .eq('created_by', idUser)
+    .select()
+    .single()
+
+  if (error) return NextResponse.json(error, { status: 500 })
+
+  try {
+    await Bucket.uploadFile(data.logoPath, logoSrc)
+  } catch (error) {
+    return NextResponse.json(error, { status: 500 })
+  }
+
+  revalidatePath('/api/organizations')
+
+  return NextResponse.json(data)
+}
