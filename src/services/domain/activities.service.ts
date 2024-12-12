@@ -18,6 +18,7 @@ export async function getActivities(hostId: string, id: string) {
       .eq('activity_host_id', hostId)
       .eq('id', id)
     if (error) return NextResponse.json(error)
+    console.log('Geeting activities organization data and banner')
     const activitiesWithBanners = await Promise.all(
       data.map(async (activity) => {
         const { data: organizationData, error: organizationError } = await supabaseClient
@@ -37,9 +38,9 @@ export async function getActivities(hostId: string, id: string) {
     console.log('Geeting activities with hostId and without id')
     const { data, error } = await supabaseClient.from(ACTIVITIES).select('*').eq('activity_host_id', hostId)
     if (error) return NextResponse.json(error)
+    console.log('Geeting activities organization data and banner')
     const activitiesWithBanners = await Promise.all(
       data.map(async (activity) => {
-        console.log('Geeting activities organization data and banner')
         const { data: organizationData, error: organizationError } = await supabaseClient
           .from(ORGANIZATIONS)
           .select('*')
@@ -57,6 +58,7 @@ export async function getActivities(hostId: string, id: string) {
     console.log('Geeting activities with Id and without hostId')
     const { data, error } = await supabaseClient.from(ACTIVITIES).select('*').eq('id', id)
     if (error) return NextResponse.json(error)
+    console.log('Geeting activities organization data and banner')
     const activitiesWithBanners = await Promise.all(
       data.map(async (activity) => {
         const { data: organizationData, error: organizationError } = await supabaseClient
@@ -76,6 +78,7 @@ export async function getActivities(hostId: string, id: string) {
     console.log('Geeting activities without hostId and id')
     const { data, error } = await supabaseClient.from(ACTIVITIES).select('*')
     if (error) return NextResponse.json(error)
+    console.log('Geeting activities organization data and banner')
     const activitiesWithBanners = await Promise.all(
       data.map(async (activity) => {
         const { data: organizationData, error: organizationError } = await supabaseClient
@@ -95,25 +98,30 @@ export async function getActivities(hostId: string, id: string) {
 }
 
 export async function postActivity(newActivity: ActivityType) {
+  console.log('Creating activity')
   const supabaseClient = createAnonymousClient()
   const bannerSrc = newActivity.banner_src
   delete newActivity.banner_src
 
   const { data, error } = await supabaseClient.from(ACTIVITIES).insert([newActivity]).select()
   if (error) return NextResponse.json(error)
+  console.log('Activity created successfully')
 
   const activityId = data[0].id
   const mimeType = bannerSrc?.split(';')[0].split(':')[1]
   const extension = mimeType === 'image/png' ? 'png' : 'jpg'
   const bannerPath = `${bannerBasePath}/${activityId}.${extension}`
   data[0].banner_path = bannerPath
+  console.log('Uploading activity banner')
   await uploadFile(supabaseBucket, bannerPath, bannerSrc as string)
+  console.log('Setting activity banner path')
   updateActivity(data[0])
   data[0].banner_src = bannerSrc
   return NextResponse.json(data[0])
 }
 
 export async function putActivity(updatedActivity: ActivityType) {
+  console.log('Updating activity')
   const bannerSrc = updatedActivity.banner_src
   const reportSrc = updatedActivity.report_src
   delete updatedActivity.banner_src
@@ -124,6 +132,7 @@ export async function putActivity(updatedActivity: ActivityType) {
   if (error) return NextResponse.json(error)
 
   if (data) {
+    console.log('Updating activity banner')
     const activityId = data[0].id
     const mimeType = bannerSrc?.split(';')[0].split(':')[1]
     const extension = mimeType === 'image/png' ? 'png' : 'jpg'
@@ -137,6 +146,14 @@ export async function putActivity(updatedActivity: ActivityType) {
       await uploadFile(supabaseBucket, report_path, reportSrc as string)
     }
   }
+  return NextResponse.json(data)
+}
+
+export async function deleteActivity(id: string) {
+  console.log('Removing activity')
+  const supabaseClient = createAnonymousClient()
+  const { data, error } = await supabaseClient.from(ACTIVITIES).delete().eq('id', id)
+  if (error) return NextResponse.json(error)
   return NextResponse.json(data)
 }
 
@@ -154,6 +171,7 @@ async function updateActivity(activity: ActivityType) {
 }
 
 async function downloadFile(bucketName: string, filePath: string) {
+  console.log('Downloading file')
   if (filePath == '' || !filePath) return ''
   const supabaseClient = createAnonymousClient()
   const { data, error } = await supabaseClient.storage.from(bucketName).download(filePath)
@@ -169,13 +187,14 @@ async function downloadFile(bucketName: string, filePath: string) {
 }
 
 async function blobToImageSrc(blob: Blob): Promise<string> {
+  console.log('Converting file blob to image')
   const arrayBuffer = await blob.arrayBuffer()
   const buffer = Buffer.from(arrayBuffer)
   return buffer.toString('base64')
 }
 
 async function uploadFile(bucketName: string, filePath: string, base64File: string) {
-  console.log('FilePath: ', filePath)
+  console.log('Uploading file')
   const fileBlob = await base64ImageSourceToBlob(base64File)
   const supabaseClient = createAnonymousClient()
   const { data: dataDelete, error: errorDelete } = await supabaseClient.storage.from(bucketName).remove([filePath])
@@ -196,7 +215,7 @@ async function uploadFile(bucketName: string, filePath: string, base64File: stri
 }
 
 async function base64ImageSourceToBlob(base64imageSource: string): Promise<Blob> {
+  console.log('Converting base64 image to blob')
   const response = await fetch(base64imageSource)
   return await response.blob()
 }
-

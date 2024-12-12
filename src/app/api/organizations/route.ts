@@ -9,23 +9,6 @@ import { revalidatePath } from 'next/cache'
 const ORGANIZATIONS = 'organizations'
 
 export async function GET() {
-  const supabaseClient = createAnonymousClient()
-
-  const supabaseClientAuth = createClient()
-  const user = await supabaseClientAuth.auth.getUser()
-  const idUser = user.data.user?.id
-
-  const { data, error } = await supabaseClient.from(ORGANIZATIONS).select().eq('created_by', idUser)
-  if (error) return NextResponse.json(error, { status: 500 })
-
-  const organizationsWithLogos = await Promise.all(
-    data.map(async (organization) => {
-      const logoSrc = await Bucket.downloadFile(organization.logoPath)
-      return { ...organization, logoSrc }
-    }),
-  )
-
-  return NextResponse.json(organizationsWithLogos)
 }
 
 export async function POST(req: NextRequest) {
