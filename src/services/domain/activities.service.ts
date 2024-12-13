@@ -1,4 +1,4 @@
-import { ActivityType } from '@/types/activities'
+import { ActivityType, ImpactDto } from '@/types/activities'
 import { createAnonymousClient } from '@/utils/supabase/anonymousClient'
 import { NextResponse } from 'next/server'
 
@@ -7,6 +7,7 @@ const bannerBasePath = process.env.NEXT_PUBLIC_ACTIVITIES_BANNER_PATH || ''
 
 const ACTIVITIES = 'activities'
 const ORGANIZATIONS = 'organizations'
+const pageSize = parseInt(process.env.PAGE_SIZE || '1')
 
 export async function getActivities(hostId: string, id: string) {
   const supabaseClient = createAnonymousClient()
@@ -95,6 +96,37 @@ export async function getActivities(hostId: string, id: string) {
 
     return NextResponse.json(activitiesWithBanners)
   }
+}
+
+export async function getCompletedActivities(page: number) {
+  const supabaseClient = createAnonymousClient()
+
+  const from = (page - 1) * pageSize
+  const to = from + pageSize - 1
+
+  const { data, error } = await supabaseClient
+    .from(ACTIVITIES)
+    .select('start_date,title')
+    .eq('state', 'completed')
+    .range(0, to)
+    .order('start_date', { ascending: false })
+
+  if (error) return NextResponse.json(error)
+
+  let lastDate: any = null
+  const impactDto: ImpactDto[] = []
+  data?.forEach((activity) => {
+    if (lastDate === activity.start_date) {
+      impactDto.push({ text: activity.title, isPrincipal: false })
+    } else {
+      lastDate = activity.start_date
+      impactDto.push(
+        { text: formatDateToReadable(activity.start_date), isPrincipal: true },
+        { text: activity.title, isPrincipal: false },
+      )
+    }
+  })
+  return NextResponse.json(impactDto)
 }
 
 export async function postActivity(newActivity: ActivityType) {
@@ -218,4 +250,14 @@ async function base64ImageSourceToBlob(base64imageSource: string): Promise<Blob>
   console.log('Converting base64 image to blob')
   const response = await fetch(base64imageSource)
   return await response.blob()
+}
+
+function formatDateToReadable(dateString: Date) {
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+    };
+    return date.toLocaleDateString('en-US', options).replace(',', '');
 }
