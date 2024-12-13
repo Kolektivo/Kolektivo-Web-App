@@ -155,6 +155,27 @@ export async function postActivity(newActivity: ActivityType) {
 export async function putActivity(updatedActivity: ActivityType) {
   console.log('Updating activity')
   const bannerSrc = updatedActivity.banner_src
+  delete updatedActivity.banner_src
+
+  const { data, error } = await updateActivity(updatedActivity)
+
+  if (error) return NextResponse.json(error)
+
+  if (data) {
+    console.log('Updating activity banner')
+    const activityId = data[0].id
+    const mimeType = bannerSrc?.split(';')[0].split(':')[1]
+    const extension = mimeType === 'image/png' ? 'png' : 'jpg'
+    const bannerPath = `${bannerBasePath}/${activityId}.${extension}`
+    data[0].banner_path = bannerPath
+    await uploadFile(supabaseBucket, bannerPath, bannerSrc as string)
+  }
+  return NextResponse.json(data)
+}
+
+export async function putCompletedActivitie(updatedActivity: ActivityType) {
+  console.log('Updating activity')
+  const bannerSrc = updatedActivity.banner_src
   const reportSrc = updatedActivity.report_src
   delete updatedActivity.banner_src
   delete updatedActivity.report_src
@@ -253,11 +274,11 @@ async function base64ImageSourceToBlob(base64imageSource: string): Promise<Blob>
 }
 
 function formatDateToReadable(dateString: Date) {
-    const date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-    };
-    return date.toLocaleDateString('en-US', options).replace(',', '');
+  const date = new Date(dateString)
+  const options: Intl.DateTimeFormatOptions = {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  }
+  return date.toLocaleDateString('en-US', options).replace(',', '')
 }

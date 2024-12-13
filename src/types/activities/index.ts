@@ -14,7 +14,7 @@ export type CreateActivityRequirementsRewardsFormValues = {
 }
 
 export type ActivityReviewType = CreateActivityDetailFormValues &
-  CreateActivityRequirementsRewardsFormValues & { banner: string } & { report: string } & {
+  CreateActivityRequirementsRewardsFormValues & { banner: string } & { report?: string } & {
     state: 'completed' | 'upcoming' | 'actionRequired'
   }
 
