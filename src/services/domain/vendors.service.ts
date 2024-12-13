@@ -8,6 +8,7 @@ import { NextResponse } from 'next/server'
 const VENDORS = 'vendors'
 
 export async function getVendors() {
+  console.log('Geeting vendors')
   const supabaseClient = createAnonymousClient()
   const supabaseClientAuth = createClient()
   const user = await supabaseClientAuth.auth.getUser()
@@ -16,6 +17,7 @@ export async function getVendors() {
   const { data, error } = await supabaseClient.from(VENDORS).select('*').eq('created_by', idUser)
   if (error) return NextResponse.json(error, { status: 500 })
 
+  console.log('Geeting vendors logos')
   const vendorsWithLogos = await Promise.all(
     data.map(async (vendor) => {
       const logoSrc = await Bucket.downloadFile(vendor.logo_path)
@@ -37,6 +39,8 @@ export async function getVendors() {
 }
 
 export async function getVendorById(id: string) {
+  console.log('Geeting vendor by id: ', id)
+
   const supabaseClient = createAnonymousClient()
 
   const supabaseClientAuth = createClient()
@@ -48,6 +52,7 @@ export async function getVendorById(id: string) {
 
   const logoSrc = await Bucket.downloadFile(data.logo_path)
 
+  console.log('Geeting vendor logo')
   const vendorWithLogo = {
     id: data.id,
     name: data.name,
@@ -64,6 +69,7 @@ export async function getVendorById(id: string) {
 }
 
 export async function postVendor(newVendor: Vendor) {
+  console.log('Creating vendor')
   const supabaseClient = createAnonymousClient()
 
   const supabaseClientAuth = createClient()
@@ -93,6 +99,7 @@ export async function postVendor(newVendor: Vendor) {
 
   const vendorId = data[0].id
   try {
+    console.log('Uploading vendor logo')
     const extension = FileUtils.getFileExtensionFromBase64(logoSrc)
     const logoPath = `vendors/logos/${vendorId}.${extension}`
     await Bucket.uploadFile(logoPath, logoSrc)
@@ -106,6 +113,7 @@ export async function postVendor(newVendor: Vendor) {
 }
 
 export async function putVendor(id: string, vendor: any) {
+  console.log('Updating vendor')
   const supabaseClient = createAnonymousClient()
 
   const supabaseClientAuth = createClient()
@@ -131,6 +139,7 @@ export async function putVendor(id: string, vendor: any) {
   if (error) return NextResponse.json(error, { status: 500 })
 
   try {
+    console.log('Updating vendor logo')
     await Bucket.uploadFile(data.logo_path, vendor.logoSrc)
   } catch (error) {
     return NextResponse.json(error, { status: 500 })
@@ -142,6 +151,7 @@ export async function putVendor(id: string, vendor: any) {
 }
 
 export async function deleteVendor(id: string) {
+  console.log('Deleting vendor with id: ', id)
   const supabaseClient = createAnonymousClient()
 
   const supabaseClientAuth = createClient()
