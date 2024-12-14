@@ -101,7 +101,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
+  const supabaseClient = createAnonymousClient()
 
   const newActivity = (await req.json()) as ActivityType
 
@@ -154,7 +154,7 @@ export async function PUT(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   const id = await req.json().then((body) => body.id)
-  const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
+  const supabaseClient = createAnonymousClient()
   const { data, error } = await supabaseClient.from(ACTIVITIES).delete().eq('id', id)
   if (error) return NextResponse.json(error)
   return NextResponse.json(data)
@@ -163,7 +163,7 @@ export async function DELETE(req: NextRequest) {
 async function uploadFile(bucketName: string, filePath: string, base64File: string) {
   console.log('FilePath: ', filePath)
   const fileBlob = await base64ImageSourceToBlob(base64File)
-  const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
+  const supabaseClient = createAnonymousClient()
   const { data: dataDelete, error: errorDelete } = await supabaseClient.storage.from(bucketName).remove([filePath])
   if (errorDelete) {
     console.error('Error uploading file:', errorDelete.message)
@@ -183,7 +183,7 @@ async function uploadFile(bucketName: string, filePath: string, base64File: stri
 
 async function downloadFile(bucketName: string, filePath: string) {
   if (filePath == '' || !filePath) return ''
-  const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
+  const supabaseClient = createAnonymousClient()
   const { data, error } = await supabaseClient.storage.from(bucketName).download(filePath)
 
   if (error) {
@@ -208,7 +208,7 @@ async function base64ImageSourceToBlob(base64imageSource: string): Promise<Blob>
 }
 
 async function updateActivity(activity: ActivityType) {
-  const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
+  const supabaseClient = createAnonymousClient()
   const { banner_src: banner_src, ...organizationWithoutLogoSrc } = activity
   console.log('Removed ', banner_src?.substring(0, 10))
 
