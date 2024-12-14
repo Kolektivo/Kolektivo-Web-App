@@ -97,61 +97,6 @@ export default function CreateActivityRequirementsRewards({ review, submitHandle
         <CardContent>
           <Box width="64%">
             <Stack gap="48px">
-              <Box>
-                <Box>
-                  <InputLabel>What are the requirements for the attendee?</InputLabel>
-                  <Stack gap="8px">
-                    {requirements.split(',').map((requirement, index) => (
-                      <Stack key={index} direction="row" gap={2}>
-                        <TextField
-                          select
-                          onChange={(event) => handleRequirementsChange(event, index)}
-                          value={requirement}
-                          sx={{ width: '100%' }}
-                          slotProps={{
-                            htmlInput: { ...register('requirements') },
-                          }}
-                          error={!!errors?.requirements}
-                        >
-                          <MenuItem disabled value="0">
-                            Select requirement
-                          </MenuItem>
-                          {requirementsOptions.map((requirementOption) => (
-                            <MenuItem
-                              key={requirementOption.value}
-                              disabled={requirementOption.disabled}
-                              value={requirementOption.value}
-                            >
-                              {requirementOption.label}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                        {/* {requirements.length > 1 && (
-                          <Button onClick={(event) => handleRemoverequirements(event, index)} sx={{ padding: '8px' }}>
-                            <Icon>close</Icon>
-                          </Button>
-                        )} */}
-                      </Stack>
-                    ))}
-                  </Stack>
-                </Box>
-                <Button
-                  onClick={handleAddRequirement}
-                  variant="contained"
-                  color="secondary"
-                  size="small"
-                  sx={{ marginTop: '16px', padding: '6px 12px' }}
-                >
-                  <Stack direction="row" alignItems="center" justifyContent="center" gap={1}>
-                    <Icon color="primary" sx={{ fontSize: '16px', lineHeight: '16px' }}>
-                      add_circle
-                    </Icon>
-                    <Typography fontWeight={700} fontSize={14}>
-                      Add other requirement
-                    </Typography>
-                  </Stack>
-                </Button>
-              </Box>
               <TextField
                 id="activityName"
                 variant="outlined"
