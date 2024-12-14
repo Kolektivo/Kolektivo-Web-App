@@ -8,10 +8,21 @@ class ActivitiesService {
   })
 
   public async get(user?: User, id?: string): Promise<(ActivityType & { organization: string })[] | undefined> {
+    const hostIdParam = user ? `hostId=${user.id}` : ''
+    const idParam = id ? `id=${id}` : ''
     const response = await this.httpInstance.get<(ActivityType & { organization: string })[]>(
-      `/activities${user || id ? '?' : ''}${user ? `hostId=${user.id}` : ''}${user ? '&' : ''}${id ? `id=${id}` : ''}`,
+      `/activities${user || id ? '?' : ''}${hostIdParam}${user ? '&' : ''}${idParam}`,
     )
 
+    return response.data
+  }
+
+  public async getBanners(data: ActivityType[]): Promise<ActivityType[]> {
+    console.log('ActivityData: ', data)
+    const response = await this.httpInstance.post<(ActivityType & { organization: string })[]>(
+      `/activities/banners`,
+      data,
+    )
     return response.data
   }
 
@@ -65,7 +76,11 @@ class ActivitiesService {
     const response = await this.httpInstance.put<ActivityType>('/activities', activity)
     return response.data
   }
-  public async updateCompletedActivity(activityReview: ActivityReviewType, user: User, id: string): Promise<ActivityType | undefined> {
+  public async updateCompletedActivity(
+    activityReview: ActivityReviewType,
+    user: User,
+    id: string,
+  ): Promise<ActivityType | undefined> {
     const activity: ActivityType = {
       id,
       created_at: new Date().toISOString(),

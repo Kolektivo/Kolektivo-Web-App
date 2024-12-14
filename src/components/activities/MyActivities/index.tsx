@@ -60,8 +60,10 @@ export default function MyActivitiesCard({
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await activitiesService.get(onlyShowOwnerActivities && user ? user : undefined)
-      setData(data)
+      const dataWithoutBanners = await activitiesService.get(onlyShowOwnerActivities && user ? user : undefined)
+      setData(dataWithoutBanners)
+      const dataWithBanners = await activitiesService.getBanners(dataWithoutBanners as ActivityType[])
+      setData(dataWithBanners as (ActivityType & { organization: string })[])
     }
     fetchData()
   }, [onlyShowOwnerActivities, user])
