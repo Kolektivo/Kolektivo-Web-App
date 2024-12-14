@@ -78,13 +78,13 @@ export default function ActivityReview({ review, children }: Props) {
             value={review.description}
             multiline
           />
-          <TextField
+          {/* <TextField
             id="activityName"
             variant="outlined"
             label="What are the requirements for the attendee?"
             value={review.requirements}
             placeholder="Select requirement"
-          />
+          /> */}
           <TextField
             id="activityName"
             variant="outlined"
