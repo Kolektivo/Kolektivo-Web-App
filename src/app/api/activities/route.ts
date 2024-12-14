@@ -1,7 +1,8 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@/utils/supabase/server'
 import { type ActivityType } from '@/types/activities'
+import { createAnonymousClient } from '@/utils/supabase/anonymousClient'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
 const supabaseBucket = process.env.NEXT_PUBLIC_SUPABASE_BUCKET || ''
@@ -12,11 +13,14 @@ const ACTIVITIES = 'activities'
 const ORGANIZATIONS = 'organizations'
 
 export async function GET(req: NextRequest) {
-  console.log('aca-organ')
+  
   const { searchParams } = new URL(req.url)
   const id = searchParams.get('id')
-  const hostId = searchParams.get('hostId')
-  const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
+  const supabaseClientAuth = createClient()
+  const user = await supabaseClientAuth.auth.getUser()
+  const hostId = user.data.user?.id
+
+  const supabaseClient = createAnonymousClient()
   if (hostId && id) {
     const { data, error } = await supabaseClient
       .from(ACTIVITIES)
