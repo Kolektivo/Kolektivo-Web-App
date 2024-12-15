@@ -8,17 +8,16 @@ class ActivitiesService {
   })
 
   public async get(user?: User, id?: string): Promise<(ActivityType & { organization: string })[] | undefined> {
-    const hostIdParam = user ? `hostId=${user.id}` : ''
+    console.log(user)
     const idParam = id ? `id=${id}` : ''
     const response = await this.httpInstance.get<(ActivityType & { organization: string })[]>(
-      `/activities${user || id ? '?' : ''}${hostIdParam}${user ? '&' : ''}${idParam}`,
+      `/activities${id ? '?' : ''}${idParam}`,
     )
 
     return response.data
   }
 
   public async getBanners(data: ActivityType[]): Promise<ActivityType[]> {
-    console.log('ActivityData: ', data)
     const response = await this.httpInstance.post<(ActivityType & { organization: string })[]>(
       `/activities/banners`,
       data,

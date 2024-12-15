@@ -1,5 +1,6 @@
 import { ActivityType, ImpactDto } from '@/types/activities'
 import { createAnonymousClient } from '@/utils/supabase/anonymousClient'
+import { createClient } from '@/utils/supabase/server'
 import { NextResponse } from 'next/server'
 
 const supabaseBucket = process.env.NEXT_PUBLIC_SUPABASE_BUCKET || ''
@@ -9,7 +10,11 @@ const ACTIVITIES = 'activities'
 const ORGANIZATIONS = 'organizations'
 const pageSize = parseInt(process.env.PAGE_SIZE || '1')
 
-export async function getActivities(hostId: string, id: string) {
+export async function getActivities(id: string) {
+  const supabaseClientAuth = createClient()
+  const user = await supabaseClientAuth.auth.getUser()
+  const hostId = user.data.user?.id
+
   const supabaseClient = createAnonymousClient()
   if (hostId && id) {
     console.log('Geeting activities with hostId and id')

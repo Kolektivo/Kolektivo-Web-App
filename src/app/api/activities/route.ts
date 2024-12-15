@@ -5,8 +5,7 @@ import { deleteActivity, getActivities, postActivity, putActivity } from '@/serv
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const id = searchParams.get('id')
-  const hostId = searchParams.get('hostId')
-  return getActivities(hostId as string, id as string)
+  return getActivities( id as string)
 }
 
 export async function POST(req: NextRequest) {

@@ -17,11 +17,12 @@ export async function getCommunities() {
 
   const { data, error } = await supabaseClient.from(COMMUNITIES).select('*', { head: false }).not('id', 'is', null)
   if (error) return NextResponse.json(error, { status: 500 })
+  const vendorsData = await supabaseClient.from('vendors').select('*', { count: 'exact' }).not('id', 'is', null)
   const response = {
     tokensInCirculation: formatCurrency(data.reduce((sum, item) => sum + item.tokens, 0) * 0.15, 'Dollard'),
     tokenTransfers: data.reduce((sum, item) => sum + item.transfers, 0),
     members: data.reduce((sum, item) => sum + item.members, 0),
-    activeVendors: data.reduce((sum, item) => sum + item.vendors, 0),
+    activeVendors: vendorsData.count,
     communities: data.map((community) => ({
       id: community.id,
       name: community.name,
@@ -144,4 +145,3 @@ function formatUnits(totalSupply: any, decimals: any): any {
   console.log('Formating units')
   throw new Error('Function not implemented.')
 }
-
