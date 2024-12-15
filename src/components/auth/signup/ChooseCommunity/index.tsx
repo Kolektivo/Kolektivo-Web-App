@@ -12,7 +12,6 @@ import { useQuery } from '@tanstack/react-query'
 import communitiesService from '@/features/communities/services/communities.service'
 
 const ChooseCommunity = (): ReactElement => {
-
   const { data, isLoading, error, refetch } = useQuery<Communities | undefined>({
     queryKey: ['getCommunities'],
     queryFn: async () => await communitiesService.get(),
@@ -22,7 +21,7 @@ const ChooseCommunity = (): ReactElement => {
   const [step, setStep] = useState<number>(1)
 
   const handleChange = (community: Community) => {
-    setSelectedCommunity(community)
+    if (community.id == 'Trinidad') setSelectedCommunity(community)
   }
 
   const handleNextStep = () => {

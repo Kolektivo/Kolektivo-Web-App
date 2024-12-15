@@ -36,21 +36,7 @@ export default function Page() {
                 Or
               </Typography>
               <Stack gap={2}>
-                <ButtonSignInGoogle />
-                <Button
-                  startIcon={<Image src={IconFacebook} alt="icon-facebook" width={24} height={24} />}
-                  variant="outlinedGray"
-                  disabled
-                >
-                  Continue with Facebook
-                </Button>
-                <Button
-                  startIcon={<Image src={IconApple} alt="icon-apple" width={24} height={24} />}
-                  variant="outlinedGray"
-                  disabled
-                >
-                  Continue with Apple
-                </Button>
+                <ButtonSignInGoogle up={false} />               
               </Stack>
             </Stack>
           </CardContent>

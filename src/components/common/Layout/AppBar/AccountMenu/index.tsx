@@ -46,9 +46,9 @@ const AccountMenu = (): ReactElement => {
       >
         <Box
           sx={{
-            position: 'relative', // Necesario para posicionar la imagen superpuesta
-            display: 'inline-block', // Asegura que ocupe solo el espacio del contenido
-            width: 48,
+            position: 'relative', 
+            display: 'inline-block', 
+            width: 5,
             height: 48,
           }}
         ></Box>

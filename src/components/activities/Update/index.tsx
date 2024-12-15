@@ -194,57 +194,7 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, d
                 htmlInput: { ...register('description') },
               }}
               error={!!errors?.description}
-            />
-            <Box>
-              <Box>
-                <InputLabel>What are the requirements for the attendee?</InputLabel>
-                <Stack gap="8px">
-                  {requirements.split(',').map((requirement, index) => (
-                    <Stack key={index} direction="row" gap={2}>
-                      <TextField
-                        select
-                        onChange={(event) => handleRequirementsChange(event, index)}
-                        slotProps={{
-                          htmlInput: { ...register('requirements') },
-                        }}
-                        error={!!errors.requirements}
-                        defaultValue={requirement}
-                        sx={{ width: '100%' }}
-                      >
-                        <MenuItem disabled value="0">
-                          Select requirement
-                        </MenuItem>
-                        {requirementsOptions.map((requirementOption) => (
-                          <MenuItem
-                            key={requirementOption.value}
-                            disabled={requirementOption.disabled}
-                            value={requirementOption.value}
-                          >
-                            {requirementOption.label}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    </Stack>
-                  ))}
-                </Stack>
-              </Box>
-              <Button
-                onClick={handleAddRequirement}
-                variant="contained"
-                color="secondary"
-                size="small"
-                sx={{ marginTop: '16px', padding: '6px 12px' }}
-              >
-                <Stack direction="row" alignItems="center" justifyContent="center" gap={1}>
-                  <Icon color="primary" sx={{ fontSize: '16px', lineHeight: '16px' }}>
-                    add_circle
-                  </Icon>
-                  <Typography fontWeight={700} fontSize={14}>
-                    Add other requirement
-                  </Typography>
-                </Stack>
-              </Button>
-            </Box>
+            />            
             <TextField
               id="activityName"
               variant="outlined"

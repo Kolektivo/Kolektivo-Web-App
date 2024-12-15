@@ -55,7 +55,7 @@ export async function signOut() {
   await supabase.auth.signOut()
 
   revalidatePath('/', 'layout')
-  redirect('/')
+  redirect('/communities')
 }
 
 export async function signup(formData: FormData) {

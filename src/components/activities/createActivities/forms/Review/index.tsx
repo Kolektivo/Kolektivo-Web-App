@@ -81,13 +81,6 @@ export default function ActivityReview({ review, children }: Props) {
           <TextField
             id="activityName"
             variant="outlined"
-            label="What are the requirements for the attendee?"
-            value={review.requirements}
-            placeholder="Select requirement"
-          />
-          <TextField
-            id="activityName"
-            variant="outlined"
             label="How many Kolektivo Points can each attendee earn? "
             value={review.kolectivoPoints}
             placeholder="Enter amount of points"

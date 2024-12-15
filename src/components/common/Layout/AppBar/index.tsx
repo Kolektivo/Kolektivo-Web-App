@@ -70,7 +70,7 @@ export default function CustomAppBar({
           </Typography>
         </Toolbar>
         <Toolbar disableGutters variant="dense" sx={{ gap: 2 }}>
-          <Link href="/">
+          <Link href="/communities">
             <Button variant="contained" color="secondary" sx={{ borderRadius: 100, minWidth: 0, padding: 2 }}>
               <Icon color="primary" sx={{ lineHeight: '22px' }}>
                 home
