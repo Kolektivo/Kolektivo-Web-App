@@ -55,7 +55,7 @@ export default function HeaderSubtitle() {
           state: 'completed',
           report: activity[0].report_src,
         }
-        activitiesService.update(activityReview, user as User, id as string)
+        activitiesService.updateCompletedActivity(activityReview, user as User, id as string)
       }
     }
     setOpenSuccessDialog(true)

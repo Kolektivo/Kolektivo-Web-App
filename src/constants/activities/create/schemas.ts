@@ -10,7 +10,7 @@ export const detailFormShema = z.object({
 })
 
 export const requiremetsRewardsFormSchema = z.object({
-  requirements: z.string().min(1),
+  // requirements: z.string().min(1),
   kolectivoPoints: z.string().min(1),
   stamps: z.string().min(1),
 })
@@ -22,7 +22,7 @@ export const reviewFormSchema = z.object({
   endTime: z.string().min(4),
   location: z.string().min(3),
   description: z.string().min(12),
-  requirements: z.string().min(1),
+  // requirements: z.string().min(1),
   kolectivoPoints: z.string().min(1),
   stamps: z.string().min(1),
 })

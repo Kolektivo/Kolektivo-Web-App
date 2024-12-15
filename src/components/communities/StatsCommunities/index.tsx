@@ -1,6 +1,5 @@
 import ValueCard from '@/components/common/cards/ValueCard'
 import { Communities } from '@/types/communities'
-import { Skeleton } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { type ReactElement } from 'react'
 
@@ -18,7 +17,7 @@ const StatsCommunities = ({ communities }: { communities: Communities | undefine
           <ValueCard icon="groups" title="Members" value={communities.members.toString()} />
         </Grid>
         <Grid size={1}>
-          <ValueCard icon="storefront" title="Active Vendors" value={communities.activeVendors.toString()} />
+          <ValueCard icon="storefront" title="Active Vendors" value={communities?.activeVendors?.toString()} />
         </Grid>
       </Grid>
     )
