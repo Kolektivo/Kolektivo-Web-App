@@ -20,23 +20,22 @@ export async function getActivities(hostId: string, id: string) {
       .eq('id', id)
     if (error) return NextResponse.json(error)
     console.log('Geeting activities organization data and banner')
-    // console.log('Geeting activities organization data and banner')
-    // const activitiesWithBanners = await Promise.all(
-    //   data.map(async (activity) => {
-    //     const { data: organizationData, error: organizationError } = await supabaseClient
-    //       .from(ORGANIZATIONS)
-    //       .select('*')
-    //       .eq('created_by', activity.activity_host_id)
-    //     if (organizationError) return NextResponse.json(organizationError)
-    //     const organizationName =
-    //       organizationData && organizationData[0] && organizationData[0].name ? organizationData[0].name : ''
-    //     const banner_src = await downloadFile(supabaseBucket, activity.banner_path)
-    //     return { ...activity, organization: organizationName, banner_src }
-    //   }),
-    // )
+    console.log('Geeting activities organization data and banner')
+    const activitiesWithBanners = await Promise.all(
+      data.map(async (activity) => {
+        const { data: organizationData, error: organizationError } = await supabaseClient
+          .from(ORGANIZATIONS)
+          .select('*')
+          .eq('created_by', activity.activity_host_id)
+        if (organizationError) return NextResponse.json(organizationError)
+        const organizationName =
+          organizationData && organizationData[0] && organizationData[0].name ? organizationData[0].name : ''
+        const banner_src = await downloadFile(supabaseBucket, activity.banner_path)
+        return { ...activity, organization: organizationName, banner_src }
+      }),
+    )
 
-    // return NextResponse.json(activitiesWithBanners)
-    return NextResponse.json(data)
+    return NextResponse.json(activitiesWithBanners)
   } else if (hostId) {
     console.log('Geeting activities with hostId and without id')
     const { data, error } = await supabaseClient.from(ACTIVITIES).select('*').eq('activity_host_id', hostId)
