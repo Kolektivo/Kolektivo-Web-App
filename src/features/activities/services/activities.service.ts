@@ -100,7 +100,7 @@ class ActivitiesService {
       report_src: activityReview.report,
       banner_src: activityReview.banner,
     }
-    const response = await this.httpInstance.put<ActivityType>('/activities', activity)
+    const response = await this.httpInstance.put<ActivityType>('/activities/completed', activity)
     return response.data
   }
   public async delete(id: string) {

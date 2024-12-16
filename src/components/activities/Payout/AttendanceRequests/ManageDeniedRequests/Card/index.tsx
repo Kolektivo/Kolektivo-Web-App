@@ -52,7 +52,7 @@ export default function DeniedRequestsCard({ requests, setRequests, handleNext }
         }
       >
         {requests?.map((request, index) => {
-          if (request.state == 'denied' || request.state == '')
+          if (request.state == 'denied' || request.state == null)
             return (
               <Box key={index}>
                 <Divider />
