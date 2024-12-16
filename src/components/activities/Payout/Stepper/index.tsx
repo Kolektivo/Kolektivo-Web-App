@@ -23,11 +23,6 @@ export default function StepperActivitiesPayout() {
   const [step, setStep] = React.useState<number>(0)
   const [attendanceRequests, setAttendanceRequests] = React.useState<AttendanceRequest[]>([])
 
-  const attendanceRequestsForManagePayouts = React.useMemo(
-    () => attendanceRequests.filter((request) => request.state),
-    [attendanceRequests],
-  )
-
   const handleBack = () => {
     setStep((prevActiveStep) => prevActiveStep - 1)
   }
@@ -71,11 +66,11 @@ export default function StepperActivitiesPayout() {
           />
           <AttendanceRequestsSelectionCard requests={attendanceRequests} setRequests={setAttendanceRequests}>
             <Button
+              disabled={attendanceRequests.length == 0}
               color="primary"
               variant="contained"
               className="stepperButton"
               onClick={() => handleNext()}
-              disabled={!(attendanceRequestsForManagePayouts.length > 0)}
             >
               Aprove
             </Button>
