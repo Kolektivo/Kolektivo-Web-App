@@ -21,7 +21,7 @@ const EmailForm = (): ReactElement => {
     formState: { errors, isValid },
   } = useForm({
     resolver: zodResolver(formSignInSchema),
-    mode: 'onTouched',
+    mode: 'all',
   })
 
   useEffect(() => {

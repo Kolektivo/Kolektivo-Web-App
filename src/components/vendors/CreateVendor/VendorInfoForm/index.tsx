@@ -25,7 +25,7 @@ const VendorInfoForm = ({ defaultValues, onCancel, onSubmit }: VendorInfoFormPro
   } = useForm<VendorInfo>({
     resolver: zodResolver(vendorInfoSchema),
     defaultValues,
-    mode: 'onBlur',
+    mode: 'all',
   })
 
   return (
