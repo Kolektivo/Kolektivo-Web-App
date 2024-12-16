@@ -8,7 +8,6 @@ class ActivitiesService {
   })
 
   public async get(user?: User, id?: string): Promise<(ActivityType & { organization: string })[] | undefined> {
-    console.log(user)
     const idParam = id ? `id=${id}` : ''
     const response = await this.httpInstance.get<(ActivityType & { organization: string })[]>(
       `/activities${id ? '?' : ''}${idParam}`,
