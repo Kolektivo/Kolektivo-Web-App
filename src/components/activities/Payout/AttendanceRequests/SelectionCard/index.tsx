@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, CardContent, Divider } from '@mui/material'
+import { Box, Button, CardContent, Divider, Typography } from '@mui/material'
 import ItemsCard from '@/components/common/cards/ItemsCard'
 import { type AttendanceRequest } from '@/types/activities'
 import AttendanceRequestCard from '@/components/activities/Payout/AttendanceRequests/Card'
@@ -28,6 +28,13 @@ export default function AttendanceRequestsSelectionCard({ requests, setRequests,
   return (
     <ItemsCard
       title="Attendee"
+      headerAction={
+        <>
+          <Typography variant="body1" color="#7E7E7E" sx={{ marginRight: '24px', paddingTop: '6px' }}>
+            Select
+          </Typography>
+        </>
+      }
       actions={
         <>
           <Link href="/activities">

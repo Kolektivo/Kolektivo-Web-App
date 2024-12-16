@@ -19,35 +19,8 @@ const steps = Array.from({ length: 4 }, () => '')
 
 export default function StepperActivitiesPayout() {
   const { id } = useParams()
-  const stepGetter = (): number => {
-    const storedSteps = JSON.parse(localStorage?.getItem('activitiesPayoutStep') ?? '0') as [
-      { id: string; step: number },
-    ]
-    if (storedSteps) {
-      const filteredStep = storedSteps.filter((storedStep) => storedStep.id == id)[0]
-      if (filteredStep) return filteredStep.step
-    }
-    return 0
-  }
 
-  const stepSetter = (newStep: number) => {
-    const storedSteps = JSON.parse(localStorage?.getItem('activitiesPayoutStep') ?? '0') as [
-      { id: string; step: number },
-    ]
-    if (storedSteps) {
-      localStorage.setItem(
-        'activitiesPayoutStep',
-        JSON.stringify([
-          ...storedSteps.filter((storedSteps) => storedSteps.id != id),
-          { id: id as string, step: newStep },
-        ]),
-      )
-    } else {
-      localStorage.setItem('activitiesPayoutStep', JSON.stringify([{ id: id as string, step: newStep }]))
-    }
-  }
-
-  const [step, setStep] = React.useState<number>(stepGetter())
+  const [step, setStep] = React.useState<number>(0)
   const [attendanceRequests, setAttendanceRequests] = React.useState<AttendanceRequest[]>([])
 
   const attendanceRequestsForManagePayouts = React.useMemo(
@@ -56,14 +29,10 @@ export default function StepperActivitiesPayout() {
   )
 
   const handleBack = () => {
-    stepSetter(step - 1)
     setStep((prevActiveStep) => prevActiveStep - 1)
   }
 
   const handleNext = (nextStep?: number) => {
-    if (step != 0) {
-      stepSetter(nextStep ? nextStep : step + 1)
-    }
     setStep((prevActiveStep) => (nextStep ? nextStep : prevActiveStep + 1))
   }
 
