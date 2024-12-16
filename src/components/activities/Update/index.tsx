@@ -40,7 +40,7 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, d
     formState: { errors, isValid },
   } = useForm<ActivityReviewType>({
     resolver: zodResolver(reviewFormSchema),
-    mode: 'onBlur',
+    mode: 'all',
   })
 
   const cleanDisabledRequirementsOptions = () => {

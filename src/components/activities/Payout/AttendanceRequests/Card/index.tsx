@@ -31,7 +31,7 @@ export default function AttendanceRequestCard({ index, requests, setRequests, se
     const updatedRequests = [...requests]
     updatedRequests[index] = {
       ...requests[index],
-      state: !checkState ? 'forManagePayout' : 'denied',
+      state: !checkState ? 'forManagePayout' : '',
     }
     setRequests(updatedRequests)
     setCheckState(!checkState)
@@ -59,7 +59,7 @@ export default function AttendanceRequestCard({ index, requests, setRequests, se
               <Checkbox
                 onClick={handleSelect}
                 checked={request.state == 'completed' || request.state == 'forManagePayout'}
-                disabled={request.state == 'completed'}
+                disabled={request.state == 'completed' || request.state == 'denied'}
                 {...label}
                 icon={<Icon sx={{ fontSize: '32px' }}>radio_button_unchecked</Icon>}
                 checkedIcon={<Icon sx={{ fontSize: '32px' }}>radio_button_checked</Icon>}

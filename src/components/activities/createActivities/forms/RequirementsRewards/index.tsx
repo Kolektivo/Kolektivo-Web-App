@@ -35,7 +35,7 @@ export default function CreateActivityRequirementsRewards({ review, submitHandle
     formState: { errors, isValid },
   } = useForm<CreateActivityRequirementsRewardsFormValues>({
     resolver: zodResolver(requiremetsRewardsFormSchema),
-    mode: 'onBlur',
+    mode: 'all',
   })
 
   const cleanDisabledRequirementsOptions = () => {

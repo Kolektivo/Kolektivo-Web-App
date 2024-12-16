@@ -31,7 +31,7 @@ const UpdateVendorForm = ({ defaultValues, onSave, saving }: UpdateVendorFormPro
   } = useForm<Vendor>({
     resolver: zodResolver(vendorInfoSchema),
     defaultValues,
-    mode: 'onBlur',
+    mode: 'all',
   })
   const [logoBase64, setLogoBase64] = useState<string | null>(defaultValues?.logoSrc || null)
 

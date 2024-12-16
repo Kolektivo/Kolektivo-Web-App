@@ -24,13 +24,16 @@ export default function DeniedRequestsCard({ requests, setRequests, handleNext }
     } = event
     const updatedRequests = [...requests]
     updatedRequests[index].denialReason = value
-    updatedRequests[index].state = 'denied'
     updatedRequests[index].payoutTransactionLink = ''
     setRequests(updatedRequests)
   }
 
   const handleConfirm = () => {
-    attendanceRequestsService.setAttendanceRequest(requests)
+    const updatedRequests = requests.map((request) => {
+      if (request.denialReason != '' && request.denialReason != null) request.state = 'denied'
+      return request
+    })
+    attendanceRequestsService.setAttendanceRequest(updatedRequests)
     handleNext()
   }
 
@@ -52,15 +55,16 @@ export default function DeniedRequestsCard({ requests, setRequests, handleNext }
         }
       >
         {requests?.map((request, index) => {
-          if (request.state == 'denied' || request.state == null)
+          if (request.state == '' || request.state == null || request.state == 'denied')
             return (
               <Box key={index}>
                 <Divider />
                 <CardContent>
                   <DeniedRequestCard request={request}>
                     <TextField
+                      disabled={request.state == 'denied'}
                       select
-                      value={request.denialReason != '' ? request.denialReason : '0'}
+                      value={request.denialReason != '' && request.denialReason != null ? request.denialReason : '0'}
                       onChange={(event) => handleRequirementsChange(event, index)}
                       sx={{ width: '60%' }}
                       slotProps={{
