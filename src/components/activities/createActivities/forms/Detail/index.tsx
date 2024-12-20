@@ -22,7 +22,7 @@ export default function CreateActivityDetailForm({ review, submitHandler }: Prop
     resolver: zodResolver(detailFormShema),
     mode: 'all',
   })
-
+  
   return (
     <Card>
       <form onSubmit={handleSubmit(submitHandler)}>

@@ -87,10 +87,10 @@ export default function UpdateActivity() {
           review={{
             name: data[0].title,
             date: data[0].start_date,
-            endTime: data[0].end_date,
+            startTime: data[0].time_lapse.split('-')[0].replace(' ', ''),
+            endTime: data[0].time_lapse.split('-')[1].replace(' ', ''),
             description: data[0].description,
             location: data[0].location as string,
-            startTime: data[0].start_date,
             banner: data[0].banner_src as string,
             kolectivoPoints: Number(data[0].points),
             requirements: data[0].requirements,

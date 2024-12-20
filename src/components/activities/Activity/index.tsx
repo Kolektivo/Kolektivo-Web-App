@@ -31,9 +31,14 @@ export default function ActivityComponent({
   disableRedirect,
 }: Props) {
   const formatDate = () => {
-    const startDateIso = parseISO(startDate)
-    const startFormattedDate = format(startDateIso, 'MMMM d')
-    return `${startFormattedDate}, ${timeLapse}`
+    const date = new Date(startDate) // Interprets the date as UTC
+    console.log('Parsed Date:', date)
+
+    const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', timeZone: 'UTC' }
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date)
+
+    console.log('Formatted Date:', formattedDate) // Outputs "December 4"
+    return `${formattedDate}, ${timeLapse}`
   }
   return (
     <Link
@@ -55,7 +60,7 @@ export default function ActivityComponent({
             alignItems="center"
             justifyContent="center"
           >
-            <Skeleton variant='rounded' width={140} height={132}/>
+            <Skeleton variant="rounded" width={140} height={132} />
           </Stack>
         )}
         <Stack gap="5px">
