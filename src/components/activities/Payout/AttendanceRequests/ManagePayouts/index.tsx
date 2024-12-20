@@ -17,7 +17,7 @@ type Props = {
 
 export default function ManagePayoutsCard({ requests, setRequests, handleBack, handleNext }: Props) {
   const { register, handleSubmit } = useForm<string[]>()
-  const [transactionLinks, setTransactionLinks] = useState<string[]>(
+  const [transactionLinks, setTransactionLinks] = useState<(string | null)[]>(
     requests.filter((request) => request.state == 'forManagePayout').map((request) => request.payoutTransactionLink),
   )
   const handleChangeTransactionLinks = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
@@ -29,7 +29,7 @@ export default function ManagePayoutsCard({ requests, setRequests, handleBack, h
       setTransactionLinks(updatedTransactionLinks)
     } catch {
       const updatedTransactionLinks = [...transactionLinks]
-      updatedTransactionLinks[index] = ''
+      updatedTransactionLinks[index] = null
       setTransactionLinks(updatedTransactionLinks)
     }
   }
@@ -66,7 +66,7 @@ export default function ManagePayoutsCard({ requests, setRequests, handleBack, h
               color="primary"
               variant="contained"
               className="stepperButton"
-              disabled={transactionLinks.filter((transactionLink) => transactionLink == '').length > 0}
+              disabled={transactionLinks.filter((transactionLink) => transactionLink == null).length > 0}
             >
               Confirm
             </Button>

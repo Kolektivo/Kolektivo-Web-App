@@ -31,7 +31,7 @@ const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: Organizatio
   } = useForm<OrganizationInfo>({
     resolver: zodResolver(formInfoSchema),
     defaultValues,
-    mode: 'onBlur',
+    mode: 'all',
   })
 
   return (

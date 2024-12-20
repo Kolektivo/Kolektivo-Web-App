@@ -20,7 +20,7 @@ export default function CreateActivityDetailForm({ review, submitHandler }: Prop
     formState: { errors, isValid },
   } = useForm<CreateActivityDetailFormValues>({
     resolver: zodResolver(detailFormShema),
-    mode: 'onBlur',
+    mode: 'all',
   })
 
   return (

@@ -8,7 +8,7 @@ class ActivitiesService {
   })
 
   public async get(user?: User, id?: string): Promise<(ActivityType & { organization: string })[] | undefined> {
-    console.log(user)
+    console.log('User: ', user)
     const idParam = id ? `id=${id}` : ''
     const response = await this.httpInstance.get<(ActivityType & { organization: string })[]>(
       `/activities${id ? '?' : ''}${idParam}`,
@@ -100,7 +100,7 @@ class ActivitiesService {
       report_src: activityReview.report,
       banner_src: activityReview.banner,
     }
-    const response = await this.httpInstance.put<ActivityType>('/activities', activity)
+    const response = await this.httpInstance.put<ActivityType>('/activities/completed', activity)
     return response.data
   }
   public async delete(id: string) {

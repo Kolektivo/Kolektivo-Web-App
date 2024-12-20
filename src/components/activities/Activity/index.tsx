@@ -1,4 +1,4 @@
-import { Chip, Stack, Typography } from '@mui/material'
+import { Chip, Skeleton, Stack, Typography } from '@mui/material'
 import { format, parseISO } from 'date-fns'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -55,9 +55,7 @@ export default function ActivityComponent({
             alignItems="center"
             justifyContent="center"
           >
-            <Typography fontWeight={700} fontSize={12} textTransform="uppercase" color="#A9A9A9">
-              Activity Banner
-            </Typography>
+            <Skeleton variant='rounded' width={140} height={132}/>
           </Stack>
         )}
         <Stack gap="5px">
