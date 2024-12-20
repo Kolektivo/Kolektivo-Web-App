@@ -87,7 +87,7 @@ export default function StepperActivitiesCreate() {
     mutate(review, {
       onSuccess: () => {
         setCreatingActivity(false)
-        // setOpenSuccessDialog(true)
+        setOpenSuccessDialog(true)
       },
       onError: () => {
         setCreatingActivity(false)

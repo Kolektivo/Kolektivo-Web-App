@@ -164,32 +164,30 @@ export async function postActivity(newActivity: ActivityType) {
   const supabaseClient = createAnonymousClient()
   const bannerSrc = newActivity.banner_src
   delete newActivity.banner_src
-  const httpInstance = axios.create({
-    baseURL: '/api',
-  })
   const activityHost: ActivityHost = {
     id: newActivity.activity_host_id,
     name: 'Nombresito',
-    address: 'Addresita'
+    wallet_address: 'Addresita'
   }
-  const activityHostResponse = httpInstance.post<ActivityType>('/activityHosts', activityHost)
-  console.log(activityHostResponse)
-  // const { data, error } = await supabaseClient.from(ACTIVITIES).insert([newActivity]).select()
-  // if (error) return NextResponse.json(error)
-  // console.log('Activity created successfully')
+  console.log('Creating activity host')
+  const {data: activityHostData, error: activityHostError} = await supabaseClient.from('activity_hosts').insert([activityHost]).select()
+  console.log('Error: ', activityHostData)
+  console.log('ActivityHostData: ', activityHostError)
+  const { data, error } = await supabaseClient.from(ACTIVITIES).insert([newActivity]).select()
+  if (error) return NextResponse.json(error)
+  console.log('Activity created successfully')
 
-  // const activityId = data[0].id
-  // const mimeType = bannerSrc?.split(';')[0].split(':')[1]
-  // const extension = mimeType === 'image/png' ? 'png' : 'jpg'
-  // const bannerPath = `${bannerBasePath}/${activityId}.${extension}`
-  // data[0].banner_path = bannerPath
-  // console.log('Uploading activity banner')
-  // await uploadFile(supabaseBucket, bannerPath, bannerSrc as string)
-  // console.log('Setting activity banner path')
-  // updateActivity(data[0])
-  // data[0].banner_src = bannerSrc
-  // return NextResponse.json(data[0])
-  return NextResponse.json({message: 'OK'})
+  const activityId = data[0].id
+  const mimeType = bannerSrc?.split(';')[0].split(':')[1]
+  const extension = mimeType === 'image/png' ? 'png' : 'jpg'
+  const bannerPath = `${bannerBasePath}/${activityId}.${extension}`
+  data[0].banner_path = bannerPath
+  console.log('Uploading activity banner')
+  await uploadFile(supabaseBucket, bannerPath, bannerSrc as string)
+  console.log('Setting activity banner path')
+  updateActivity(data[0])
+  data[0].banner_src = bannerSrc
+  return NextResponse.json(data[0])
 }
 
 export async function putActivity(updatedActivity: ActivityType) {
