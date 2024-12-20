@@ -96,6 +96,9 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, d
     cleanDisabledRequirementsOptions()
     updateDisabledRequirementsOptions(review.requirements)
   }, [review])
+  useEffect(() => {
+    console.log('StartTime: ', review.startTime)
+  }, [review])
 
   return (
     <Card>
@@ -146,7 +149,7 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, d
                   type="time"
                   variant="outlined"
                   placeholder="Start time"
-                  defaultValue={new Date(review.startTime).toISOString().split('T')[1].substring(0, 5)}
+                  defaultValue={review.startTime}
                   slotProps={{
                     htmlInput: { ...register('startTime') },
                   }}
@@ -157,7 +160,7 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, d
                   type="time"
                   variant="outlined"
                   placeholder="End time"
-                  defaultValue={new Date(review.endTime).toISOString().split('T')[1].substring(0, 5)}
+                  defaultValue={review.endTime}
                   slotProps={{
                     htmlInput: { ...register('endTime') },
                   }}
