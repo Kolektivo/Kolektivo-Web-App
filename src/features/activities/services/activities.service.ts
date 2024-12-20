@@ -31,14 +31,19 @@ class ActivitiesService {
   }
 
   public async create(activityReview: ActivityReviewType, user: User): Promise<ActivityType | undefined> {
+    console.log('Activity review: ', activityReview)
+    const start_date = new Date(`${activityReview.date}T${activityReview.startTime}Z`).toISOString();
+    const end_date = new Date(`${activityReview.date}T${activityReview.endTime}Z`).toISOString();
+    console.log(start_date)
+    console.log(end_date)
     const exampleActivity: ActivityType = {
       created_at: new Date().toISOString(),
       activity_host_id: user.id,
       user_created: user.email ?? '',
       title: activityReview.name,
       description: activityReview.description,
-      start_date: activityReview.date,
-      end_date: activityReview.date,
+      start_date: start_date,
+      end_date: end_date,
       time_lapse: `${activityReview.startTime} - ${activityReview.endTime}`,
       full_address: 'Eco Center, 123 Greenway Drive, Austin, TX, USA',
       badge_contract_address: '0x1234abcd5678ef90',
@@ -53,6 +58,8 @@ class ActivitiesService {
   }
 
   public async update(activityReview: ActivityReviewType, user: User, id: string): Promise<ActivityType | undefined> {
+    const start_date = new Date(`${activityReview.date}T${activityReview.startTime}Z`).toISOString();
+    const end_date = new Date(`${activityReview.date}T${activityReview.endTime}Z`).toISOString();
     const activity: ActivityType = {
       id,
       created_at: new Date().toISOString(),
@@ -60,8 +67,8 @@ class ActivitiesService {
       user_created: user.email ?? '',
       title: activityReview.name,
       description: activityReview.description,
-      start_date: activityReview.date,
-      end_date: activityReview.date,
+      start_date: start_date,
+      end_date: end_date,
       time_lapse: `${activityReview.startTime} - ${activityReview.endTime}`,
       full_address: 'Eco Center, 123 Greenway Drive, Austin, TX, USA',
       badge_contract_address: '0x1234abcd5678ef90',
