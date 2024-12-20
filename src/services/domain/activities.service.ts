@@ -161,16 +161,18 @@ export async function getCompletedActivities(page: number) {
 
 export async function postActivity(newActivity: ActivityType) {
   console.log('Creating activity')
+
   const supabaseClient = createAnonymousClient()
+
   const bannerSrc = newActivity.banner_src
   delete newActivity.banner_src
   const activityHost: ActivityHost = {
     id: newActivity.activity_host_id,
-    name: 'Nombresito',
-    wallet_address: 'Addresita'
+    name: newActivity.user_created,
+    wallet_address: 'X'
   }
   console.log('Creating activity host')
-  const {data: activityHostData, error: activityHostError} = await supabaseClient.from('activity_hosts').insert([activityHost]).select()
+  const { data: activityHostData, error: activityHostError } = await supabaseClient.from('activity_hosts').insert([activityHost]).select()
   console.log('Error: ', activityHostData)
   console.log('ActivityHostData: ', activityHostError)
   const { data, error } = await supabaseClient.from(ACTIVITIES).insert([newActivity]).select()
