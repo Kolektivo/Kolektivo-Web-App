@@ -18,6 +18,17 @@ export default function HeaderSubtitle() {
   const handleSkip = () => {
     router.push('/activities')
   }
+
+  const handleDownloadReportTemplate = () => {
+    const fileUrl = '/activityFinishReport.docx'
+    const anchor = document.createElement('a')
+    anchor.href = fileUrl 
+    anchor.download = 'report-template.docx'
+    document.body.appendChild(anchor)
+    anchor.click()
+    document.body.removeChild(anchor)
+  }
+
   const handleSelectReport = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click()
@@ -71,7 +82,10 @@ export default function HeaderSubtitle() {
     <Stack direction="row" justifyContent="space-between">
       <Stack gap="4px" marginTop={4}>
         <Typography variant="body1" color="text.secondary">
-          1. Fill in the Activity Report Template (click here for template)
+          1. Fill in the Activity Report Template{' '}
+          <u onClick={handleDownloadReportTemplate} style={{ cursor: 'pointer' }}>
+            (click here for template)
+          </u>
         </Typography>
         <Stack direction="row" gap="4px">
           <Typography variant="body1" color="text.secondary">
