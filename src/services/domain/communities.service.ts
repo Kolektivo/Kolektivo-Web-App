@@ -35,7 +35,7 @@ export async function getCommunities() {
 }
 async function callApi(apiURL: string, params: any): Promise<any> {
   try {
-    console.log('Calling ', apiURL)
+    console.log('Calling ', apiURL, params)
     const response = await axios.get(apiURL, params)
 
     if (response.data.status !== '1') {
@@ -73,25 +73,20 @@ async function updateCommunities() {
   data.forEach(async (community) => {
     if (community.id != 'Trinidad') return
     console.log('Updating ' + community.name)
-    const communityData = await gatherContractInfo(community.contract_address, community.last_block)
-    const vendorsData = await supabaseClient
-      .from('vendors')
-      .select('*', { count: 'exact', head: true })
-      .eq('community', community.id)
+    const communityData = await gatherContractInfo(community.contract_address, community.last_block)   
     console.log('Current comunity ', community)
     community.transfers = communityData.transfers
     community.members = communityData.members
     community.tokens = communityData.tokens
     community.last_block = communityData.last_block
-    community.vendors = vendorsData.count
     console.log('Before saving ', community)
     let updateResult = await supabaseClient.from(COMMUNITIES).update(community).eq('id', community.id).select().single()
-    if (updateResult.error != null) throw new Error(`Error updating communities: ${error}`)
+    if (updateResult.error != null) throw new Error(`Error updating data in communities: ${error}`)
     updateResult = await supabaseClient
       .from('communities')
       .update({ last_update: new Date().toISOString() })
       .eq('id', community.id)
-    if (updateResult.error != null) throw new Error(`Error updating communities: ${error}`)
+    if (updateResult.error != null) throw new Error(`Error updating lastUpdate in communities: ${error}`)
   })
   return true
 }
@@ -143,5 +138,8 @@ async function gatherContractInfo(contractAddress: string, fromBlock: number): P
 }
 function formatUnits(totalSupply: any, decimals: any): any {
   console.log('Formating units')
-  throw new Error('Function not implemented.')
+  let decimalPart = totalSupply.substring(totalSupply.length - decimals);
+  let integerPart = totalSupply.substring(0, totalSupply.length - decimals);
+  return parseInt(integerPart) + "." + parseInt(decimalPart) 
+
 }
