@@ -1,6 +1,5 @@
 import { Vendor } from '@/types/vendors'
 import FileUtils from '@/utils/files/fileUtils'
-import { createAnonymousClient } from '@/utils/supabase/anonymousClient'
 import Bucket from '@/utils/supabase/bucket'
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
@@ -9,9 +8,8 @@ const VENDORS = 'vendors'
 
 export async function getVendors() {
   console.log('Geeting vendors')
-  const supabaseClient = createAnonymousClient()
-  const supabaseClientAuth = createClient()
-  const user = await supabaseClientAuth.auth.getUser()
+  const supabaseClient = await createClient()
+  const user = await supabaseClient.auth.getUser()
   const idUser = user.data.user?.id
 
   const { data, error } = await supabaseClient.from(VENDORS).select('*').eq('created_by', idUser)
@@ -41,10 +39,10 @@ export async function getVendors() {
 export async function getVendorById(id: string) {
   console.log('Geeting vendor by id: ', id)
 
-  const supabaseClient = createAnonymousClient()
+  const supabaseClient = await createClient()
 
-  const supabaseClientAuth = createClient()
-  const user = await supabaseClientAuth.auth.getUser()
+  //const supabaseClientAuth = createClient()
+  const user = await supabaseClient.auth.getUser()
   const idUser = user.data.user?.id
 
   const { data, error } = await supabaseClient.from(VENDORS).select('*').eq('id', id).eq('created_by', idUser).single()
@@ -70,10 +68,10 @@ export async function getVendorById(id: string) {
 
 export async function postVendor(newVendor: Vendor) {
   console.log('Creating vendor')
-  const supabaseClient = createAnonymousClient()
+  const supabaseClient = await createClient()
 
-  const supabaseClientAuth = createClient()
-  const user = await supabaseClientAuth.auth.getUser()
+  //const supabaseClientAuth = createClient()
+  const user = await supabaseClient.auth.getUser()
   const idUser = user.data.user?.id
 
   const logoSrc = newVendor.logoSrc!
@@ -114,10 +112,10 @@ export async function postVendor(newVendor: Vendor) {
 
 export async function putVendor(id: string, vendor: any) {
   console.log('Updating vendor')
-  const supabaseClient = createAnonymousClient()
+  const supabaseClient = await createClient()
 
-  const supabaseClientAuth = createClient()
-  const user = await supabaseClientAuth.auth.getUser()
+  //const supabaseClientAuth = createClient()
+  const user = await supabaseClient.auth.getUser()
   const idUser = user.data.user?.id
 
   const { data, error } = await supabaseClient
@@ -152,10 +150,10 @@ export async function putVendor(id: string, vendor: any) {
 
 export async function deleteVendor(id: string) {
   console.log('Deleting vendor with id: ', id)
-  const supabaseClient = createAnonymousClient()
+  const supabaseClient = await createClient()
 
-  const supabaseClientAuth = createClient()
-  const user = await supabaseClientAuth.auth.getUser()
+  //const supabaseClientAuth = createClient()
+  const user = await supabaseClient.auth.getUser()
   const idUser = user.data.user?.id
 
   const { data, error } = await supabaseClient

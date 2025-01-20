@@ -3,8 +3,8 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
-
 import { createClient } from '@/utils/supabase/server'
+
 
 export type AuthState = {
   error: boolean
@@ -12,7 +12,7 @@ export type AuthState = {
 }
 
 export async function signIn(formData: FormData) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const data = {
     email: formData.get('email') as string,
@@ -33,7 +33,7 @@ export async function signInWithGoogle() {
   const headersList = headers()
   const host = headersList.get('x-forwarded-host') || ''
   const protocol = headersList.get('x-forwarded-proto') || 'http'
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { error, data } = await supabase.auth.signInWithOAuth({
     provider: 'google',
@@ -50,7 +50,7 @@ export async function signInWithGoogle() {
 }
 
 export async function signOut() {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   await supabase.auth.signOut()
 
@@ -59,7 +59,7 @@ export async function signOut() {
 }
 
 export async function signup(formData: FormData) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const data = {
     email: formData.get('email') as string,

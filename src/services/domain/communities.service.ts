@@ -1,4 +1,4 @@
-import { createAnonymousClient } from '@/utils/supabase/anonymousClient'
+import { createClient } from '@/utils/supabase/server'
 import axios from 'axios'
 import { NextResponse } from 'next/server'
 
@@ -7,7 +7,7 @@ const COMMUNITIES = 'communities'
 
 export async function getCommunities() {
   console.log('Geeting communities')
-  const supabaseClient = createAnonymousClient()
+  const supabaseClient = await createClient()
   try {
     await updateCommunities()
   } catch (error) {
@@ -61,7 +61,7 @@ function formatCurrency(value: number, id: string, locale = 'en-US') {
 
 async function updateCommunities() {
   console.log('Updating communities')
-  const supabaseClient = createAnonymousClient()
+  const supabaseClient =await createClient()
 
   const { data, error } = await supabaseClient
     .from(COMMUNITIES)

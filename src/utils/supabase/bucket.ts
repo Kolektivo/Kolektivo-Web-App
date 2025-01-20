@@ -1,10 +1,10 @@
 import { SUPABASE_BUCKET, SUPABASE_URL } from '@/config/constants'
 import FileUtils from '../files/fileUtils'
-import { createAnonymousClient } from './anonymousClient'
+import { createClient } from './server'
 
 const Bucket = {
   uploadFile: async (filePath: string, base64File: string) => {
-    const supabaseClient = createAnonymousClient()
+    const supabaseClient = await createClient()
 
     const fileBlob = await FileUtils.base64ImageSourceToBlob(base64File)
     const { data: dataUpload, error: errorUpload } = await supabaseClient.storage
@@ -19,7 +19,7 @@ const Bucket = {
   },
   downloadFile: async (filePath: string) => {
     if (filePath == '' || !filePath) return ''
-    const supabaseClient = createAnonymousClient()
+    const supabaseClient = await createClient()
     const { data, error } = await supabaseClient.storage.from(SUPABASE_BUCKET).download(filePath)
 
     if (error) {
@@ -33,7 +33,7 @@ const Bucket = {
   },
   deleteFile: async (filePath: string) => {
     if (filePath == '' || !filePath) return ''
-    const supabaseClient = createAnonymousClient()
+    const supabaseClient = await createClient()
     const { error } = await supabaseClient.storage.from(SUPABASE_BUCKET).remove([filePath])
 
     if (error) {

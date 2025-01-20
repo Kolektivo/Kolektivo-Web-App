@@ -1,8 +1,6 @@
 import { ActivityType, ImpactDto } from '@/types/activities'
 import { ActivityHost } from '@/types/activityHosts'
-import { createAnonymousClient } from '@/utils/supabase/anonymousClient'
 import { createClient } from '@/utils/supabase/server'
-import axios from 'axios'
 import { NextResponse } from 'next/server'
 
 const supabaseBucket = process.env.NEXT_PUBLIC_SUPABASE_BUCKET || ''
@@ -13,11 +11,11 @@ const ORGANIZATIONS = 'organizations'
 const pageSize = parseInt(process.env.PAGE_SIZE || '1')
 
 export async function getActivities(id: string) {
-  const supabaseClientAuth = createClient()
+  const supabaseClientAuth = await createClient()
   const user = await supabaseClientAuth.auth.getUser()
   const hostId = user.data.user?.id
 
-  const supabaseClient = createAnonymousClient()
+  const supabaseClient = await createClient()
   if (hostId && id) {
     console.log('Geeting activities with hostId and id')
     const { data, error } = await supabaseClient
@@ -47,70 +45,23 @@ export async function getActivities(id: string) {
     console.log('Geeting activities with hostId and without id')
     const { data, error } = await supabaseClient.from(ACTIVITIES).select('*').eq('activity_host_id', hostId)
     if (error) return NextResponse.json(error)
-    // console.log('Geeting activities organization data and banner')
-    // const activitiesWithBanners = await Promise.all(
-    //   data.map(async (activity) => {
-    //     const { data: organizationData, error: organizationError } = await supabaseClient
-    //       .from(ORGANIZATIONS)
-    //       .select('*')
-    //       .eq('created_by', activity.activity_host_id)
-    //     if (organizationError) return NextResponse.json(organizationError)
-    //     const organizationName =
-    //       organizationData && organizationData[0] && organizationData[0].name ? organizationData[0].name : ''
-    //     const banner_src = await downloadFile(supabaseBucket, activity.banner_path)
-    //     return { ...activity, organization: organizationName, banner_src }
-    //   }),
-    // )
-
-    // return NextResponse.json(activitiesWithBanners)
     return NextResponse.json(data)
   } else if (id) {
     console.log('Geeting activities with Id and without hostId')
     const { data, error } = await supabaseClient.from(ACTIVITIES).select('*').eq('id', id)
     if (error) return NextResponse.json(error)
     console.log('Geeting activities organization data and banner')
-    // const activitiesWithBanners = await Promise.all(
-    //   data.map(async (activity) => {
-    //     const { data: organizationData, error: organizationError } = await supabaseClient
-    //       .from(ORGANIZATIONS)
-    //       .select('*')
-    //       .eq('created_by', activity.activity_host_id)
-    //     if (organizationError) return NextResponse.json(organizationError)
-    //     const organizationName =
-    //       organizationData && organizationData[0] && organizationData[0].name ? organizationData[0].name : ''
-    //     const banner_src = await downloadFile(supabaseBucket, activity.banner_path)
-    //     return { ...activity, organization: organizationName, banner_src }
-    //   }),
-    // )
-
-    // return NextResponse.json(activitiesWithBanners)
     return NextResponse.json(data)
   } else {
     console.log('Geeting activities without hostId and id')
     const { data, error } = await supabaseClient.from(ACTIVITIES).select('*')
-    if (error) return NextResponse.json(error)
-    // console.log('Geeting activities organization data and banner')
-    // const activitiesWithBanners = await Promise.all(
-    //   data.map(async (activity) => {
-    //     const { data: organizationData, error: organizationError } = await supabaseClient
-    //       .from(ORGANIZATIONS)
-    //       .select('*')
-    //       .eq('created_by', activity.activity_host_id)
-    //     if (organizationError) return NextResponse.json(organizationError)
-    //     const organizationName =
-    //       organizationData && organizationData[0] && organizationData[0].name ? organizationData[0].name : ''
-    //     const banner_src = await downloadFile(supabaseBucket, activity.banner_path)
-    //     return { ...activity, organization: organizationName, banner_src }
-    //   }),
-    // )
-
-    // return NextResponse.json(activitiesWithBanners)
+    if (error) return NextResponse.json(error)   
     return NextResponse.json(data)
   }
 }
 
 export async function getActivitiesBanners(data: any) {
-  const supabaseClient = createAnonymousClient()
+  const supabaseClient = await createClient()
   const activitiesWithBanners = await Promise.all(
     data.map(async (activity: any) => {
       const { data: organizationData, error: organizationError } = await supabaseClient
@@ -129,7 +80,7 @@ export async function getActivitiesBanners(data: any) {
 }
 
 export async function getCompletedActivities(page: number) {
-  const supabaseClient = createAnonymousClient()
+  const supabaseClient = await createClient()
 
   const from = (page - 1) * pageSize
   const to = from + pageSize - 1
@@ -162,7 +113,7 @@ export async function getCompletedActivities(page: number) {
 export async function postActivity(newActivity: ActivityType) {
   console.log('Creating activity')
 
-  const supabaseClient = createAnonymousClient()
+  const supabaseClient = await createClient()
 
   const bannerSrc = newActivity.banner_src
   delete newActivity.banner_src
@@ -244,14 +195,14 @@ export async function putCompletedActivitie(updatedActivity: ActivityType) {
 
 export async function deleteActivity(id: string) {
   console.log('Removing activity')
-  const supabaseClient = createAnonymousClient()
+  const supabaseClient = await createClient()
   const { data, error } = await supabaseClient.from(ACTIVITIES).delete().eq('id', id)
   if (error) return NextResponse.json(error)
   return NextResponse.json(data)
 }
 
 async function updateActivity(activity: ActivityType) {
-  const supabaseClient = createAnonymousClient()
+  const supabaseClient = await createClient()
   const { banner_src: banner_src, ...organizationWithoutLogoSrc } = activity
   console.log('Removed ', banner_src?.substring(0, 10))
 
@@ -266,7 +217,7 @@ async function updateActivity(activity: ActivityType) {
 async function downloadFile(bucketName: string, filePath: string) {
   console.log('Downloading file')
   if (filePath == '' || !filePath) return ''
-  const supabaseClient = createAnonymousClient()
+  const supabaseClient = await createClient()
   const { data, error } = await supabaseClient.storage.from(bucketName).download(filePath)
 
   if (error) {
@@ -289,7 +240,7 @@ async function blobToImageSrc(blob: Blob): Promise<string> {
 async function uploadFile(bucketName: string, filePath: string, base64File: string) {
   console.log('Uploading file')
   const fileBlob = await base64ImageSourceToBlob(base64File)
-  const supabaseClient = createAnonymousClient()
+  const supabaseClient = await createClient()
   const { data: dataDelete, error: errorDelete } = await supabaseClient.storage.from(bucketName).remove([filePath])
   if (errorDelete) {
     console.error('Error uploading file:', errorDelete.message)

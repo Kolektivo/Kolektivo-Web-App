@@ -1,5 +1,4 @@
 import FileUtils from '@/utils/files/fileUtils'
-import { createAnonymousClient } from '@/utils/supabase/anonymousClient'
 import Bucket from '@/utils/supabase/bucket'
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
@@ -9,9 +8,9 @@ const ORGANIZATIONS = 'organizations'
 
 export async function getOrganizations() {
   console.log('Getting organizations')
-  const supabaseClient = createAnonymousClient()
-  const supabaseClientAuth = createClient()
-  const user = await supabaseClientAuth.auth.getUser()
+  const supabaseClient = await createClient()
+ // const supabaseClientAuth = createClient()
+  const user = await supabaseClient.auth.getUser()
   const idUser = user.data.user?.id
 
   const { data, error } = await supabaseClient.from(ORGANIZATIONS).select().eq('created_by', idUser)
@@ -30,9 +29,9 @@ export async function getOrganizations() {
 
 export async function postOrganization(newOrganization: any) {
   console.log('Creating organization')
-  const supabaseClient = createAnonymousClient()
-  const supabaseClientAuth = createClient()
-  const user = await supabaseClientAuth.auth.getUser()
+  const supabaseClient = await createClient()
+  //const supabaseClientAuth = createClient()
+  const user = await supabaseClient.auth.getUser()
   const idUser = user.data.user?.id
 
   const logoSrc = newOrganization.logoSrc
@@ -64,10 +63,10 @@ export async function postOrganization(newOrganization: any) {
 
 export async function putOrganization(id: string, organization: any) {
   console.log('Updating organization')
-  const supabaseClient = createAnonymousClient()
+  const supabaseClient = await createClient()
 
-  const supabaseClientAuth = createClient()
-  const user = await supabaseClientAuth.auth.getUser()
+  //const supabaseClientAuth = createClient()
+  const user = await supabaseClient.auth.getUser()
   const idUser = user.data.user?.id
 
 
