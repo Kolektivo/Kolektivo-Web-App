@@ -1,145 +1,161 @@
+import { Communities, Community } from '@/types/communities'
+import { formatCurrency } from '@/utils/formatters/numeric'
+import { gatherScannerInfo } from '@/utils/integration/scanner'
 import { createClient } from '@/utils/supabase/server'
-import axios from 'axios'
 import { NextResponse } from 'next/server'
 
-const scannerApi = process.env.SCANNER_API_URL || ''
+
 const COMMUNITIES = 'communities'
+const VENDORS = 'vendors'
+const UPDATE_INTERVAL_MS = 3600 * 1000;
 
-export async function getCommunities() {
-  console.log('Geeting communities')
-  const supabaseClient = await createClient()
+export async function getCommunities(): Promise<NextResponse> {
+  console.log('Fetching communities');
+  
+  const supabaseClient = await createClient();
+
   try {
-    await updateCommunities()
+    await updateCommunities();
   } catch (error) {
-    console.log('ERROR UPDATING COMMUNITIES:')
-    console.log(error)
+    console.error('Error actualizando comunidades:', error);
+    return NextResponse.json({ message: 'Error updating communities' }, { status: 500 });
   }
 
-  const { data, error } = await supabaseClient.from(COMMUNITIES).select('*', { head: false }).not('id', 'is', null)
-  if (error) return NextResponse.json(error, { status: 500 })
-  const vendorsData = await supabaseClient.from('vendors').select('*', { count: 'exact' }).not('id', 'is', null)
-  const response = {
-    tokensInCirculation: formatCurrency(data.reduce((sum, item) => sum + item.tokens, 0) * 0.15, 'Dollard'),
-    tokenTransfers: data.reduce((sum, item) => sum + item.transfers, 0),
-    members: data.reduce((sum, item) => sum + item.members, 0),
-    activeVendors: vendorsData.count,
-    communities: data.map((community) => ({
-      id: community.id,
-      name: community.name,
-      members: community.members,
-      tokenSupply: formatCurrency(community.tokens, community.id),
-      srcImage: community.srcImage,
-    })),
-  }
-  return NextResponse.json(response)
-}
-async function callApi(apiURL: string, params: any): Promise<any> {
   try {
-    console.log('Calling ', apiURL, params)
-    const response = await axios.get(apiURL, params)
+    const [communitiesResult, vendorsResult] = await Promise.all([
+      supabaseClient
+        .from(COMMUNITIES)
+        .select('*')
+        .not('id', 'is', null),
+      supabaseClient
+        .from(VENDORS)
+        .select('*', { count: 'exact' })
+        .not('id', 'is', null)
+    ]);
 
-    if (response.data.status !== '1') {
-      throw new Error('Remote API error fetching data: ' + response.data.message + ' ' + response.data.result)
+    if (communitiesResult.error) {
+      console.error('Error getting communities:', communitiesResult.error);
+      return NextResponse.json({ message: 'Error getting communities' }, { status: 500 });
     }
-    return response.data.result
+
+    if (vendorsResult.error) {
+      console.error('Error getting vendors:', vendorsResult.error);
+      return NextResponse.json({ message: 'Error getting vendors' }, { status: 500 });
+    }
+
+    const communities = communitiesResult.data;
+    const activeVendors = vendorsResult.count || 0;
+
+    const response: Communities = {
+      tokensInCirculation: formatCurrency(
+        communities.reduce((sum, community) => sum + community.tokens, 0) * 0.15,
+        'Dollard'
+      ),
+      tokenTransfers: communities.reduce((sum, community) => sum + community.transfers, 0),
+      members: communities.reduce((sum, community) => sum + community.members, 0),
+      activeVendors,
+      communities: communities.map((community): Community => ({
+        id: community.id,
+        name: community.name,
+        members: community.members,
+        tokenSupply: formatCurrency(community.tokens, 'Dollard'),
+        srcImage: community.srcImage,
+        transfers: community.transfers,
+      })),
+    };
+
+    return NextResponse.json(response);
   } catch (error) {
-    console.error('Unexpected error fetching data:', error)
-    throw error
+    console.error('Error communities:', error);
+    return NextResponse.json({ message: 'Error communities' }, { status: 500 });
   }
 }
 
-function toInteger(value: string) {
-  return parseInt(`0x${value}`, 16)
-}
+async function updateCommunities(): Promise<boolean> {
+  console.log('Updating communities');
 
-function formatCurrency(value: number, id: string, locale = 'en-US') {
-  let formatedValue = new Intl.NumberFormat(locale).format(value)
-  if (id == 'Dollard') return '$' + formatedValue
-  if (id == 'Trinidad') return formatedValue + ' KTT'
-  return formatedValue + ' KCW'
-}
+  const supabaseClient = await createClient();
 
-async function updateCommunities() {
-  console.log('Updating communities')
-  const supabaseClient =await createClient()
+  
+  const oneHourAgo = new Date(Date.now() - UPDATE_INTERVAL_MS).toISOString();
 
-  const { data, error } = await supabaseClient
-    .from(COMMUNITIES)
-    .select('*')
-    .lte('last_update', new Date(Date.now() - 3600 * 1000).toISOString())
-  if (error) throw new Error(`Error gathering communities: ${error}`)
-  console.log('Communities ' + data.length)
+  try {
+    
+    const { data, error } = await supabaseClient
+      .from(COMMUNITIES)
+      .select('*')
+      .lte('last_update', oneHourAgo)
+      .eq('id', 'Trinidad'); 
 
-  data.forEach(async (community) => {
-    if (community.id != 'Trinidad') return
-    console.log('Updating ' + community.name)
-    const communityData = await gatherContractInfo(community.contract_address, community.last_block)   
-    console.log('Current comunity ', community)
-    community.transfers = communityData.transfers
-    community.members = communityData.members
-    community.tokens = communityData.tokens
-    community.last_block = communityData.last_block
-    console.log('Before saving ', community)
-    let updateResult = await supabaseClient.from(COMMUNITIES).update(community).eq('id', community.id).select().single()
-    if (updateResult.error != null) throw new Error(`Error updating data in communities: ${error}`)
-    updateResult = await supabaseClient
-      .from('communities')
-      .update({ last_update: new Date().toISOString() })
-      .eq('id', community.id)
-    if (updateResult.error != null) throw new Error(`Error updating lastUpdate in communities: ${error}`)
-  })
-  return true
-}
+    if (error) {
+      throw new Error(`Error gathering communities: ${error.message}`);
+    }
 
-async function gatherContractInfo(contractAddress: string, fromBlock: number): Promise<Record<string, any>> {
-  console.log('Conllecting contract info')
-  const getTokenSupplyParams = {
-    module: 'token',
-    action: 'getToken',
-    contractaddress: contractAddress,
+    if (!data || data.length === 0) {
+      console.log('No communities require updating.');
+      return true;
+    }
+
+    console.log(`Communities to update: ${data.length}`);
+
+    const updatePromises = data.map(async (community) => {
+      try {
+        console.log(`Updating ${community.name}`);
+
+        // Obtener la información actualizada desde el scanner
+        const communityData = await gatherScannerInfo(
+          community.contract_address,
+          community.last_block
+        );
+
+        if (!communityData) {
+          throw new Error('No data returned from gatherScannerInfo');
+        }
+
+        console.log('Current community data:', community);
+
+      
+        const updatedCommunity: Partial<Community> = {
+          transfers: communityData.transfers,
+          members: communityData.members,
+          tokens: communityData.tokens,
+          last_block: communityData.last_block,
+        };
+
+
+        const { error: updateError } = await supabaseClient
+          .from(COMMUNITIES)
+          .update(updatedCommunity)
+          .eq('id', community.id);
+
+        if (updateError) {
+          throw new Error(`Error updating community data: ${updateError.message}`);
+        }
+
+ 
+        const { error: lastUpdateError } = await supabaseClient
+          .from(COMMUNITIES)
+          .update({ last_update: new Date().toISOString() })
+          .eq('id', community.id);
+
+        if (lastUpdateError) {
+          throw new Error(`Error updating last_update: ${lastUpdateError.message}`);
+        }
+
+        console.log(`Successfully updated community: ${community.name}`);
+      } catch (communityError) {
+        console.error(`Failed to update community ${community.id}:`, communityError);
+       
+      }
+    });
+
+    
+    await Promise.all(updatePromises);
+
+    console.log('All applicable communities have been processed.');
+    return true;
+  } catch (error) {
+    console.error('Error in updateCommunities:', error);
+    throw error; 
   }
-  const getHolderCountSupplyParams = {
-    module: 'token',
-    action: 'getTokenHolders',
-    contractaddress: contractAddress,
-  }
-  const countTransferCallssApiUrl = {
-    module: 'token',
-    action: 'tokentx',
-    fromBlock: fromBlock,
-    toBlock: 'latest',
-    contractaddress: contractAddress,
-  }
-
-  const communityData: Record<string, any> = {}
-
-  const tokenSuppply = await callApi(scannerApi, { params: getTokenSupplyParams })
-  console.log('Got tokens: ', tokenSuppply)
-  communityData['tokens'] = formatUnits(tokenSuppply.totalSupply, tokenSuppply.decimals)
-  console.log('Set tokens: ' + communityData['tokens'])
-  const members = await callApi(scannerApi, { params: getHolderCountSupplyParams })
-  communityData['members'] = members.length
-  console.log('Got members: ' + communityData['members'])
-
-  const transferCalls: any = await callApi(scannerApi, { params: countTransferCallssApiUrl })
-  communityData['transfers'] = transferCalls.length
-  console.log('Got transfers: ' + communityData['transfers'])
-
-  const lastBlockHex = transferCalls.reduce((max: any, block: any) => {
-    const currentBlockNumber = toInteger(block.blockNumber)
-    const maxBlockNumber = toInteger(max.blockNumber)
-    return currentBlockNumber > maxBlockNumber ? block : max
-  }, transferCalls[0])
-
-  communityData['last_block'] = toInteger(lastBlockHex.blockNumber)
-
-  console.log('Got last block: ', communityData['last_block'])
-  return communityData
-}
-function formatUnits(totalSupply: any, decimals: any): any {
-  console.log('Formating units')
-  let decimalPart = totalSupply.substring(totalSupply.length - decimals);
-  let integerPart = totalSupply.substring(0, totalSupply.length - decimals);
-  return parseInt(integerPart) + "." + parseInt(decimalPart) 
-
 }

@@ -3,16 +3,16 @@ export interface Community {
   srcImage: string
   name: string
   members: number
-  tokenSupply: number
+  transfers: number
+  tokenSupply: string
+  tokens?: string
+  last_block?: number
 }
 
-
 export interface Communities {
-  tokensInCirculation: number
+  tokensInCirculation: string
   tokenTransfers: number
   members: number
   activeVendors: number
   communities: Community[]
 }
-
-
