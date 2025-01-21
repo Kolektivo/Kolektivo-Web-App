@@ -1,9 +1,9 @@
 import { AttendanceRequestResponse } from "@/types/activities"
+import bucket from "@/utils/supabase/bucket"
 import { createClient } from "@/utils/supabase/server"
 import { NextResponse } from "next/server"
 
 const ATTENDANCEREQUESTS = 'attendance_requests'
-const supabaseBucket = process.env.NEXT_PUBLIC_SUPABASE_BUCKET || ''
 
 export async function getAttendanceRequests(activityId: string) {
   console.log('Getting attendance requests')
@@ -12,7 +12,7 @@ export async function getAttendanceRequests(activityId: string) {
   if (error) return NextResponse.json(error)
   const attendanceRequestsWithProofImage = await Promise.all(
     data.map(async (request) => {
-      const proofImage = await downloadFile(supabaseBucket, request.proof_image_path)
+      const proofImage = await bucket.downloadFile(request.proof_image_path)
       return { ...request, proof_image: proofImage }
     }),
   )
@@ -45,24 +45,3 @@ async function updateAttendanceRequest(attendanceRequest: AttendanceRequestRespo
   return { data, error }
 }
 
-async function downloadFile(bucketName: string, filePath: string) {
-  console.log('Dowloading file')
-  if (filePath == '' || !filePath) return ''
-  const supabaseClient = await createClient()
-  const { data, error } = await supabaseClient.storage.from(bucketName).download(filePath)
-
-  if (error) {
-    console.error('Error downloading file:', error.message)
-  } else {
-    const mimeType = filePath.endsWith('png') ? 'image/png' : 'image/jpeg'
-    const base64 = await blobToImageSrc(data)
-    const imageSource = `data:${mimeType};base64,${base64}`
-    return imageSource
-  }
-}
-async function blobToImageSrc(blob: Blob): Promise<string> {
-  console.log('Converting blob to image')
-  const arrayBuffer = await blob.arrayBuffer()
-  const buffer = Buffer.from(arrayBuffer)
-  return buffer.toString('base64')
-}

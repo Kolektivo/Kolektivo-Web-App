@@ -66,7 +66,7 @@ export async function getVendorById(id: string) {
   return NextResponse.json(vendorWithLogo)
 }
 
-export async function postVendor(newVendor: Vendor) {
+export async function createVendor(newVendor: Vendor) {
   console.log('Creating vendor')
   const supabaseClient = await createClient()
 
@@ -110,7 +110,7 @@ export async function postVendor(newVendor: Vendor) {
   return NextResponse.json(data[0])
 }
 
-export async function putVendor(id: string, vendor: any) {
+export async function updateVendor(id: string, vendor: any) {
   console.log('Updating vendor')
   const supabaseClient = await createClient()
 

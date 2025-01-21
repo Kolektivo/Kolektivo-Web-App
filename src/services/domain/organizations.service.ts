@@ -9,7 +9,6 @@ const ORGANIZATIONS = 'organizations'
 export async function getOrganizations() {
   console.log('Getting organizations')
   const supabaseClient = await createClient()
- // const supabaseClientAuth = createClient()
   const user = await supabaseClient.auth.getUser()
   const idUser = user.data.user?.id
 
@@ -27,10 +26,9 @@ export async function getOrganizations() {
   return NextResponse.json(organizationsWithLogos)
 }
 
-export async function postOrganization(newOrganization: any) {
+export async function createOrganization(newOrganization: any) {
   console.log('Creating organization')
   const supabaseClient = await createClient()
-  //const supabaseClientAuth = createClient()
   const user = await supabaseClient.auth.getUser()
   const idUser = user.data.user?.id
 
@@ -61,11 +59,10 @@ export async function postOrganization(newOrganization: any) {
   return NextResponse.json(data[0])
 }
 
-export async function putOrganization(id: string, organization: any) {
+export async function updateOrganization(id: string, organization: any) {
   console.log('Updating organization')
   const supabaseClient = await createClient()
 
-  //const supabaseClientAuth = createClient()
   const user = await supabaseClient.auth.getUser()
   const idUser = user.data.user?.id
 
