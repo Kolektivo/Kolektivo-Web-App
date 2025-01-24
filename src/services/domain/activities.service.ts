@@ -55,7 +55,7 @@ export async function getActivities(id: string) {
   } else {
     console.log('Geeting activities without hostId and id')
     const { data, error } = await supabaseClient.from(ACTIVITIES).select('*')
-    if (error) return NextResponse.json(error)   
+    if (error) return NextResponse.json(error)
     return NextResponse.json(data)
   }
 }
