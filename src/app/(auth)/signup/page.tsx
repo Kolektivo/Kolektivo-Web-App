@@ -9,11 +9,17 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import LoadingButton from '@/components/common/buttons/LoadingButton'
 
-const formSignUpSchema = z.object({
-  name: z.string().min(1),
-  email: z.string().email({ message: 'Invalid email address' }).min(1),
-  password: z.string().min(6),
-})
+const formSignUpSchema = z
+  .object({
+    name: z.string().min(5, { message: 'Name must have at least 5 characters' }),
+    email: z.string().email({ message: 'Invalid email address' }).min(5),
+    password: z.string().min(8, { message: 'Password must have at least 8 characters' }),
+    confirmPassword: z.string().min(8, { message: 'Confirm Password must have at least 8 characters' }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  })
 
 export default function Page() {
   const [state, setState] = useState<AuthState>({ error: false, message: null })
@@ -30,6 +36,7 @@ export default function Page() {
   useEffect(() => {
     if (state?.error) {
       resetField('password')
+      resetField('confirmPassword')
     }
   }, [state, resetField])
   const handleSubmit = async (data: FormData) => {
@@ -56,26 +63,32 @@ export default function Page() {
                     htmlInput: { ...register('name') },
                   }}
                   error={!!errors?.name}
+                  helperText={errors?.name?.message}
                 />
                 <TextField
                   label="Email"
                   placeholder="Email address"
                   type="email"
-                  slotProps={{
-                    htmlInput: { ...register('email') },
-                  }}
+                  {...register('email')}
                   error={!!errors?.email}
+                  helperText={errors?.email?.message}
                 />
                 <TextField
                   label="Create a password"
                   placeholder="Must be 8 characters"
                   type="password"
-                  slotProps={{
-                    htmlInput: { ...register('password') },
-                  }}
+                  {...register('password')}
                   error={!!errors?.password}
+                  helperText={errors?.password?.message}
                 />
-                <TextField label="Confirm password" placeholder="Repeat password" type="password" />
+                <TextField
+                  label="Confirm password"
+                  placeholder="Repeat password"
+                  type="password"
+                  {...register('confirmPassword')}
+                  error={!!errors?.confirmPassword}
+                  helperText={errors?.confirmPassword?.message}
+                />
 
                 <LoadingButton variant="contained" fullWidth type="submit" loading={isPending} disabled={!isValid}>
                   Sign Up
