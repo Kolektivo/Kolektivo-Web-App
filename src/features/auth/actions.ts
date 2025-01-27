@@ -61,24 +61,38 @@ export async function signOut() {
 
 export async function signUp(formData: FormData) {
   const supabase = await createClient()
-  console.log('Creating')
+  
   const userData = {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
     options: {
-      data: {
-        name: formData.get('name') as string,
+      data: { 
+        display_name: formData.get('name') as string,
       },
     }
   }
 
+  console.log('Creating user ', userData)
   const { data, error } = await supabase.auth.signUp(userData)
 
   if (error) {
     console.log(error)
     return { error: true, message: error.message }
   }
-  console.log('Singing')
-  return await signIn(formData)
- 
+
+  const loginData = {
+    email: formData.get('email') as string,
+    password: formData.get('password') as string,
+  }
+  console.log('Singing in with password',loginData.email)
+  const resp = await supabase.auth.signInWithPassword(loginData)
+
+  if (resp.error) {
+    console.log(error)
+    return { error: true, message: resp.error.message }
+  }
+
+  revalidatePath('/', 'layout')
+  redirect('/signup/choose-community')  
+
 }
