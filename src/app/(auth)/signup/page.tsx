@@ -63,7 +63,7 @@ export default function Page() {
                     htmlInput: { ...register('name') },
                   }}
                   error={!!errors?.name}
-                  helperText={errors?.name?.message}
+                  helperText={String(errors?.name?.message)}
                 />
                 <TextField
                   label="Email"
@@ -71,7 +71,7 @@ export default function Page() {
                   type="email"
                   {...register('email')}
                   error={!!errors?.email}
-                  helperText={errors?.email?.message}
+                  helperText={String(errors?.email?.message)}
                 />
                 <TextField
                   label="Create a password"
@@ -79,7 +79,7 @@ export default function Page() {
                   type="password"
                   {...register('password')}
                   error={!!errors?.password}
-                  helperText={errors?.password?.message}
+                  helperText={String(errors?.password?.message)}
                 />
                 <TextField
                   label="Confirm password"
@@ -87,7 +87,7 @@ export default function Page() {
                   type="password"
                   {...register('confirmPassword')}
                   error={!!errors?.confirmPassword}
-                  helperText={errors?.confirmPassword?.message}
+                  helperText={String(errors?.confirmPassword?.message)}
                 />
 
                 <LoadingButton variant="contained" fullWidth type="submit" loading={isPending} disabled={!isValid}>
