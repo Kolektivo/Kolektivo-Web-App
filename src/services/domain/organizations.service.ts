@@ -35,27 +35,32 @@ export async function createOrganization(newOrganization: any) {
   const logoSrc = newOrganization.logoSrc
   delete newOrganization.logoSrc
 
+  console.log('Inserting in database')
   const { data, error } = await supabaseClient
     .from(ORGANIZATIONS)
     .insert([{ ...newOrganization, created_by: idUser }])
     .select()
   if (error) return NextResponse.json(error, { status: 500 })
 
+  console.log(data)
   const organizationId = data[0].id
 
   try {
-    console.log('Uploading organization logos')
+    console.log('Uploading organization logos ', organizationId)
     const extension = FileUtils.getFileExtensionFromBase64(logoSrc)
     const logoPath = `organizations/logos/${organizationId}.${extension}`
+    console.log(logoPath)
     await Bucket.uploadFile(logoPath, logoSrc)
-    await supabaseClient.from(ORGANIZATIONS).update({ logoPath }).eq('id', organizationId)
+    const resp = await supabaseClient.from(ORGANIZATIONS).update({ logoPath: logoPath }).eq('id', organizationId)
+
+    if (resp.error) {
+      console.log(error)
+      return NextResponse.json(error, { status: 500 })
+    }
   } catch (error) {
-    await supabaseClient.from(ORGANIZATIONS).delete().eq('id', organizationId)
+    console.log(error)
     return NextResponse.json(error, { status: 500 })
   }
-
-  revalidatePath('/api/organizations')
-
   return NextResponse.json(data[0])
 }
 
