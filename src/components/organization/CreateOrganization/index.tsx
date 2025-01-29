@@ -9,6 +9,7 @@ import { type OrganizationInfo, type Organization, type OrganizationLogo } from 
 import { useMutation } from '@tanstack/react-query'
 import organizationsService from '@/features/organizations/services/organizations.service'
 import DialogError from '@/components/common/modals/DialogError'
+import useSWR, { mutate as mutateSWR } from 'swr'
 
 type CreateOrganizationSteps = {
   step1?: OrganizationInfo
@@ -59,6 +60,7 @@ const CreateOrganization = (): ReactElement => {
   }
 
   const handleModalSuccess = () => {
+    mutateSWR('/api/organizations', undefined, { revalidate: true })
     router.push('/my-organization')
   }
 
@@ -109,3 +111,5 @@ const CreateOrganization = (): ReactElement => {
 }
 
 export default CreateOrganization
+
+

@@ -12,6 +12,7 @@ import UploadImage from '@/components/common/inputs/image/UploadImage'
 import { useState } from 'react'
 import LoadingButton from '@/components/common/buttons/LoadingButton'
 
+
 const formInfoSchema = z.object({
   name: z.string().min(1),
   location: z.string().min(1),
@@ -51,7 +52,7 @@ const UpdateOrganizationForm = ({ defaultValues, onSave, saving }: OrganizationI
   const handleSave = (data: Organization) => {
     data.logoSrc = logoBase64!
     data.id = defaultValues?.id
-    onSave(data)
+    onSave(data)    
   }
 
   return (

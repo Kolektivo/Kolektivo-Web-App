@@ -1,31 +1,30 @@
 'use client'
 
 import organizationsService from '@/features/organizations/services/organizations.service'
-import { type Organization } from '@/types/organization'
-import { useQuery } from '@tanstack/react-query'
 import { type ReactElement } from 'react'
 import MyOrganization from '../MyOrganization'
 import ActionCard from '@/components/common/cards/ActionCard'
 import ErrorDisplay from '@/components/common/display/ErrorDisplay'
 import MyOrganizationSkeleton from '../MyOrganization/Skeleton'
+import useSWR from 'swr'
 
 const MainOrganization = (): ReactElement => {
-  const { data, isLoading, error, refetch } = useQuery<Organization | undefined>({
-    queryKey: ['getMyOrganization'],
-    queryFn: async () => await organizationsService.get(),
+  const { data, error, isValidating, mutate } = useSWR('/api/organizations', organizationsService.fetcher, {
+    revalidateOnFocus: false,
+    dedupingInterval: 60000,
   })
 
   if (error) {
     return (
       <ErrorDisplay
         onClickButton={() => {
-          refetch()
+          mutate()
         }}
       />
     )
   }
 
-  if (isLoading) {
+  if (isValidating) {
     return <MyOrganizationSkeleton />
   }
 

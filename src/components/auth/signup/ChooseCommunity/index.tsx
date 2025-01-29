@@ -5,16 +5,16 @@ import { Card, CardContent, Stack, Button, Box } from '@mui/material'
 import { type ReactElement } from 'react'
 import OptionCommunity from './OptionCommunity'
 import { useState } from 'react'
-import { Communities, type Community } from '@/types/communities'
+import { type Community } from '@/types/communities'
 import CardCommunity from '@/components/communities/CardsCommunities/CardCommunity'
 import Link from 'next/link'
-import { useQuery } from '@tanstack/react-query'
 import communitiesService from '@/features/communities/services/communities.service'
+import useSWR from 'swr'
 
 const ChooseCommunity = (): ReactElement => {
-  const { data, isLoading, error, refetch } = useQuery<Communities | undefined>({
-    queryKey: ['getCommunities'],
-    queryFn: async () => await communitiesService.get(),
+  const { data, error, isValidating, mutate } = useSWR('/api/communities', communitiesService.fetcher, {
+    revalidateOnFocus: false,
+    dedupingInterval: 60000,
   })
 
   const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(null)

@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 import DialogError from '@/components/common/modals/DialogError'
 import DialogSuccess from '@/components/common/modals/DialogSuccess'
 import UpdateVendorSkeleton from './Skeleton'
+import useSWR, { mutate as mutateSWR } from 'swr'
 
 const UpdateVendor = ({ id }: { id: string }): ReactElement => {
   const [saving, setSaving] = useState<boolean>(false)
@@ -32,6 +33,7 @@ const UpdateVendor = ({ id }: { id: string }): ReactElement => {
 
   const handleModalSuccess = () => {
     refetch()
+    mutateSWR('/api/vendors', undefined, { revalidate: true })
     router.push('/my-vendor')
   }
 

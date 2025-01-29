@@ -14,12 +14,9 @@ export async function getCommunities(): Promise<NextResponse> {
   
   const supabaseClient = await createClient();
 
-  try {
-    await updateCommunities();
-  } catch (error) {
+  updateCommunities().catch((error) => {
     console.error('Error actualizando comunidades:', error);
-    return NextResponse.json({ message: 'Error updating communities' }, { status: 500 });
-  }
+  });
 
   try {
     const [communitiesResult, vendorsResult] = await Promise.all([

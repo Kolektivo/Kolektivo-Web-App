@@ -15,6 +15,7 @@ import { useMutation } from '@tanstack/react-query'
 import vendorsService from '@/features/vendors/services/vendors.service'
 import DialogSuccess from '@/components/common/modals/DialogSuccess'
 import { useRouter } from 'next/navigation'
+import useSWR, { mutate as mutateSWR } from 'swr'
 
 type UpdateVendorFormProps = {
   defaultValues?: Vendor
@@ -64,6 +65,7 @@ const UpdateVendorForm = ({ defaultValues, onSave, saving }: UpdateVendorFormPro
   }
 
   const handleModalSuccess = () => {
+    mutateSWR('/api/vendors', undefined, { revalidate: true })
     router.push('/my-vendor')
   }
 

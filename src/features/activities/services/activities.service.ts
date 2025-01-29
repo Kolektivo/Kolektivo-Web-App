@@ -7,6 +7,8 @@ class ActivitiesService {
     baseURL: '/api',
   })
 
+
+
   public async get(user?: User, id?: string): Promise<(ActivityType & { organization: string })[] | undefined> {
     console.log('User: ', user)
     const idParam = id ? `id=${id}` : ''
@@ -25,10 +27,14 @@ class ActivitiesService {
     return response.data
   }
 
-  public async getCompleted(page: number): Promise<ImpactDto[] | undefined> {
-    const response = await this.httpInstance.get<ImpactDto[]>(`/activities/completed?page=${page}`)
+  completedActivitiesFetcher = (url: string) => axios.get<ImpactDto[]>(url).then(response => {
     return response.data
-  }
+  })
+
+  // public async getCompleted(page: number): Promise<ImpactDto[] | undefined> {
+  //   const response = await this.httpInstance.get<ImpactDto[]>(`/activities/completed?page=${page}`)
+  //   return response.data
+  // }
 
   public async create(activityReview: ActivityReviewType, user: User): Promise<ActivityType | undefined> {
     console.log('Activity review: ', activityReview)

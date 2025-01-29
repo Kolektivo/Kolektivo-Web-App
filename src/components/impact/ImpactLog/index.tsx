@@ -2,37 +2,40 @@
 import ErrorDisplay from '@/components/common/display/ErrorDisplay'
 import LogsViewer from '@/components/common/display/LogsViewer'
 import activitiesService from '@/features/activities/services/activities.service'
-import { ImpactDto } from '@/types/activities'
 import { Card, CardHeader, CardContent, CardActions, Button } from '@mui/material'
-import { useQuery } from '@tanstack/react-query'
 import { useState, type ReactElement } from 'react'
 import { Skeleton, Stack } from '@mui/material'
 import React from 'react'
+import useSWR from 'swr'
 
 const ImpactLog = (): ReactElement => {
   const [page, setPage] = useState(1)
 
-  const { data, error, isLoading, refetch } = useQuery<ImpactDto[] | undefined>({
-    queryKey: ['getCompletedActivities', page],
-    queryFn: async () => await activitiesService.getCompleted(page),
-  })
+  const { data, error, isValidating, mutate } = useSWR(
+    `api/activities/completed?page=${page}`,
+    activitiesService.completedActivitiesFetcher,
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 60000,
+    },
+  )
 
   const handleLoadMore = async () => {
     setPage((prevPage) => prevPage + 1)
-    await refetch()
+    await mutate()
   }
 
   if (error) {
     return (
       <ErrorDisplay
         onClickButton={() => {
-          refetch()
+          mutate()
         }}
       />
     )
   }
 
-  if (isLoading) {
+  if (isValidating) {
     return (
       <Card>
         <CardHeader title="Impact Log" />
@@ -40,8 +43,8 @@ const ImpactLog = (): ReactElement => {
           <Skeleton width={250} height={132} />
         </CardContent>
         <CardActions sx={{ justifyContent: 'center' }}>
-          <Button size="small" onClick={handleLoadMore} disabled={isLoading}>
-            {isLoading ? 'Loading...' : 'Load more'}
+          <Button size="small" onClick={handleLoadMore} disabled={isValidating}>
+            {isValidating ? 'Loading...' : 'Load more'}
           </Button>
         </CardActions>
       </Card>
@@ -56,8 +59,8 @@ const ImpactLog = (): ReactElement => {
           <LogsViewer logs={data} />
         </CardContent>
         <CardActions sx={{ justifyContent: 'center' }}>
-          <Button size="small" onClick={handleLoadMore} disabled={isLoading}>
-            {isLoading ? 'Loading...' : 'Load more'}
+          <Button size="small" onClick={handleLoadMore} disabled={isValidating}>
+            {isValidating ? 'Loading...' : 'Load more'}
           </Button>
         </CardActions>
       </Card>

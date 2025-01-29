@@ -5,27 +5,27 @@ import { Stack, Card, CardHeader, CardContent, Skeleton } from '@mui/material'
 import { type ReactElement } from 'react'
 import CardsCommunities from '../CardsCommunities'
 import StatsCommunities from '../StatsCommunities'
-import communitiesService from '@/features/communities/services/communities.service'
-import { useQuery } from '@tanstack/react-query'
 import ErrorDisplay from '@/components/common/display/ErrorDisplay'
+import useSWR from 'swr'
+import communitiesService from '@/features/communities/services/communities.service'
 
 const StackCommunities = (): ReactElement => {
-  const { data, isLoading, error, refetch } = useQuery<Communities | undefined>({
-    queryKey: ['getCommunities'],
-    queryFn: async () => await communitiesService.get(),
+  const { data, error, isValidating, mutate } = useSWR('/api/communities', communitiesService.fetcher, {
+    revalidateOnFocus: false,
+    dedupingInterval: 60000,
   })
 
   if (error) {
     return (
       <ErrorDisplay
         onClickButton={() => {
-          refetch()
+          mutate()
         }}
       />
     )
   }
 
-  if (isLoading) {
+  if (isValidating) {
     return (
       <Stack gap={4}>
         <StatsCommunities communities={undefined} />

@@ -3,21 +3,20 @@
 import { Alert, Box, Button, CardContent, Divider } from '@mui/material'
 import React, { type ReactNode } from 'react'
 import ItemsCard from '@/components/common/cards/ItemsCard'
-import { useQuery } from '@tanstack/react-query'
-import { type Vendor } from '@/types/vendors'
 import vendorsService from '@/features/vendors/services/vendors.service'
 import VendorItem from '../VendorItem'
 import VendorItemSkeleton from '../VendorItem/Skeleton'
+import useSWR from 'swr'
 
 export default function MyVendorsCard({ actions, isUpdate = false }: { actions?: ReactNode; isUpdate?: boolean }) {
-  const { data, isLoading, error, refetch } = useQuery<Vendor[] | undefined>({
-    queryKey: ['getMyVendors'],
-    queryFn: async () => await vendorsService.getAll(),
+  const { data, error, isValidating, mutate } = useSWR('/api/vendors', vendorsService.fetcher, {
+    revalidateOnFocus: false,
+    dedupingInterval: 60000,
   })
 
   return (
     <ItemsCard title="My Vendor(s)" actions={actions}>
-      {isLoading && (
+      {isValidating && (
         <CardContent>
           <VendorItemSkeleton />
         </CardContent>
@@ -33,7 +32,7 @@ export default function MyVendorsCard({ actions, isUpdate = false }: { actions?:
                 variant="contained"
                 color="error"
                 onClick={() => {
-                  refetch()
+                  mutate()
                 }}
               >
                 Reload

@@ -6,11 +6,12 @@ class VendorsService {
     baseURL: '/api',
   })
 
-  public async getAll(): Promise<Vendor[] | undefined> {
-    const response = await this.httpInstance.get<Vendor[]>('/vendors')
+
+  fetcher = (url: string) => axios.get<Vendor[]>(url).then(response => {
     if (response.data.length > 0) return response.data
     else return [] as Vendor[]
-  }
+  })
+
 
   public async get(id: string): Promise<Vendor | undefined> {
     const response = await this.httpInstance.get<Vendor>(`/vendors/${id}`)

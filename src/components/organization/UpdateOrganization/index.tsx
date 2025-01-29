@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation'
 import HeaderCard from '@/components/common/cards/HeaderCard'
 import { Stack } from '@mui/material'
 import UpdateOrganizationSkeleton from './Skeleton'
+import useSWR, { mutate as mutateSWR } from 'swr'
 
 const UpdateOrganization = (): ReactElement => {
   const [saving, setSaving] = useState<boolean>(false)
@@ -33,6 +34,7 @@ const UpdateOrganization = (): ReactElement => {
   }
 
   const handleModalSuccess = () => {
+    mutateSWR('/api/organizations', undefined, { revalidate: true })
     router.push('/my-organization')
   }
 

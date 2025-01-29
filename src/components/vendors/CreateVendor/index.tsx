@@ -9,6 +9,7 @@ import { useMutation } from '@tanstack/react-query'
 import DialogSuccess from '@/components/common/modals/DialogSuccess'
 import DialogError from '@/components/common/modals/DialogError'
 import vendorsService from '@/features/vendors/services/vendors.service'
+import useSWR, { mutate as mutateSWR } from 'swr'
 
 type CreateVendorSteps = {
   step1?: VendorInfo
@@ -59,6 +60,7 @@ const CreateVendor = (): ReactElement => {
   }
 
   const handleModalSuccess = () => {
+    mutateSWR('/api/vendors', undefined, { revalidate: true })
     router.push('/my-vendor')
   }
 

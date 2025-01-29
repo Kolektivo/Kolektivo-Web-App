@@ -12,6 +12,11 @@ class OrginizationsService {
     else return {} as Organization
   }
 
+  fetcher = (url: string) => axios.get<Organization[]>(url).then(res => {
+    if (res.data.length > 0) return res.data.pop()
+      else return {} as Organization
+  })
+
   public async create(organization: Organization): Promise<Organization> {
     const response = await this.httpInstance.post<Organization>('/organizations', organization)
 
