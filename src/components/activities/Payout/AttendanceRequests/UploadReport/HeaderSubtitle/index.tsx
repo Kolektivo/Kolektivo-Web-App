@@ -22,7 +22,7 @@ export default function HeaderSubtitle() {
   const handleDownloadReportTemplate = () => {
     const fileUrl = '/activityFinishReport.docx'
     const anchor = document.createElement('a')
-    anchor.href = fileUrl 
+    anchor.href = fileUrl
     anchor.download = 'report-template.docx'
     document.body.appendChild(anchor)
     anchor.click()
@@ -61,6 +61,8 @@ export default function HeaderSubtitle() {
           startTime: activity[0].time_lapse.split('-')[0],
           kolectivoPoints: Number(activity[0].points) ?? 0,
           location: activity[0].location ?? '',
+          longitude: activity[0].longitude ?? 0,
+          latitude: activity[0].latitude ?? 0,
           requirements: activity[0].requirements,
           stamps: activity[0].stamp ?? '',
           state: 'completed',

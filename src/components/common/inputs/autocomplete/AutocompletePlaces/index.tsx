@@ -73,8 +73,8 @@ const AutocompletePlaces = ({
   const [inputValue, setInputValue] = React.useState('')
   const [options, setOptions] = React.useState<readonly PlaceType[]>([])
   const loaded = React.useRef(false)
-  const [mapLat, setMapLat] = React.useState<number>(lat)
-  const [mapLng, setMapLng] = React.useState<number>(lng)
+  const [mapLat, setMapLat] = React.useState<number>(lat ?? 0)
+  const [mapLng, setMapLng] = React.useState<number>(lng ?? 0)
 
   const getPlaceDetails = (placeId: string) => {
     const service = new (window as any).google.maps.places.PlacesService(document.createElement('div'))
@@ -111,7 +111,7 @@ const AutocompletePlaces = ({
   )
 
   React.useEffect(() => {
-    if(!onLatLngChange) return;
+    if (!onLatLngChange) return
     if (!(window as any).google || !document.getElementById('map')) return
 
     const map = new (window as any).google.maps.Map(document.getElementById('map'), {
