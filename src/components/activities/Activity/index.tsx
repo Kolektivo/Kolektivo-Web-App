@@ -31,13 +31,13 @@ export default function ActivityComponent({
   disableRedirect,
 }: Props) {
   const formatDate = () => {
-    const date = new Date(startDate) // Interprets the date as UTC
+    const date = new Date(startDate) 
     console.log('Parsed Date:', date)
 
-    const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', timeZone: 'UTC' }
+    const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', timeZone: 'America/Port_of_Spain' }
     const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date)
 
-    console.log('Formatted Date:', formattedDate) // Outputs "December 4"
+    console.log('Formatted Date:', formattedDate)
     return `${formattedDate}, ${timeLapse}`
   }
   return (

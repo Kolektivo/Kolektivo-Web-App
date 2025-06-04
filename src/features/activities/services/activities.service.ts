@@ -30,7 +30,7 @@ class ActivitiesService {
 
         return isoWithOffset
       }
-
+      console.log('Ey', toTZString(activity.start_date))
       return {
         ...activity,
         start_date: toTZString(activity.start_date),
