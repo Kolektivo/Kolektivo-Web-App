@@ -8,7 +8,7 @@ type Props = {
   id: string
   organization: string
   startDate: string
-  timeLapse: string
+  endDate: string
   img: string
   title: string
   state: string
@@ -24,20 +24,34 @@ export default function ActivityComponent({
   img,
   title,
   startDate,
-  timeLapse,
+  endDate,
   state,
   stateColor,
   redirectionPath,
   disableRedirect,
 }: Props) {
   const formatDate = () => {
-    const date = new Date(startDate) 
-    console.log('Parsed Date:', date)
+    const start = new Date(startDate)
+    const end = new Date(endDate)
 
-    const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', timeZone: 'America/Port_of_Spain' }
-    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date)
+    const options: Intl.DateTimeFormatOptions = {
+      month: 'long',
+      day: 'numeric',
+      timeZone: 'America/Port_of_Spain',
+    }
+    const hourOptions: Intl.DateTimeFormatOptions = {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: 'America/Port_of_Spain',
+    }
 
-    console.log('Formatted Date:', formattedDate)
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(start)
+    const startTime = new Intl.DateTimeFormat('en-US', hourOptions).format(start)
+    const endTime = new Intl.DateTimeFormat('en-US', hourOptions).format(end)
+
+    const timeLapse = `${startTime} - ${endTime}`
+
     return `${formattedDate}, ${timeLapse}`
   }
   return (

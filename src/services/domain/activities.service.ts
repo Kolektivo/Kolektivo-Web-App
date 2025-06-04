@@ -24,8 +24,7 @@ export async function getActivities(id: string) {
       .eq('activity_host_id', hostId)
       .eq('id', id)
     if (error) return NextResponse.json(error)
-    console.log('Geeting activities organization data and banner')
-    console.log('Geeting activities organization data and banner')
+    console.log('Geting activities organization data and banner')
     const activitiesWithBanners = await Promise.all(
       data.map(async (activity) => {
         const { data: organizationData, error: organizationError } = await supabaseClient

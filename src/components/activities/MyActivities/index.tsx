@@ -97,7 +97,7 @@ export default function MyActivitiesCard({
               img={activity.banner_src as string}
               title={activity.title}
               startDate={activity.start_date}
-              timeLapse={activity.time_lapse}
+              endDate={activity.end_date}
               stateColor={getStateColor(activity) ?? 'completedChip'}
               state={getState(activity) ?? 'Upcoming'}
               redirectionPath={disablePayoutRedirect ? '' : getRedirectionPath(activity)}
