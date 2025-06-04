@@ -16,7 +16,29 @@ class ActivitiesService {
       `/activities${id ? '?' : ''}${idParam}`,
     )
 
-    return response.data
+    const dataWithLocalTime = response.data.map(activity => {
+      const toTZString = (utcStr: string): string => {
+        const utcDate = new Date(utcStr)
+
+        const tzOffsetInMinutes = 4 * 60
+        const localTime = new Date(utcDate.getTime() - tzOffsetInMinutes * 60_000)
+
+        const pad = (n: number): string => n.toString().padStart(2, '0')
+        const isoWithOffset =
+          `${localTime.getFullYear()}-${pad(localTime.getMonth() + 1)}-${pad(localTime.getDate())}` +
+          `T${pad(localTime.getHours())}:${pad(localTime.getMinutes())}:${pad(localTime.getSeconds())}-04:00`
+
+        return isoWithOffset
+      }
+
+      return {
+        ...activity,
+        start_date: toTZString(activity.start_date),
+        end_date: toTZString(activity.end_date),
+      }
+    })
+
+    return dataWithLocalTime
   }
 
   public async getBanners(data: ActivityType[]): Promise<ActivityType[]> {
@@ -38,8 +60,8 @@ class ActivitiesService {
 
   public async create(activityReview: ActivityReviewType, user: User): Promise<ActivityType | undefined> {
     console.log('Activity review: ', activityReview)
-    const start_date = new Date(`${activityReview.date}T${activityReview.startTime}Z`).toISOString();
-    const end_date = new Date(`${activityReview.date}T${activityReview.endTime}Z`).toISOString();
+    const start_date = new Date(`${activityReview.date}T${activityReview.startTime}-04:00`).toISOString();
+    const end_date = new Date(`${activityReview.date}T${activityReview.endTime}-04:00`).toISOString();
     console.log(start_date)
     console.log(end_date)
     const exampleActivity: ActivityType = {
@@ -64,8 +86,8 @@ class ActivitiesService {
   }
 
   public async update(activityReview: ActivityReviewType, user: User, id: string): Promise<ActivityType | undefined> {
-    const start_date = new Date(`${activityReview.date}T${activityReview.startTime}Z`).toISOString();
-    const end_date = new Date(`${activityReview.date}T${activityReview.endTime}Z`).toISOString();
+    const start_date = new Date(`${activityReview.date}T${activityReview.startTime}-04:00`).toISOString();
+    const end_date = new Date(`${activityReview.date}T${activityReview.endTime}-04:00`).toISOString();
     const activity: ActivityType = {
       id,
       created_at: new Date().toISOString(),
