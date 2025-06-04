@@ -6,6 +6,8 @@ export const detailFormShema = z.object({
   startTime: z.string().min(4),
   endTime: z.string().min(4),
   location: z.string().min(3),
+   latitude: z.number(),
+  longitude: z.number(),
   description: z.string().min(12),
 })
 
@@ -21,6 +23,8 @@ export const reviewFormSchema = z.object({
   startTime: z.string().min(4),
   endTime: z.string().min(4),
   location: z.string().min(3),
+  latitude: z.number(),
+  longitude: z.number(),
   description: z.string().min(12),
   // requirements: z.string().min(1),
   kolectivoPoints: z.string().min(1),

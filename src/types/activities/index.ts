@@ -4,6 +4,8 @@ export type CreateActivityDetailFormValues = {
   startTime: string
   endTime: string
   location: string
+  latitude: number
+  longitude: number
   description: string
 }
 
@@ -31,6 +33,8 @@ export type ActivityType = {
   badge_contract_address: string
   requirements: string
   location: string | null
+  latitude: number
+  longitude: number
   points: string | null
   stamp: string | null
   time_lapse: string

@@ -97,6 +97,8 @@ export default function UpdateActivity() {
             stamps: data[0].stamp as string,
             report: '',
             state: 'upcoming',
+            latitude: data[0].latitude as number,
+            longitude: data[0].longitude as number,
           }}
           submitHandler={handleSave}
           deleteHandler={handleDelete}

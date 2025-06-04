@@ -77,6 +77,8 @@ class ActivitiesService {
       badge_contract_address: '0x1234abcd5678ef90',
       requirements: activityReview.requirements.toString(),
       location: activityReview.location,
+      longitude: activityReview.longitude,
+      latitude: activityReview.latitude,
       points: `${activityReview.kolectivoPoints}`,
       stamp: activityReview.stamps,
       banner_src: activityReview.banner,
@@ -88,6 +90,7 @@ class ActivitiesService {
   public async update(activityReview: ActivityReviewType, user: User, id: string): Promise<ActivityType | undefined> {
     const start_date = new Date(`${activityReview.date}T${activityReview.startTime}-04:00`).toISOString();
     const end_date = new Date(`${activityReview.date}T${activityReview.endTime}-04:00`).toISOString();
+    console.log('Act long', activityReview.longitude)
     const activity: ActivityType = {
       id,
       created_at: new Date().toISOString(),
@@ -102,6 +105,8 @@ class ActivitiesService {
       badge_contract_address: '0x1234abcd5678ef90',
       requirements: activityReview.requirements.toString(),
       location: activityReview.location,
+      longitude: activityReview.longitude,
+      latitude: activityReview.latitude,
       points: `${activityReview.kolectivoPoints}`,
       stamp: activityReview.stamps,
       state: activityReview.state,
@@ -129,6 +134,8 @@ class ActivitiesService {
       badge_contract_address: '0x1234abcd5678ef90',
       requirements: activityReview.requirements.toString(),
       location: activityReview.location,
+      longitude: activityReview.longitude,
+      latitude: activityReview.latitude,
       points: `${activityReview.kolectivoPoints}`,
       stamp: activityReview.stamps,
       state: activityReview.state,

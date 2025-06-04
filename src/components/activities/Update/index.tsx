@@ -38,9 +38,13 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, d
     register,
     handleSubmit,
     formState: { errors, isValid },
+    setValue,
   } = useForm<ActivityReviewType>({
     resolver: zodResolver(reviewFormSchema),
     mode: 'all',
+    defaultValues: {
+      ...review,
+    },
   })
 
   const cleanDisabledRequirementsOptions = () => {
@@ -106,19 +110,7 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, d
         <CardContent>
           <Stack gap="48px">
             <UploadImage onChangeImage={handleBannerChange} previewBase64={banner} />
-            {/* {review.banner ? (
-                <Image src={review.banner} alt="Selected" width={285} height={160} style={{ borderRadius: '12px' }} />
-              ) : (
-                <Stack
-                  sx={{ backgroundColor: '#F2F2F2', borderRadius: '12px' }}
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <Typography fontWeight={700} fontSize={20} textTransform="uppercase" color="#A9A9A9">
-                    Activity Banner
-                  </Typography>
-                </Stack>
-              )} */}
+
             <TextField
               id="activityName"
               variant="outlined"
@@ -170,22 +162,29 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, d
             </Stack>
             <Controller
               control={control}
-              rules={{
-                required: true,
-              }}
+              name="location"
+              rules={{ required: true }}
               defaultValue={review.location}
               render={({ field: { onChange, onBlur, value } }) => (
                 <AutocompletePlaces
                   label="Where is it located?"
                   placeholder="Enter location"
-                  onChange={onChange}
+                  onChange={(val) => {
+                    onChange(val)
+                  }}
+                  onLatLngChange={(lat, lng) => {
+                    setValue('latitude', lat)
+                    setValue('longitude', lng)
+                  }}
                   onBlur={onBlur}
                   value={value ?? ''}
+                  lat={review.latitude}
+                  lng={review.longitude}
                   error={!!errors?.location}
                 />
               )}
-              name="location"
             />
+
             <TextField
               id="description"
               variant="outlined"
@@ -197,7 +196,7 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, d
                 htmlInput: { ...register('description') },
               }}
               error={!!errors?.description}
-            />            
+            />
             <TextField
               id="activityName"
               variant="outlined"

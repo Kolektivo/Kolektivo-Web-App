@@ -17,12 +17,13 @@ export default function CreateActivityDetailForm({ review, submitHandler }: Prop
     control,
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
   } = useForm<CreateActivityDetailFormValues>({
     resolver: zodResolver(detailFormShema),
     mode: 'all',
   })
-  
+
   return (
     <Card>
       <form onSubmit={handleSubmit(submitHandler)}>
@@ -82,21 +83,27 @@ export default function CreateActivityDetailForm({ review, submitHandler }: Prop
             </Stack>
             <Controller
               control={control}
-              rules={{
-                required: true,
-              }}
+              name="location"
+              rules={{ required: true }}
               defaultValue={review.location}
               render={({ field: { onChange, onBlur, value } }) => (
                 <AutocompletePlaces
                   label="Where is it located?"
                   placeholder="Enter location"
-                  onChange={onChange}
+                  onChange={(val) => {
+                    onChange(val)
+                  }}
+                  onLatLngChange={(lat, lng) => {
+                    setValue('latitude', lat)
+                    setValue('longitude', lng)
+                  }}
                   onBlur={onBlur}
                   value={value ?? ''}
+                  lat={review.latitude}
+                  lng={review.longitude}
                   error={!!errors?.location}
                 />
               )}
-              name="location"
             />
             <TextField
               id="description"
