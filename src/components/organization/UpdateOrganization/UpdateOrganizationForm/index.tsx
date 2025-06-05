@@ -12,7 +12,6 @@ import UploadImage from '@/components/common/inputs/image/UploadImage'
 import { useState } from 'react'
 import LoadingButton from '@/components/common/buttons/LoadingButton'
 
-
 const formInfoSchema = z.object({
   name: z.string().min(1),
   location: z.string().min(1),
@@ -20,6 +19,8 @@ const formInfoSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }).min(1),
   description: z.string().min(5, { message: 'Must be 5 or more characters long' }),
   commitment: z.string(),
+  latitude: z.number(),
+  longitude: z.number(),
 })
 
 type OrganizationInfoFormProps = {
@@ -33,6 +34,7 @@ const UpdateOrganizationForm = ({ defaultValues, onSave, saving }: OrganizationI
     control,
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
   } = useForm<Organization>({
     resolver: zodResolver(formInfoSchema),
@@ -52,7 +54,7 @@ const UpdateOrganizationForm = ({ defaultValues, onSave, saving }: OrganizationI
   const handleSave = (data: Organization) => {
     data.logoSrc = logoBase64!
     data.id = defaultValues?.id
-    onSave(data)    
+    onSave(data)
   }
 
   return (
@@ -88,6 +90,12 @@ const UpdateOrganizationForm = ({ defaultValues, onSave, saving }: OrganizationI
                     onBlur={onBlur}
                     value={value ?? ''}
                     error={!!errors?.location}
+                    lat={defaultValues?.latitude ?? 0}
+                    lng={defaultValues?.longitude ?? 0}
+                    onLatLngChange={(lat, lng) => {
+                      setValue('latitude', lat)
+                      setValue('longitude', lng)
+                    }}
                   />
                 )}
                 name="location"

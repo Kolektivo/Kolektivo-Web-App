@@ -41,9 +41,9 @@ type AutocompletePlacesProps = {
   helperText?: string
   value?: string
   name?: string
-  lat?: number
-  lng?: number
-  onLatLngChange?: (lat: number, lng: number) => void
+  lat: number
+  lng: number
+  onLatLngChange: (lat: number, lng: number) => void
   onChange?: (value: string) => void
   onBlur?: FocusEventHandler
 }
@@ -242,7 +242,7 @@ const AutocompletePlaces = ({
           )
         }}
       />
-      {typeof window !== 'undefined' && onLatLngChange && (
+      {typeof window !== 'undefined' && (
         <div style={{ height: 300, marginTop: 16 }}>
           <div id="map" style={{ width: '100%', height: '100%' }} />
         </div>

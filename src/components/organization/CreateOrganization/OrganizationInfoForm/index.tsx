@@ -14,6 +14,8 @@ const formInfoSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }).min(1),
   description: z.string().min(5, { message: 'Must be 5 or more characters long' }),
   commitment: z.string(),
+  latitude: z.number(),
+  longitude: z.number(),
 })
 
 type OrganizationInfoFormProps = {
@@ -27,6 +29,7 @@ const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: Organizatio
     control,
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
   } = useForm<OrganizationInfo>({
     resolver: zodResolver(formInfoSchema),
@@ -58,10 +61,16 @@ const OrganizationInfoForm = ({ defaultValues, onCancel, onSubmit }: Organizatio
                   <AutocompletePlaces
                     label="Location"
                     placeholder="Enter location"
+                    value={value ?? ''}
                     onChange={onChange}
                     onBlur={onBlur}
-                    value={value ?? ''}
                     error={!!errors?.location}
+                    lat={defaultValues?.latitude ?? 0}
+                    lng={defaultValues?.longitude ?? 0}
+                    onLatLngChange={(lat, lng) => {
+                      setValue('latitude', lat)
+                      setValue('longitude', lng)
+                    }}
                   />
                 )}
                 name="location"

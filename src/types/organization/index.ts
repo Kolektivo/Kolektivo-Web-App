@@ -6,6 +6,8 @@ export interface OrganizationInfo {
   email?: string
   description?: string
   commitment?: string
+  latitude?: number
+  longitude?: number
 }
 
 export interface OrganizationLogo {
