@@ -14,6 +14,8 @@ export interface VendorInfo {
   category?: string
   openingHours?: VendorOpeningHour[]
   wifiAvailability?: boolean
+  latitude?: number
+  longitude?: number
 }
 
 export interface VendorLogo {

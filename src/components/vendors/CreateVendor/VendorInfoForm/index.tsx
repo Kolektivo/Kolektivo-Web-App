@@ -21,6 +21,7 @@ const VendorInfoForm = ({ defaultValues, onCancel, onSubmit }: VendorInfoFormPro
     control,
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
   } = useForm<VendorInfo>({
     resolver: zodResolver(vendorInfoSchema),
@@ -45,9 +46,8 @@ const VendorInfoForm = ({ defaultValues, onCancel, onSubmit }: VendorInfoFormPro
               ></TextField>
               <Controller
                 control={control}
-                rules={{
-                  required: true,
-                }}
+                name="location"
+                rules={{ required: true }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <AutocompletePlaces
                     label="Location"
@@ -56,10 +56,16 @@ const VendorInfoForm = ({ defaultValues, onCancel, onSubmit }: VendorInfoFormPro
                     onBlur={onBlur}
                     value={value ?? ''}
                     error={!!errors?.location}
+                    lat={defaultValues?.latitude ?? 0}
+                    lng={defaultValues?.longitude ?? 0}
+                    onLatLngChange={(lat, lng) => {
+                      setValue('latitude', lat)
+                      setValue('longitude', lng)
+                    }}
                   />
                 )}
-                name="location"
               />
+
               <TextField
                 label="Website"
                 placeholder="Enter website URL"

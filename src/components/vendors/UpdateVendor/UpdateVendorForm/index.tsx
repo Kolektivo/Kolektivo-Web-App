@@ -28,6 +28,7 @@ const UpdateVendorForm = ({ defaultValues, onSave, saving }: UpdateVendorFormPro
     control,
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
   } = useForm<Vendor>({
     resolver: zodResolver(vendorInfoSchema),
@@ -102,10 +103,17 @@ const UpdateVendorForm = ({ defaultValues, onSave, saving }: UpdateVendorFormPro
                     onBlur={onBlur}
                     value={value ?? ''}
                     error={!!errors?.location}
+                    lat={defaultValues?.latitude ?? 0}
+                    lng={defaultValues?.longitude ?? 0}
+                    onLatLngChange={(lat, lng) => {
+                      setValue('latitude', lat)
+                      setValue('longitude', lng)
+                    }}
                   />
                 )}
                 name="location"
               />
+
               <TextField
                 label="Website"
                 placeholder="Enter website URL"

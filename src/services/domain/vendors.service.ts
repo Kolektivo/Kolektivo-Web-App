@@ -28,6 +28,8 @@ export async function getVendors() {
         category: vendor.category,
         openingHours: vendor.opening_hours,
         wifiAvailability: vendor.wifi,
+        latitude: vendor.latitude,
+        longitude: vendor.longitude,
         logoSrc,
       }
     }),
@@ -55,6 +57,8 @@ export async function getVendorById(id: string) {
     id: data.id,
     name: data.name,
     location: data.location,
+    latitude: data.latitude,
+    longitude: data.longitude,
     website: data.website,
     phone: data.phone,
     category: data.category,
@@ -82,6 +86,8 @@ export async function createVendor(newVendor: Vendor) {
     .insert([
       {
         location: newVendor.location,
+        latitude: newVendor.latitude,
+        longitude: newVendor.longitude,
         wifi: newVendor.wifiAvailability,
         website: newVendor.website,
         phone: newVendor.phone,
@@ -122,6 +128,8 @@ export async function updateVendor(id: string, vendor: any) {
     .from(VENDORS)
     .update({
       location: vendor.location,
+      latitude: vendor.latitude,
+      longitude: vendor.longitude,
       wifi: vendor.wifiAvailability,
       website: vendor.website,
       phone: vendor.phone,

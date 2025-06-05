@@ -8,6 +8,8 @@ export const vendorInfoSchema = z.object({
   phone: z.string().min(5),
   category: z.string().min(2),
   wifiAvailability: z.string().min(2),
+  latitude: z.number(),
+  longitude: z.number(),
   openingHours: z.array(
     z.object({
       day: z.number(),
