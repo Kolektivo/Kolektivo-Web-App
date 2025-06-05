@@ -25,8 +25,8 @@ export const reviewFormSchema = z.object({
   location: z.string().min(3),
   latitude: z.number(),
   longitude: z.number(),
-  description: z.string().min(12),
+  description: z.string().min(9),
   // requirements: z.string().min(1),
-  kolectivoPoints: z.string().min(1),
+  kolectivoPoints: z.preprocess((val) => Number(val), z.number().min(1)),
   stamps: z.string().min(1),
 })

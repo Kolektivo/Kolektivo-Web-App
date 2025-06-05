@@ -6,6 +6,7 @@ import DialogSuccess from '@/components/common/modals/DialogSuccess'
 import activitiesService from '@/features/activities/services/activities.service'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import { type ActivityReviewType, type ActivityType } from '@/types/activities'
+import { formatDateToDDMMYYYY } from '@/utils/formatters/date'
 import { type User } from '@supabase/supabase-js'
 import { useMutation } from '@tanstack/react-query'
 import { useParams, useRouter } from 'next/navigation'
@@ -74,6 +75,7 @@ export default function UpdateActivity() {
     fetchData()
   }, [user, id])
 
+  console.log(data && data[0].start_date.split('T')[1].replace('-04:00', ''))
   if (data)
     return (
       <>
@@ -87,8 +89,8 @@ export default function UpdateActivity() {
           review={{
             name: data[0].title,
             date: data[0].start_date,
-            startTime: data[0].time_lapse.split('-')[0].replace(' ', ''),
-            endTime: data[0].time_lapse.split('-')[1].replace(' ', ''),
+            startTime: data[0].start_date.split('T')[1].replace('-04:00', ''),
+            endTime: data[0].end_date.split('T')[1].replace('-04:00', ''),
             description: data[0].description,
             location: data[0].location as string,
             banner: data[0].banner_src as string,

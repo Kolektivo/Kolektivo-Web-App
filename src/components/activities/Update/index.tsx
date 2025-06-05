@@ -44,6 +44,7 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, d
     mode: 'all',
     defaultValues: {
       ...review,
+      date: new Date(review.date).toISOString().slice(0, 10),
     },
   })
 
@@ -97,16 +98,22 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, d
   }
 
   useEffect(() => {
+    console.log('errors:', errors)
+  }, [errors])
+
+  useEffect(() => {
     cleanDisabledRequirementsOptions()
     updateDisabledRequirementsOptions(review.requirements)
   }, [review])
   useEffect(() => {
     console.log('StartTime: ', review.startTime)
   }, [review])
-
+  console.log('Date:', new Date(review.date).toISOString().slice(0, 10))
   return (
     <Card>
       <form onSubmit={handleSubmit((data) => submitHandler({ ...data, requirements, banner }))}>
+        <input type="hidden" {...register('latitude')} />
+        <input type="hidden" {...register('longitude')} />
         <CardContent>
           <Stack gap="48px">
             <UploadImage onChangeImage={handleBannerChange} previewBase64={banner} />
@@ -125,17 +132,21 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, d
             <Stack gap="16px">
               <Typography variant="h3">When does your activity start and end?</Typography>
               <Stack direction="row" gap="16px">
-                <TextField
-                  id="date"
-                  type="date"
-                  variant="outlined"
-                  placeholder="Date"
-                  defaultValue={new Date(review.date).toISOString().split('T')[0]}
-                  slotProps={{
-                    htmlInput: { ...register('date') },
-                  }}
-                  error={!!errors?.date}
+                <Controller
+                  control={control}
+                  name="date"
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      id="date"
+                      type="date"
+                      variant="outlined"
+                      placeholder="Date"
+                      error={!!errors?.date}
+                    />
+                  )}
                 />
+
                 <TextField
                   id="startTime"
                   type="time"
@@ -160,6 +171,7 @@ export default function ActivityUpdate({ review, submitHandler, deleteHandler, d
                 />
               </Stack>
             </Stack>
+
             <Controller
               control={control}
               name="location"
